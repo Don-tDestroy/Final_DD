@@ -1,5 +1,6 @@
 {
-    "dependencies": {
+  "dependencies": {
+    "com.google.ar.core.arfoundation.extensions": "file:C:/Users/SAMSUNG/Downloads/arcore-unity-extensions-1.42.0.tgz",
     "com.ptc.vuforia.engine": "file:com.ptc.vuforia.engine-10.22.5.tgz",
     "com.unity.collab-proxy": "2.3.1",
     "com.unity.feature.development": "1.0.1",
