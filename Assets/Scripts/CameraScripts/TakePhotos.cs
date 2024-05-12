@@ -1,10 +1,18 @@
 ﻿using System;
+using System.Collections;
+using System.IO;
 using UnityEngine;
 
 public class TakePhotos : MonoBehaviour
 {
     public void TakePhoto()
     {
+        StartCoroutine(TakeAPhoto());
+    }
+
+    IEnumerator TakeAPhoto()
+    {
+        yield return new WaitForEndOfFrame();
         // 카메라
         Camera camera = Camera.main;
         
@@ -34,7 +42,11 @@ public class TakePhotos : MonoBehaviour
 
         byte[] bytes = image.EncodeToPNG();
         string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
-        // string filePath;
+        string filePath = Path.Combine(Application.persistentDataPath, fileName);
+        File.WriteAllBytes(filePath, bytes);
+
+        Destroy(rt);
+        Destroy(image);
     }
 
 }
