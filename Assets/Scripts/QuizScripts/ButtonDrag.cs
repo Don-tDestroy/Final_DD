@@ -4,25 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
+public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [HideInInspector]
     public Transform destPosition; // 드래그 될 위치
     public Transform answerBtn; // 정답과 일치하는 버튼
     private Transform sourceTr; // 이동될 UI
-
     private Transform originParent; // 원래 부모
-    private Vector2 originPosition;
+    private CanvasGroup canvasGroup; // 상호작용 제어를 위한
+
+    private Vector3 originPosition; // 원래 위치
     private Vector2 startingPoint;
     private Vector2 moveBegin;
     private Vector2 moveOffset;
+
 
     private void Awake()
     {
         sourceTr = this.transform;
         destPosition = this.transform;
         originParent = this.transform.parent.transform;
-        originPosition = transform.localPosition;
+        originPosition = this.transform.localPosition;
+        canvasGroup = this.GetComponent<CanvasGroup>();
     }
 
     public void ObjInit()
@@ -32,7 +35,7 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
     }
 
     // 드래그 시작 위치 지정
-    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
+    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         if (destPosition == answerBtn)
         {
@@ -42,12 +45,14 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
         {
             QuizManager.Instance.CurrentCntDown();
         }
-        moveBegin = eventData.position;
-        GetComponent<Image>().raycastTarget = false;
         destPosition = sourceTr;
         transform.SetParent(originParent);
-        transform.SetAsFirstSibling();
+        transform.SetAsLastSibling();
+
+        moveBegin = eventData.position;
         startingPoint = transform.localPosition;
+
+        canvasGroup.blocksRaycasts = false;
     }
 
     // 드래그 : 마우스 커서 위치로 이동
@@ -69,12 +74,12 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
         {
             transform.localPosition = destPosition.localPosition;
             transform.SetParent(destPosition);
-            if(destPosition == answerBtn)
+            if (destPosition == answerBtn)
             {
                 QuizManager.Instance.AnswerCntUp();
             }
             QuizManager.Instance.CurrentCntUp();
         }
-        GetComponent<Image>().raycastTarget = true;
+        canvasGroup.blocksRaycasts = true;
     }
 }
