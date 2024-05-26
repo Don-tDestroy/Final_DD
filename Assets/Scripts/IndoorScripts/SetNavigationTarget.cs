@@ -25,11 +25,6 @@ public class SetNavigationTarget : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began))
-        {
-            lineToggle = !lineToggle;
-
-        }
         if (lineToggle)
         {
 
@@ -38,6 +33,10 @@ public class SetNavigationTarget : MonoBehaviour
             line.SetPositions(path.corners);
             line.enabled = true;
         }
+
+    }
+    public void onSetNavigationTarget() {
+        lineToggle = !lineToggle;
 
     }
 }

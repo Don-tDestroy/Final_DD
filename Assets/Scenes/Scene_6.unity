@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 56676200}
   - component: {fileID: 56676199}
   - component: {fileID: 56676198}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1033,7 +1033,7 @@ GameObject:
   - component: {fileID: 155432384}
   - component: {fileID: 155432383}
   - component: {fileID: 155432382}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1491,7 +1491,7 @@ GameObject:
   - component: {fileID: 417773400}
   - component: {fileID: 417773399}
   - component: {fileID: 417773398}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2413,7 +2413,7 @@ GameObject:
   - component: {fileID: 615503339}
   - component: {fileID: 615503338}
   - component: {fileID: 615503337}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3275,7 +3275,7 @@ GameObject:
   - component: {fileID: 812977724}
   - component: {fileID: 812977723}
   - component: {fileID: 812977722}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3652,7 +3652,7 @@ GameObject:
   - component: {fileID: 829230535}
   - component: {fileID: 829230534}
   - component: {fileID: 829230533}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3843,7 +3843,7 @@ GameObject:
   - component: {fileID: 896265250}
   - component: {fileID: 896265249}
   - component: {fileID: 896265248}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4323,7 +4323,7 @@ GameObject:
   - component: {fileID: 1024686616}
   - component: {fileID: 1024686615}
   - component: {fileID: 1024686614}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9536,7 +9536,7 @@ GameObject:
   - component: {fileID: 1149697796}
   - component: {fileID: 1149697795}
   - component: {fileID: 1149697794}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10135,7 +10135,7 @@ GameObject:
   - component: {fileID: 1240859034}
   - component: {fileID: 1240859033}
   - component: {fileID: 1240859032}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10605,7 +10605,7 @@ GameObject:
   - component: {fileID: 1310646828}
   - component: {fileID: 1310646827}
   - component: {fileID: 1310646826}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10844,7 +10844,7 @@ GameObject:
   - component: {fileID: 1389435988}
   - component: {fileID: 1389435987}
   - component: {fileID: 1389435986}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11537,7 +11537,7 @@ GameObject:
   - component: {fileID: 1505376605}
   - component: {fileID: 1505376604}
   - component: {fileID: 1505376603}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11640,6 +11640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1566277108}
   - component: {fileID: 1566277107}
+  - component: {fileID: 1566277109}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -11680,6 +11681,31 @@ Transform:
   - {fileID: 1226952113}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1566277109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566277106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb2276469bc4924fb92ef3176259768, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenPosTxt: {fileID: 0}
+  partInfoTxt: {fileID: 0}
+  partCntTxt: {fileID: 0}
+  distancePart: {fileID: 0}
+  partPrefab: {fileID: 0}
+  firstPartPopup: {fileID: 0}
+  partGuidePopup: {fileID: 0}
+  planeSnackbar: {fileID: 0}
+  partSnackbar: {fileID: 0}
+  pathLatitude: []
+  pathLongitude: []
+  targetRadius: 0
+  partTransformInfo: []
 --- !u!1 &1602262279
 GameObject:
   m_ObjectHideFlags: 0
@@ -11692,7 +11718,7 @@ GameObject:
   - component: {fileID: 1602262283}
   - component: {fileID: 1602262282}
   - component: {fileID: 1602262281}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12378,7 +12404,7 @@ GameObject:
   - component: {fileID: 1843061782}
   - component: {fileID: 1843061781}
   - component: {fileID: 1843061780}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13616,7 +13642,7 @@ GameObject:
   - component: {fileID: 2126933698}
   - component: {fileID: 2126933697}
   - component: {fileID: 2126933696}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13721,7 +13747,7 @@ GameObject:
   - component: {fileID: 2136760234}
   - component: {fileID: 2136760233}
   - component: {fileID: 2136760232}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: FloorCube (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
