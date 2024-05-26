@@ -22,7 +22,7 @@ public class QuizManager : MonoBehaviour
 
     private void Start()
     {
-        originParent = GameObject.Find("Quiz_Panel").transform;
+        originParent = GameObject.Find("Quiz").transform;
         List<string> names = new List<string> { "Front", "ECC", "Posco", "Science", "Engineering" };
         for(int i = 0; i < names.Count; i++)
         {
@@ -90,7 +90,7 @@ public class QuizManager : MonoBehaviour
         for (int i = 0; i < sourceTrList.Count; i++)
         {
             sourceTrList[i].SetParent(originParent);
-            sourceTrList[i].SetAsFirstSibling();
+            sourceTrList[i].SetAsLastSibling();
             sourceTrList[i].localPosition = sourceTrPosList[i];
             sourceTrList[i].gameObject.GetComponent<ButtonDrag>().ObjInit();
         }
