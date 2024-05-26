@@ -6,6 +6,13 @@ using UnityEngine.XR.ARSubsystems;
 using TMPro;
 
 
+[System.Serializable]
+public struct PartTransformInfo
+{
+    public string key;
+    public Vector3 value;
+}
+
 public class PartSceneManager : MonoBehaviour
 {
     // 부품 생성 관련 ray info
@@ -18,9 +25,10 @@ public class PartSceneManager : MonoBehaviour
 
     public TextMeshProUGUI screenPosTxt; // (테스트용) 스크린 클릭 position
     public TextMeshProUGUI partInfoTxt; // (테스트용) 부품 생성 확인
-    public TextMeshProUGUI partCntTxt; // (테스트용) 주운 부품 개수 확인
+    public TextMeshProUGUI partCntTxt; // 주운 부품 개수 확인 [TODO] 디자인 적용해야함
     public GameObject partPrefab;
     public GameObject firstPartPopup; // 처음 부품 주운 후 나오는 팝업
+    public GameObject partGuidePopup; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
@@ -35,6 +43,8 @@ public class PartSceneManager : MonoBehaviour
     private List<double> pathLongitude = new List<double>(); // GPS 경로 (경도)
     [SerializeField]
     private double targetRadius; // 목표 반경
+    [SerializeField]
+    private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
 
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index)
@@ -64,6 +74,31 @@ public class PartSceneManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(PartGuide());
+    }
+
+    private IEnumerator PartGuide()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        // 고정된 부품 생성
+        GameObject guidePartObj = Instantiate(partPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
+        guidePartObj.transform.localPosition = partTransformInfo[0].value;
+        guidePartObj.transform.localScale = partTransformInfo[2].value;
+        guidePartObj.transform.localEulerAngles = partTransformInfo[1].value;
+
+        // 하단 팝업 생성
+        SoundEffectManager.Instance.Play(1);
+        partGuidePopup.SetActive(true);
+
+        // 기다리기
+        yield return new WaitForSeconds(3f);
+
+        // 고정된 부품 & 하단 팝업 지우기
+        Destroy(guidePartObj);
+        partGuidePopup.SetActive(false);
+
+        // GPS path 및 줍기 활성화
         StartCoroutine(CheckGPSPath());
         StartCoroutine(CheckPickPart());
     }
@@ -106,6 +141,13 @@ public class PartSceneManager : MonoBehaviour
                     Destroy(hitInfo.collider.gameObject);
                     partCnt++;
 
+                    // 부품 처음 줍는 거라면 팝업 띄우기
+                    if (partCnt == 1)
+                    {
+                        firstPartPopup.SetActive(true);
+                        Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
+                    }
+
                     partCntTxt.text = "part count : " + partCnt;
                     StartCoroutine(PickingPart(2f));
                 }
@@ -124,15 +166,18 @@ public class PartSceneManager : MonoBehaviour
 
     private void CreateManyPart(bool isFirst)
     {
+        // 부품 일정 시간별로 여러 개 생성
         StartCoroutine(CreatePartPerSeconds(isFirst));
     }
 
     private bool CreateOnePart(Vector2 pos)
     {
+        // 인식한 바닥 (TrackableType.PlaneWithinPolygon) 과 닿았다면 부품 생성
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
-            Instantiate(partPrefab, hitPose.position, hitPose.rotation);
+            GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
+            part.transform.localEulerAngles = partTransformInfo[1].value;
             return true;
         }
 
@@ -147,6 +192,7 @@ public class PartSceneManager : MonoBehaviour
 
         if (isFirst)
         {
+            // 처음 부품 생성이라면 -> createdPos 만큼 모두 생성
             for (int i = 0; i < createdPos.Count; i++)
             {
                 while (arRaycastManager.Raycast(createdPos[i], hits, TrackableType.PlaneWithinPolygon) == false)
@@ -162,16 +208,22 @@ public class PartSceneManager : MonoBehaviour
         }
         else
         {
-            while (arRaycastManager.Raycast(createdPos[1], hits, TrackableType.PlaneWithinPolygon) == false)
+            // 그 다음 부터는 가장 마지막 createdPos만 생성
+            while (arRaycastManager.Raycast(createdPos[createdPos.Count - 1], hits, TrackableType.PlaneWithinPolygon) == false)
             {
                 yield return null;
             }
 
-            CreateOnePart(createdPos[1]);
+            CreateOnePart(createdPos[createdPos.Count - 1]);
             partInfoTxt.text += "only 1th part";
             yield return new WaitForSeconds(1);
         }
 
         isCreatingCoroutine = false;
+    }
+
+    public void PopupOkButton()
+    {
+        Time.timeScale = 1; // 시간 다시 흐르기
     }
 }

@@ -32,10 +32,7 @@ public class SoundEffectManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-    }
 
-    private void Start()
-    {
         audioSource = GetComponent<AudioSource>();
     }
 
