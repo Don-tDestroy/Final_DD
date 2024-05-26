@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -32,12 +32,12 @@ public class CameraSwitch : MonoBehaviour
         // 요청된 방향을 반대로 변경
         if (currentFacingDirection == CameraFacingDirection.World)
         {
-            Debug.Log("후면 카메라로 전환합니다.");
+            Debug.Log("전면 카메라로 전환합니다.");
             arCameraManager.requestedFacingDirection = CameraFacingDirection.User;
         }
         else
         {
-            Debug.Log("전면 카메라로 전환합니다.");
+            Debug.Log("후면 카메라로 전환합니다.");
             arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
         }
     }
