@@ -14,6 +14,7 @@ public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     private CanvasGroup canvasGroup; // 상호작용 제어를 위한
 
     private Vector3 originPosition; // 원래 위치
+    private Vector3 originScale; // 원래 크기
     private Vector2 startingPoint;
     private Vector2 moveBegin;
     private Vector2 moveOffset;
@@ -25,6 +26,7 @@ public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         destPosition = this.transform;
         originParent = this.transform.parent.transform;
         originPosition = this.transform.localPosition;
+        originScale = this.transform.localScale;
         canvasGroup = this.GetComponent<CanvasGroup>();
     }
 
@@ -46,6 +48,8 @@ public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             QuizManager.Instance.CurrentCntDown();
         }
         destPosition = sourceTr;
+
+        transform.localScale = new Vector3(transform.localScale.x * 1.1f, transform.localScale.y * 1.1f, transform.localScale.z);
         transform.SetParent(originParent);
         transform.SetAsLastSibling();
 
@@ -53,6 +57,7 @@ public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         startingPoint = transform.localPosition;
 
         canvasGroup.blocksRaycasts = false;
+        SoundEffectManager.Instance.Play(0);
     }
 
     // 드래그 : 마우스 커서 위치로 이동
@@ -69,10 +74,12 @@ public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         if(destPosition == sourceTr)
         {
             transform.localPosition = originPosition;
+            transform.localScale = originScale;
         }
         else
         {
             transform.localPosition = destPosition.localPosition;
+            transform.localScale = destPosition.localScale;
             transform.SetParent(destPosition);
             if (destPosition == answerBtn)
             {
