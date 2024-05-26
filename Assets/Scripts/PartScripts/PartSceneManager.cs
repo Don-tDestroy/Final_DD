@@ -26,13 +26,18 @@ public class PartSceneManager : MonoBehaviour
     public TextMeshProUGUI screenPosTxt; // (테스트용) 스크린 클릭 position
     public TextMeshProUGUI partInfoTxt; // (테스트용) 부품 생성 확인
     public TextMeshProUGUI partCntTxt; // 주운 부품 개수 확인 [TODO] 디자인 적용해야함
+    public TextMeshProUGUI distancePart; // (테스트용) 클릭한 부품과의 거리
+
     public GameObject partPrefab;
     public GameObject firstPartPopup; // 처음 부품 주운 후 나오는 팝업
     public GameObject partGuidePopup; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
+    public GameObject planeSnackbar; // 바닥 인식 중에 뜨는 스낵바
+    public GameObject partSnackbar; // 부품 줍기 중에 뜨는 스낵바
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
+    private readonly float partRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
     private bool picked = true; // 부품 주운 후
@@ -135,25 +140,49 @@ public class PartSceneManager : MonoBehaviour
 
                 if (Physics.Raycast(screenRay.origin, screenRay.direction, out hitInfo, Mathf.Infinity, partLayerMask))
                 {
-                    screenPosTxt.text += "없어짐 ! ";
-                    Debug.Log("없어짐 !!");
-                    SoundEffectManager.Instance.Play(0);
-                    Destroy(hitInfo.collider.gameObject);
-                    partCnt++;
+                    // (테스트용) 거리 확인
+                    distancePart.text = "부품 거리 " + hitInfo.distance;
 
-                    // 부품 처음 줍는 거라면 팝업 띄우기
-                    if (partCnt == 1)
+                    // 부품이 특정 반경 내에 있을 경우에만 주울 수 있도록
+                    if (hitInfo.distance <= partRadius)
                     {
-                        firstPartPopup.SetActive(true);
-                        Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
-                    }
+                        screenPosTxt.text += "없어짐 ! ";
+                        SoundEffectManager.Instance.Play(0);
+                        Destroy(hitInfo.collider.gameObject);
+                        partCnt++;
 
-                    partCntTxt.text = "part count : " + partCnt;
-                    StartCoroutine(PickingPart(2f));
+                        // 부품 처음 줍는 거라면 팝업 띄우기
+                        if (partCnt == 1)
+                        {
+                            firstPartPopup.SetActive(true);
+                            Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
+                        }
+
+                        partCntTxt.text = "part count : " + partCnt;
+                        StartCoroutine(PickingPart(2f));
+                    }
+                    else
+                    {
+                        // 특정 반경 내에 없으면 스낵바 띄워서 안내
+                        StartCoroutine(OpenPartSnackbar());
+                    }
+                   
                 }
             }
             yield return null;
         }
+    }
+
+    
+    private IEnumerator OpenPartSnackbar()
+    {
+        partSnackbar.SetActive(true);
+        partSnackbar.GetComponent<FadeInOut>().FadeInAll();
+
+        yield return new WaitForSeconds(2f);
+
+        partSnackbar.SetActive(false);
+        partSnackbar.GetComponent<FadeInOut>().FadeOutAll();
     }
 
     private IEnumerator PickingPart(float interval)
@@ -184,6 +213,23 @@ public class PartSceneManager : MonoBehaviour
         return false;
     }
 
+    // 바닥 생성됐는지 확인하는 함수
+    private bool CheckCreatedPlane(Vector2 createdPos)
+    {
+        if (arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon) == false)
+        {
+            if (planeSnackbar.activeSelf == false)
+            {
+                planeSnackbar.SetActive(true);
+                planeSnackbar.GetComponent<FadeInOut>().FadeInAll();
+            }
+            return false;
+        }
+        planeSnackbar.SetActive(false);
+        planeSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+        return true;
+    }
+
     private IEnumerator CreatePartPerSeconds(bool isFirst)
     {
         if (isCreatingCoroutine) yield break;
@@ -195,7 +241,7 @@ public class PartSceneManager : MonoBehaviour
             // 처음 부품 생성이라면 -> createdPos 만큼 모두 생성
             for (int i = 0; i < createdPos.Count; i++)
             {
-                while (arRaycastManager.Raycast(createdPos[i], hits, TrackableType.PlaneWithinPolygon) == false)
+                while (CheckCreatedPlane(createdPos[i]) == false)
                 {
                     yield return null;
                 }
@@ -209,7 +255,7 @@ public class PartSceneManager : MonoBehaviour
         else
         {
             // 그 다음 부터는 가장 마지막 createdPos만 생성
-            while (arRaycastManager.Raycast(createdPos[createdPos.Count - 1], hits, TrackableType.PlaneWithinPolygon) == false)
+            while (CheckCreatedPlane(createdPos[createdPos.Count - 1]) == false)
             {
                 yield return null;
             }
