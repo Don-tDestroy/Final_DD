@@ -17,13 +17,17 @@ public class PlacedItemManager : MonoBehaviour
     public TextMeshProUGUI screenPosTxt; // (테스트용) 스크린 클릭 position
     public TextMeshProUGUI itemInfoTxt; // (테스트용) 아이템 생성 확인
     public TextMeshProUGUI itemGetTxt; // 아이템 주움 여부 확인 [TODO] 디자인 적용해야함
+    public TextMeshProUGUI distanceItem; // (테스트용) 클릭한 부품과의 거리
+    
     public GameObject itemPrefab;
     public GameObject itemGuidePopup; // 씬 시작할 때 나오는 아이템 줍기 가이드 팝업
     public GameObject GetItemPopup; // 아이템 주운 후 나오는 팝업
+    public GameObject itemSnackbar; // 부품 줍기 중에 뜨는 스낵바
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
+    private readonly float itemRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
     private bool picked = true; // 부품 주운 후
@@ -126,16 +130,28 @@ public class PlacedItemManager : MonoBehaviour
 
                 if (Physics.Raycast(screenRay.origin, screenRay.direction, out hitInfo, Mathf.Infinity, partLayerMask))
                 {
-                    SoundEffectManager.Instance.Play(0);
-                    Destroy(hitInfo.collider.gameObject);
+                    // (테스트용) 거리 확인
+                    distanceItem.text = "부품 거리 " + hitInfo.distance;
 
-                    // 카메라를 주우면 종료
-                    if (picked == false)
+                    // 아이템이 특정 반경 내에 있을 경우에만 주울 수 있도록
+                    if (hitInfo.distance <= itemRadius)
                     {
-                        Debug.Log("카메라를 주웠습니다");
-                        GetItemPopup.SetActive(true);
-                        picked = true;
-                        break; // 끝냄
+                        SoundEffectManager.Instance.Play(0);
+                        Destroy(hitInfo.collider.gameObject);
+
+                        // 카메라를 주우면 종료
+                        if (picked == false)
+                        {
+                            Debug.Log("카메라를 주웠습니다");
+                            GetItemPopup.SetActive(true);
+                            picked = true;
+                            break; // 끝냄
+                        }
+                    }
+                    else
+                    {
+                        // 특정 반경 내에 없으면 스낵바 띄워서 안내
+                        StartCoroutine(OpenItemSnackbar());
                     }
 
                 }
@@ -144,6 +160,16 @@ public class PlacedItemManager : MonoBehaviour
         }
     }
 
+    private IEnumerator OpenItemSnackbar()
+    {
+        itemSnackbar.SetActive(true);
+        itemSnackbar.GetComponent<FadeInOut>().FadeInAll();
+
+        yield return new WaitForSeconds(2f);
+
+        itemSnackbar.SetActive(false);
+        itemSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+    }
 
     private bool CreateOnePart(Vector2 pos)
     {

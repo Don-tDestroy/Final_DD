@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +51,7 @@ public class PhotoGallery : MonoBehaviour
         {
             StartCoroutine(LoadPhoto(filePath));
         }
+        Debug.Log("갤러리에서 사진을 로드 완료했습니다.");
     }
 
     private IEnumerator LoadPhoto(string filePath)
@@ -76,6 +77,7 @@ public class PhotoGallery : MonoBehaviour
         if (imageComponent != null)
         {
             imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Debug.Log("이미지에 텍스처를 추가했습니다.");
         }
         else
         {
