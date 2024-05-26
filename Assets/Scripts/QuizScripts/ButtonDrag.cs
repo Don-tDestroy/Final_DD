@@ -4,25 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
+public class ButtonDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [HideInInspector]
     public Transform destPosition; // 드래그 될 위치
     public Transform answerBtn; // 정답과 일치하는 버튼
     private Transform sourceTr; // 이동될 UI
-
     private Transform originParent; // 원래 부모
-    private Vector2 originPosition;
+    private CanvasGroup canvasGroup; // 상호작용 제어를 위한
+
+    private Vector3 originPosition; // 원래 위치
+    private Vector3 originScale; // 원래 크기
     private Vector2 startingPoint;
     private Vector2 moveBegin;
     private Vector2 moveOffset;
+
 
     private void Awake()
     {
         sourceTr = this.transform;
         destPosition = this.transform;
         originParent = this.transform.parent.transform;
-        originPosition = transform.localPosition;
+        originPosition = this.transform.localPosition;
+        originScale = this.transform.localScale;
+        canvasGroup = this.GetComponent<CanvasGroup>();
     }
 
     public void ObjInit()
@@ -32,7 +37,7 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
     }
 
     // 드래그 시작 위치 지정
-    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
+    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         if (destPosition == answerBtn)
         {
@@ -42,12 +47,17 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
         {
             QuizManager.Instance.CurrentCntDown();
         }
-        moveBegin = eventData.position;
-        GetComponent<Image>().raycastTarget = false;
         destPosition = sourceTr;
+
+        transform.localScale = new Vector3(transform.localScale.x * 1.1f, transform.localScale.y * 1.1f, transform.localScale.z);
         transform.SetParent(originParent);
-        transform.SetAsFirstSibling();
+        transform.SetAsLastSibling();
+
+        moveBegin = eventData.position;
         startingPoint = transform.localPosition;
+
+        canvasGroup.blocksRaycasts = false;
+        SoundEffectManager.Instance.Play(0);
     }
 
     // 드래그 : 마우스 커서 위치로 이동
@@ -64,17 +74,19 @@ public class ButtonDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IEnd
         if(destPosition == sourceTr)
         {
             transform.localPosition = originPosition;
+            transform.localScale = originScale;
         }
         else
         {
             transform.localPosition = destPosition.localPosition;
+            transform.localScale = destPosition.localScale;
             transform.SetParent(destPosition);
-            if(destPosition == answerBtn)
+            if (destPosition == answerBtn)
             {
                 QuizManager.Instance.AnswerCntUp();
             }
             QuizManager.Instance.CurrentCntUp();
         }
-        GetComponent<Image>().raycastTarget = true;
+        canvasGroup.blocksRaycasts = true;
     }
 }
