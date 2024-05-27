@@ -1,1 +1,1 @@
-# exploring-ewha-with-diddy-
+# Exploring Ewha with Diddy
