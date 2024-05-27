@@ -1440,6 +1440,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882945668}
   m_CullTransparentMesh: 1
+--- !u!1 &890213790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 890213791}
+  - component: {fileID: 890213792}
+  m_Layer: 0
+  m_Name: SceneMove
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &890213791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890213790}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 194.51251, y: 232.53748, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &890213792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890213790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2da0f66e9a6a7b4faf352cbe52bf4bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prevSceneName: Scene_2_TestGPSScene
+  destSceneName: Scene_3
 --- !u!1 &912135306
 GameObject:
   m_ObjectHideFlags: 0
@@ -7268,18 +7314,22 @@ PrefabInstance:
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 890213792}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PopupOkButton
+      value: GoToCameraScene
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: PartSceneManager, Assembly-CSharp
+      value: SceneMove, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: Scene_2_Test
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -7489,3 +7539,4 @@ SceneRoots:
   - {fileID: 262496854}
   - {fileID: 2043421923}
   - {fileID: 1822726894}
+  - {fileID: 890213791}

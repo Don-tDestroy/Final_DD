@@ -72,6 +72,20 @@ public class PhotoGallery : MonoBehaviour
     private void AddPhotoToGallery(Texture2D texture)
     {
         GameObject photoObject = Instantiate(photoPrefab, galleryContainer);
+
+        // photoObject의 RectTransform 가져와서 비율을 조정
+        /*RectTransform rectTransform = photoObject.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            float originalWidth = rectTransform.sizeDelta.x;
+            float newHeight = originalWidth * Screen.height / Screen.height;
+            rectTransform.sizeDelta = new Vector2(originalWidth, newHeight);
+        }
+        else
+        {
+            Debug.LogError("photoPrefab에 RectTransform 컴포넌트가 없습니다.");
+        }*/
+
         // UI 이미지에 텍스처 설정
         Image imageComponent = photoObject.GetComponent<Image>();
         if (imageComponent != null)
