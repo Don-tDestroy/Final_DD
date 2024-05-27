@@ -30,7 +30,7 @@ public class PartSceneManager : MonoBehaviour
 
     public GameObject partPrefab;
     public GameObject firstPartPopup; // 처음 부품 주운 후 나오는 팝업
-    public GameObject partGuidePopup; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
+    public GameObject partGuideCanavas; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
     public GameObject planeSnackbar; // 바닥 인식 중에 뜨는 스낵바
     public GameObject partSnackbar; // 부품 줍기 중에 뜨는 스낵바
 
@@ -86,22 +86,15 @@ public class PartSceneManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        // 고정된 부품 생성
-        GameObject guidePartObj = Instantiate(partPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-        guidePartObj.transform.localPosition = partTransformInfo[0].value;
-        guidePartObj.transform.localScale = partTransformInfo[2].value;
-        guidePartObj.transform.localEulerAngles = partTransformInfo[1].value;
-
-        // 하단 팝업 생성
+        // 가이드 캔버스
         SoundEffectManager.Instance.Play(1);
-        partGuidePopup.SetActive(true);
+        partGuideCanavas.SetActive(true);
 
         // 기다리기
         yield return new WaitForSeconds(3f);
 
-        // 고정된 부품 & 하단 팝업 지우기
-        Destroy(guidePartObj);
-        partGuidePopup.SetActive(false);
+        // 가이드 캔버스 지우기
+        partGuideCanavas.SetActive(false);
 
         // GPS path 및 줍기 활성화
         StartCoroutine(CheckGPSPath());
