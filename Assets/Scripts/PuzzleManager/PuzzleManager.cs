@@ -17,8 +17,10 @@ public class PuzzleManager : MonoBehaviour
     private Transform originParent;
 
 
-    public int[] stagePully = { 64, 1, 24 };
+    public int[] stagePully = { 8, 1, 11 };
     public PuzzleButtonDragGroup[] stagePullyGroup;
+
+    public Animator fixSpaceShipAnim;
 
 
     private void Awake()
@@ -67,12 +69,22 @@ public class PuzzleManager : MonoBehaviour
     {
         currentCnt++;
         UpdateCompletionText();
+        StartCoroutine(PlayFixAnim());
         // 100% 완성된 모습은 보여주고 끝내기?
         // 아님 팝업에서 완성된 우주선 보여주기?
         if (currentCnt == targetCnt)
         {
             FinalAnswerCheck();
         }
+    }
+
+    private IEnumerator PlayFixAnim()
+    {
+        fixSpaceShipAnim.SetBool("isFix", true);
+
+        yield return new WaitForSeconds(1f);
+
+        fixSpaceShipAnim.SetBool("isFix", false);
     }
 
     public void CurrentCntDown()

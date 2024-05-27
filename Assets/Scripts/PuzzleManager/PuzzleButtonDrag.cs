@@ -23,6 +23,7 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField]
     private int stageIdx;
 
+    public Animator fixPullyAnim;
 
     private void Awake()
     {
@@ -54,6 +55,20 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void EnableDrag()
     {
         canDrag = true;
+    }
+
+    private IEnumerator PlayFixAnim()
+    {
+
+        fixPullyAnim.SetBool("isFix", true);
+        transform.localPosition = sourceTr.localPosition;
+        transform.localScale = sourceTr.localScale;
+
+        yield return new WaitForSeconds(1f);
+
+        transform.localPosition = originPosition;
+        transform.localScale = originScale;
+        fixPullyAnim.SetBool("isFix", false);
     }
 
     // 드래그 시작 위치 지정
@@ -112,8 +127,9 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
         else
         {
-            transform.localPosition = destPosition.localPosition;
-            transform.localScale = destPosition.localScale;
+
+            StartCoroutine(PlayFixAnim());
+
 
             PuzzleManager.Instance.AnswerCntUp();
             PuzzleManager.Instance.CurrentCntUp();
@@ -123,9 +139,10 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
             DisableDrag();
 
             // 좀 있다가 자기 자리로
-            transform.localPosition = originPosition;
-            transform.localScale = originScale;
+
             Debug.Log("비활성화");
+
+
 
         }
 
