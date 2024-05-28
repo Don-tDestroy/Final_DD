@@ -788,8 +788,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2da0f66e9a6a7b4faf352cbe52bf4bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prevSceneName: 
-  destSceneName: 
+  prevSceneName: TestGPSScene
+  destSceneName: Scene_6_Demo
 --- !u!4 &1435078736
 Transform:
   m_ObjectHideFlags: 0
@@ -907,10 +907,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
@@ -918,7 +922,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1247195862}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1435078735}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
@@ -926,11 +938,23 @@ PrefabInstance:
       value: TakePhoto
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: GoToScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: TakePhotos, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SceneMove, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8207021518932371914, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}

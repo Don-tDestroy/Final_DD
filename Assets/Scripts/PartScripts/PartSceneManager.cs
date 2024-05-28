@@ -50,6 +50,8 @@ public class PartSceneManager : MonoBehaviour
     private double targetRadius; // 목표 반경
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
+    [SerializeField]
+    private string lastPartTriggerScene; // 마지막 부품 주웠을 때 이동할 씬 이름
 
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index)
@@ -149,7 +151,7 @@ public class PartSceneManager : MonoBehaviour
                         if (lastPart != null && hitInfo.collider.gameObject == lastPart)
                         {
                             Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
-                            SceneManager.LoadScene("TestCameraScene");
+                            SceneManager.LoadScene(lastPartTriggerScene);
                         }
 
                         Destroy(hitInfo.collider.gameObject);

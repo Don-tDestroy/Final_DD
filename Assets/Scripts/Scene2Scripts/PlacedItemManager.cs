@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class PlacedItemManager : MonoBehaviour
 {
@@ -40,6 +42,8 @@ public class PlacedItemManager : MonoBehaviour
     private double targetRadius; // 목표 반경
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
+    [SerializeField]
+    private string afterPickCameraTrigger;
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index) // PlacedItemManager에서는 사용되지 x, 추후 삭제
     private int partLayerMask; // 부품 레이어 마스크 (부품 주울 때, 부품 layer에만 ray 쏠 때 사용)
@@ -99,6 +103,8 @@ public class PlacedItemManager : MonoBehaviour
 
     private IEnumerator CheckGPSPath()
     {
+        yield return new WaitForSeconds(3f); // 일정 시간 뒤 카메라 생성
+
         while (true)
         {
             // GPS 가 path 반경 안에 들어왔는지 확인
@@ -110,7 +116,7 @@ public class PlacedItemManager : MonoBehaviour
                 itemInfoTxt.text = (currPathIdx + 1).ToString() + "번째 반경에서 카메라 아이템을 생성.";
                 CreateOnePart(createdPos[0]);
                 currPathIdx++;
-                break; // 끝냄
+                yield break; // 끝냄
             }
             yield return null;
         }
@@ -145,7 +151,9 @@ public class PlacedItemManager : MonoBehaviour
                             Debug.Log("카메라를 주웠습니다");
                             GetItemPopup.SetActive(true);
                             picked = true;
-                            break; // 끝냄
+                            // yield break; // 끝냄
+                            yield return new WaitForSeconds(1f);
+                            SceneManager.LoadScene(afterPickCameraTrigger);
                         }
                     }
                     else
