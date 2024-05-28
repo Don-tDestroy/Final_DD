@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct PartTransformInfo
@@ -54,6 +54,8 @@ public class PartSceneManager : MonoBehaviour
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index)
     private int partLayerMask; // 부품 레이어 마스크 (부품 주울 때, 부품 layer에만 ray 쏠 때 사용)
+
+    private List<GameObject> lastPathParts = new List<GameObject>(); // 마지막 반경에서 생성된 부품 저장
 
 
     private void Awake()
@@ -141,6 +143,15 @@ public class PartSceneManager : MonoBehaviour
                     {
                         screenPosTxt.text += "없어짐 ! ";
                         SoundEffectManager.Instance.Play(0);
+
+                        // 마지막 부품 클릭했으면 카메라 씬으로 이동
+                        GameObject lastPart = GetLastPart();
+                        if (lastPart != null && hitInfo.collider.gameObject == lastPart)
+                        {
+                            Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
+                            SceneManager.LoadScene("TestCameraScene");
+                        }
+
                         Destroy(hitInfo.collider.gameObject);
                         partCnt++;
 
@@ -200,6 +211,13 @@ public class PartSceneManager : MonoBehaviour
             var hitPose = hits[0].pose;
             GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
             part.transform.localEulerAngles = partTransformInfo[1].value;
+
+
+            // 마지막 부품 반경에서 생성된 부품일 경우
+            if (currPathIdx == pathLatitude.Count - 1)
+            {
+                lastPathParts.Add(part);
+            }
             return true;
         }
 
@@ -260,6 +278,19 @@ public class PartSceneManager : MonoBehaviour
 
         isCreatingCoroutine = false;
     }
+
+    private GameObject GetLastPart()
+    {
+        if (lastPathParts.Count > 0)
+        {
+            return lastPathParts[lastPathParts.Count - 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 
     public void PopupOkButton()
     {

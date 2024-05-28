@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +51,7 @@ public class PhotoGallery : MonoBehaviour
         {
             StartCoroutine(LoadPhoto(filePath));
         }
+        Debug.Log("갤러리에서 사진을 로드 완료했습니다.");
     }
 
     private IEnumerator LoadPhoto(string filePath)
@@ -71,11 +72,26 @@ public class PhotoGallery : MonoBehaviour
     private void AddPhotoToGallery(Texture2D texture)
     {
         GameObject photoObject = Instantiate(photoPrefab, galleryContainer);
+
+        // photoObject의 RectTransform 가져와서 비율을 조정
+        /*RectTransform rectTransform = photoObject.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            float originalWidth = rectTransform.sizeDelta.x;
+            float newHeight = originalWidth * Screen.height / Screen.height;
+            rectTransform.sizeDelta = new Vector2(originalWidth, newHeight);
+        }
+        else
+        {
+            Debug.LogError("photoPrefab에 RectTransform 컴포넌트가 없습니다.");
+        }*/
+
         // UI 이미지에 텍스처 설정
         Image imageComponent = photoObject.GetComponent<Image>();
         if (imageComponent != null)
         {
             imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Debug.Log("이미지에 텍스처를 추가했습니다.");
         }
         else
         {
