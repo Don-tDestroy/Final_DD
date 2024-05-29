@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class PlacedItemManager : MonoBehaviour
 {
@@ -23,6 +25,7 @@ public class PlacedItemManager : MonoBehaviour
     public GameObject itemGuidePopup; // 씬 시작할 때 나오는 아이템 줍기 가이드 팝업
     public GameObject GetItemPopup; // 아이템 주운 후 나오는 팝업
     public GameObject itemSnackbar; // 부품 줍기 중에 뜨는 스낵바
+    public GameObject planeSnackbar; // 바닥 인식 중에 뜨는 스낵바
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
@@ -40,6 +43,8 @@ public class PlacedItemManager : MonoBehaviour
     private double targetRadius; // 목표 반경
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
+    [SerializeField]
+    private string afterPickCameraTrigger;
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index) // PlacedItemManager에서는 사용되지 x, 추후 삭제
     private int partLayerMask; // 부품 레이어 마스크 (부품 주울 때, 부품 layer에만 ray 쏠 때 사용)
@@ -99,6 +104,8 @@ public class PlacedItemManager : MonoBehaviour
 
     private IEnumerator CheckGPSPath()
     {
+        yield return new WaitForSeconds(3f); // 일정 시간 뒤 카메라 생성
+
         while (true)
         {
             // GPS 가 path 반경 안에 들어왔는지 확인
@@ -107,10 +114,10 @@ public class PlacedItemManager : MonoBehaviour
             {
                 // 1번만 카메라 아이템을 생성
                 picked = false;
-                itemInfoTxt.text = (currPathIdx + 1).ToString() + "번째 반경에서 카메라 아이템을 생성.";
-                CreateOnePart(createdPos[0]);
+                itemInfoTxt.text = (currPathIdx + 1).ToString() + "번째 반경에서 카메라 아이템을 생성...";
+                StartCoroutine(CreateOnePart(createdPos[0]));
                 currPathIdx++;
-                break; // 끝냄
+                yield break; // 끝냄
             }
             yield return null;
         }
@@ -145,7 +152,9 @@ public class PlacedItemManager : MonoBehaviour
                             Debug.Log("카메라를 주웠습니다");
                             GetItemPopup.SetActive(true);
                             picked = true;
-                            break; // 끝냄
+                            // yield break; // 끝냄
+                            yield return new WaitForSeconds(1f);
+                            SceneManager.LoadScene(afterPickCameraTrigger);
                         }
                     }
                     else
@@ -171,16 +180,38 @@ public class PlacedItemManager : MonoBehaviour
         itemSnackbar.GetComponent<FadeInOut>().FadeOutAll();
     }
 
-    private bool CreateOnePart(Vector2 pos)
+    // 바닥 생성됐는지 확인하는 함수
+    private bool CheckCreatedPlane(Vector2 createdPos)
     {
+        if (arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon) == false)
+        {
+            if (planeSnackbar.activeSelf == false)
+            {
+                planeSnackbar.SetActive(true);
+                planeSnackbar.GetComponent<FadeInOut>().FadeInAll();
+            }
+            return false;
+        }
+        planeSnackbar.SetActive(false);
+        planeSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+        return true;
+    }
+
+
+    private IEnumerator CreateOnePart(Vector2 pos)
+    {
+        // 그 다음 부터는 가장 마지막 createdPos만 생성
+        while (CheckCreatedPlane(pos) == false)
+        {
+            yield return null;
+        }
+
         // 인식한 바닥 (TrackableType.PlaneWithinPolygon) 과 닿았다면 부품 생성
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
             GameObject part = Instantiate(itemPrefab, hitPose.position, hitPose.rotation);
             part.transform.localEulerAngles = partTransformInfo[1].value;
-            return true;
         }
-        return false;
     }
 }

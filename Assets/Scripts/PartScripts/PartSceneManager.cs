@@ -30,7 +30,7 @@ public class PartSceneManager : MonoBehaviour
 
     public GameObject partPrefab;
     public GameObject firstPartPopup; // 처음 부품 주운 후 나오는 팝업
-    public GameObject partGuidePopup; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
+    public GameObject partGuideCanavas; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
     public GameObject planeSnackbar; // 바닥 인식 중에 뜨는 스낵바
     public GameObject partSnackbar; // 부품 줍기 중에 뜨는 스낵바
 
@@ -50,6 +50,8 @@ public class PartSceneManager : MonoBehaviour
     private double targetRadius; // 목표 반경
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
+    [SerializeField]
+    private string lastPartTriggerScene; // 마지막 부품 주웠을 때 이동할 씬 이름
 
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index)
@@ -88,22 +90,15 @@ public class PartSceneManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        // 고정된 부품 생성
-        GameObject guidePartObj = Instantiate(partPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-        guidePartObj.transform.localPosition = partTransformInfo[0].value;
-        guidePartObj.transform.localScale = partTransformInfo[2].value;
-        guidePartObj.transform.localEulerAngles = partTransformInfo[1].value;
-
-        // 하단 팝업 생성
+        // 가이드 캔버스
         SoundEffectManager.Instance.Play(1);
-        partGuidePopup.SetActive(true);
+        partGuideCanavas.SetActive(true);
 
         // 기다리기
         yield return new WaitForSeconds(3f);
 
-        // 고정된 부품 & 하단 팝업 지우기
-        Destroy(guidePartObj);
-        partGuidePopup.SetActive(false);
+        // 가이드 캔버스 지우기
+        partGuideCanavas.SetActive(false);
 
         // GPS path 및 줍기 활성화
         StartCoroutine(CheckGPSPath());
@@ -156,7 +151,7 @@ public class PartSceneManager : MonoBehaviour
                         if (lastPart != null && hitInfo.collider.gameObject == lastPart)
                         {
                             Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
-                            SceneManager.LoadScene("TestCameraScene");
+                            SceneManager.LoadScene(lastPartTriggerScene);
                         }
 
                         Destroy(hitInfo.collider.gameObject);
