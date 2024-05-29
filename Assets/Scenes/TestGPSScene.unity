@@ -1177,7 +1177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6083279010033445913, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -288
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 6083279010033445913, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1400,7 +1400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6083279010033445913, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -288
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 6083279010033445913, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2725,13 +2725,13 @@ MonoBehaviour:
   planeSnackbar: {fileID: 634352393}
   partSnackbar: {fileID: 720876859}
   pathLatitude:
-  - 37.5665855407715
-  - 37.5665855407715
-  - 37.5665855407715
+  - 37.56641769
+  - 37.56641769
+  - 37.56641769
   pathLongitude:
-  - 126.948631286621
-  - 126.948631286621
-  - 126.948631286621
+  - 126.94823455
+  - 126.94823455
+  - 126.94823455
   targetRadius: 15
   partTransformInfo:
   - key: position

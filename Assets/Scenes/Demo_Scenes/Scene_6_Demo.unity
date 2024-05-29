@@ -6325,13 +6325,13 @@ MonoBehaviour:
   planeSnackbar: {fileID: 1874495817}
   partSnackbar: {fileID: 783599334}
   pathLatitude:
-  - 37.566589
-  - 37.566589
-  - 37.566589
+  - 37.56641769
+  - 37.56641769
+  - 37.56641769
   pathLongitude:
-  - 126.948631
-  - 126.948631
-  - 126.948631
+  - 126.94823455
+  - 126.94823455
+  - 126.94823455
   targetRadius: 15
   partTransformInfo:
   - key: position
