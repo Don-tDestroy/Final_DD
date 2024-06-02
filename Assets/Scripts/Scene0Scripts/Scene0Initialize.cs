@@ -6,6 +6,9 @@ public class Scene0Initialize : MonoBehaviour
     public GameObject prologuePanel;
     public GameObject startPanel;
     public GameObject galleryPanel;
+    public GameObject locationPanel;
+
+    public double mainGateLat, mainGateLong;
 
     void Start()
     {
@@ -20,30 +23,43 @@ public class Scene0Initialize : MonoBehaviour
         }
     }
 
-    public void StartGame() // °ÔÀÓ ½ÃÀÛ
+    public void StartGame() // ê²Œì„ ì‹œì‘
     {
+        bool isInRadius = GPSManager.Instance.CheckCurrPosInRadius(mainGateLat, mainGateLong);
+        if (!isInRadius) // ì •ë¬¸ ì£¼ìœ„ì— ì—†ìœ¼ë©´
+        {
+            startPanel.SetActive(false);
+            locationPanel.SetActive(true);
+            return;
+        }
         PlayerPrefs.SetInt("IsPrologueWatched", 1);
-        SceneManager.LoadScene("Scene_1"); // ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿
+        SceneManager.LoadScene("Scene_1"); // ë‹¤ìŒ ì”¬ìœ¼ë¡œ ì´ë™
     }
 
-    public void SeePrologue() // ÇÁ·Ñ·Î±× º¸±â: ÃßÈÄ ´Ù½Ãº¸±â ±â´É Ãß°¡ ½Ã¿¡µµ È£Ãâ
+    public void SeePrologue() // í”„ë¡¤ë¡œê·¸ ë³´ê¸°: ì¶”í›„ ë‹¤ì‹œë³´ê¸° ê¸°ëŠ¥ ì¶”ê°€ ì‹œì—ë„ í˜¸ì¶œ
     {
         startPanel.SetActive(false);
         galleryPanel.SetActive(false);
         prologuePanel.SetActive(true);
     }
     
-    public void SeeStart() // ÇÁ·Ñ·Î±× º¸±â: ÃßÈÄ ´Ù½Ãº¸±â ±â´É Ãß°¡ ½Ã¿¡µµ È£Ãâ
+    public void SeeStart() // í”„ë¡¤ë¡œê·¸ ë³´ê¸°: ì¶”í›„ ë‹¤ì‹œë³´ê¸° ê¸°ëŠ¥ ì¶”ê°€ ì‹œì—ë„ í˜¸ì¶œ
     {
         prologuePanel.SetActive(false);
         galleryPanel.SetActive(false);
         startPanel.SetActive(true);
     }
 
-    public void SeeGallery() // °¶·¯¸® º¸±â
+    public void SeeGallery() // ê°¤ëŸ¬ë¦¬ ë³´ê¸°
     {
         startPanel.SetActive(false);
         prologuePanel.SetActive(false);
         galleryPanel.SetActive(true);
+    }
+
+    public void CloseLocationPanel()
+    {
+        locationPanel.SetActive(false);
+        startPanel.SetActive(true);
     }
 }
