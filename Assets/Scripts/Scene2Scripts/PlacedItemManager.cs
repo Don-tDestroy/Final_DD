@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 
 public class PlacedItemManager : MonoBehaviour
@@ -223,25 +222,43 @@ public class PlacedItemManager : MonoBehaviour
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
+            var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
 
             // 마지막 부품 반경에서, 카메라 Prefab으로 게임오브젝트를 1개만 생성함
             if (currPathIdx == pathLatitude.Count - 1)
             {
                 if (lastPathParts.Count == 0)
                 {
-                    GameObject cameraItem = Instantiate(cameraItemPrefab, hitPose.position, hitPose.rotation);
+                    GameObject cameraItem = Instantiate(cameraItemPrefab, hitPose.position, partRotation);
                     cameraItem.transform.localEulerAngles = cameraItemTransformInfo[1].value;
                     lastPathParts.Add(cameraItem);
                 }
             }
             else
             {
-                GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
+                GameObject part = Instantiate(partPrefab, hitPose.position, partRotation);
                 part.transform.localEulerAngles = partTransformInfo[1].value;
             }
             return true;
         }
         return false;
+    }
+
+    // Y축 회전을 목표지점으로 설정하는 함수
+    private float CalculateYRotationToTarget(Vector3 partPosition)
+    {
+        if (currPathIdx >= pathLatitude.Count) return 0;
+
+        Vector3 targetPos = new Vector3(
+            (float)pathLongitude[currPathIdx],
+            partPosition.y,
+            (float)pathLatitude[currPathIdx]
+        );
+
+        Vector3 directionToTarget = targetPos - partPosition;
+        float angle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+
+        return Mathf.Clamp(angle, -180f, 0f);
     }
 
     // 바닥 생성됐는지 확인하는 함수

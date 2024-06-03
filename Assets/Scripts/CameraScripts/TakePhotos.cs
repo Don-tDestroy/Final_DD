@@ -10,13 +10,12 @@ public class TakePhotos : MonoBehaviour
     private string galleryDirPath;
     private int targetWidth;
     private int targetHeight;
-    private LayerMask originalCullingMask;
     public AudioSource audioSource;
 
     void Start()
     {
         arCameraManager = FindObjectOfType<ARCameraManager>(); // Canvas에서 컴포넌트 가져오기
-        arCameraManager.requestedFacingDirection = CameraFacingDirection.User;
+        arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
         galleryDirPath = PhotoGallery.getGalleryDirPath();
         targetWidth = Screen.width;
         targetHeight = Screen.height;
@@ -39,13 +38,6 @@ public class TakePhotos : MonoBehaviour
 
         Camera camera = Camera.main;
 
-        // Save the original culling mask
-        originalCullingMask = camera.cullingMask;
-
-        // Exclude the CameraUI layer
-        int cameraUILayer = LayerMask.NameToLayer("CameraUI");
-        camera.cullingMask = originalCullingMask & ~(1 << cameraUILayer);
-
         // 카메라에 Render Texture 설정
         RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24);
         camera.targetTexture = rt;
@@ -64,9 +56,6 @@ public class TakePhotos : MonoBehaviour
         
         camera.targetTexture = null;
         RenderTexture.active = currentRT;
-
-        // Restore the original culling mask
-        camera.cullingMask = originalCullingMask;
 
         // 사진 파일 이름, 경로
         string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
