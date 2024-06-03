@@ -6,6 +6,7 @@ using UnityEngine;
 public class DiddyManager : MonoBehaviour
 {
     Animator animator;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
