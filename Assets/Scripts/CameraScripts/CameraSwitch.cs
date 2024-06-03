@@ -5,6 +5,8 @@ using UnityEngine.XR.ARFoundation;
 public class CameraSwitch : MonoBehaviour
 {
     [SerializeField] private ARCameraManager arCameraManager;
+    [SerializeField] private RectTransform canvasRectTransform1;
+    [SerializeField] private RectTransform canvasRectTransform2;
 
     void Start()
     {
@@ -40,5 +42,9 @@ public class CameraSwitch : MonoBehaviour
             Debug.Log("후면 카메라로 전환합니다.");
             arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
         }
+
+        // Canvas의 회전을 조절하여 항상 원래의 방향을 유지하도록 함
+        canvasRectTransform1.localRotation = Quaternion.identity;
+        canvasRectTransform2.localRotation = Quaternion.identity;
     }
 }

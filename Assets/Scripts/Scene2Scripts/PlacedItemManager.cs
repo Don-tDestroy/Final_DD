@@ -90,9 +90,9 @@ public class PlacedItemManager : MonoBehaviour
 
         // 고정된 카메라 생성
         GameObject guidePartObj = Instantiate(cameraItemPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-        guidePartObj.transform.localPosition = partTransformInfo[0].value;
-        guidePartObj.transform.localScale = partTransformInfo[2].value;
-        guidePartObj.transform.localEulerAngles = partTransformInfo[1].value;
+        guidePartObj.transform.localPosition = cameraItemTransformInfo[0].value;
+        guidePartObj.transform.localScale = cameraItemTransformInfo[2].value;
+        guidePartObj.transform.localEulerAngles = cameraItemTransformInfo[1].value;
 
         // 하단 팝업 생성
         SoundEffectManager.Instance.Play(1);
@@ -129,6 +129,10 @@ public class PlacedItemManager : MonoBehaviour
         }
     }
 
+    public void MoveToCameraScene()
+    {
+        SceneMove.GoToCameraScene("Scene_2", "Scene_0");
+    }
 
     private IEnumerator CheckPickPart()
     {
@@ -160,9 +164,7 @@ public class PlacedItemManager : MonoBehaviour
                             Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품인 카메라를 주웠습니다");
                             GetCameraItemPopup.SetActive(true);
                             picked = true;
-                            yield return new WaitForSeconds(1f);
-                            SceneMove.GoToCameraScene("Scene_2", lastPartTriggerScene);
-                            SceneManager.LoadScene(lastPartTriggerScene);
+                            yield return null;
                         }
 
                         Destroy(hitInfo.collider.gameObject);

@@ -10,6 +10,8 @@ public class TakePhotos : MonoBehaviour
     private string galleryDirPath;
     private int targetWidth;
     private int targetHeight;
+    private LayerMask originalCullingMask;
+    public AudioSource audioSource;
 
     void Start()
     {
@@ -17,7 +19,7 @@ public class TakePhotos : MonoBehaviour
         arCameraManager.requestedFacingDirection = CameraFacingDirection.User;
         galleryDirPath = PhotoGallery.getGalleryDirPath();
         targetWidth = Screen.width;
-        targetHeight = targetWidth * 4 / 3; // targetHeight = Screen.height;
+        targetHeight = Screen.height;
     }
 
     // 사진 촬영 메서드
@@ -33,8 +35,16 @@ public class TakePhotos : MonoBehaviour
     IEnumerator TakeAPhoto()
     {
         yield return new WaitForEndOfFrame();
+        audioSource.Play();
 
         Camera camera = Camera.main;
+
+        // Save the original culling mask
+        originalCullingMask = camera.cullingMask;
+
+        // Exclude the CameraUI layer
+        int cameraUILayer = LayerMask.NameToLayer("CameraUI");
+        camera.cullingMask = originalCullingMask & ~(1 << cameraUILayer);
 
         // 카메라에 Render Texture 설정
         RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24);
@@ -53,9 +63,10 @@ public class TakePhotos : MonoBehaviour
         image.Apply();
         
         camera.targetTexture = null;
-        // 원래의 활성 Render Texture를 대체함
         RenderTexture.active = currentRT;
 
+        // Restore the original culling mask
+        camera.cullingMask = originalCullingMask;
 
         // 사진 파일 이름, 경로
         string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
