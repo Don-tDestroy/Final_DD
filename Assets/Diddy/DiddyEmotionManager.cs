@@ -15,13 +15,14 @@ public class DiddyEmotionManager : MonoBehaviour
     public void DiddyChangeEmotion(int emote_index)
     {
         animator.SetInteger("emotion", 0);
-        StartCoroutine(GiveDelay(0.5f));
-        animator.SetInteger("emotion", emote_index);
+        StartCoroutine(GiveDelay(0.1f, emote_index));
+        
     }
 
-    IEnumerator GiveDelay(float time)
+    IEnumerator GiveDelay(float time, int index)
     {
         yield return new WaitForSeconds(time);
+        animator.SetInteger("emotion", index);
     }
 
 }
