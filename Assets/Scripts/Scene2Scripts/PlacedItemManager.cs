@@ -170,7 +170,7 @@ public class PlacedItemManager : MonoBehaviour
                         partCnt++;
 
                         // 부품 처음 줍는 거라면 팝업 띄우기
-                        if (partCnt == 1)
+                        if (partCnt == 1 && lastPart == null)
                         {
                             firstPartPopup.SetActive(true);
                             Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
@@ -224,38 +224,37 @@ public class PlacedItemManager : MonoBehaviour
             var hitPose = hits[0].pose;
             var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
 
-            // 마지막 부품 반경에서, 카메라 Prefab으로 게임오브젝트를 1개만 생성함
+            // 마지막 부품 반경에서, 게임오브젝트를 1개만 생성함 (카메라 Prefab으로)
             if (currPathIdx == pathLatitude.Count - 1)
             {
                 if (lastPathParts.Count == 0)
                 {
                     GameObject cameraItem = Instantiate(cameraItemPrefab, hitPose.position, partRotation);
-                    cameraItem.transform.localEulerAngles = cameraItemTransformInfo[1].value;
+                    // cameraItem.transform.localEulerAngles = cameraItemTransformInfo[1].value;
                     lastPathParts.Add(cameraItem);
                 }
             }
             else
             {
                 GameObject part = Instantiate(partPrefab, hitPose.position, partRotation);
-                part.transform.localEulerAngles = partTransformInfo[1].value;
             }
             return true;
         }
         return false;
     }
 
-    // Y축 회전을 목표지점으로 설정하는 함수
-    private float CalculateYRotationToTarget(Vector3 partPosition)
+    //목적지를 가리키도록 Y축 회전을 계산
+    private float CalculateYRotationToTarget(Vector3 hitPosition)
     {
         if (currPathIdx >= pathLatitude.Count) return 0;
 
         Vector3 targetPos = new Vector3(
             (float)pathLongitude[currPathIdx],
-            partPosition.y,
+            hitPosition.y,
             (float)pathLatitude[currPathIdx]
         );
 
-        Vector3 directionToTarget = targetPos - partPosition;
+        Vector3 directionToTarget = targetPos - hitPosition;
         float angle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
 
         return Mathf.Clamp(angle, -180f, 0f);

@@ -13,80 +13,46 @@ public class DiddyTransform : MonoBehaviour
 
     void Update()
     {
-        // 마우스 입력 처리
-        if (Input.GetMouseButtonDown(0))
+        // 마우스 및 터치 입력 처리
+        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             RaycastHit hit;
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+            if (Input.touchCount > 0)
+                ray = mainCamera.ScreenPointToRay(Input.GetTouch(0).position);
 
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.transform == transform)
                 {
                     dragging = true;
-                    offset = hit.transform.position - GetMouseWorldPos();
-                    print("DiddyTransform - 드래깅 시작");
+                    offset = hit.transform.position - GetInputWorldPos();
                     DiddyEmotionRotate();
                 }
             }
         }
 
-        if (Input.GetMouseButton(0) && dragging)
+        if ((Input.GetMouseButton(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)) && dragging)
         {
-            Vector3 targetPosition = GetMouseWorldPos() + offset;
+            Vector3 targetPosition = GetInputWorldPos() + offset;
             transform.position = ClampPositionToScreen(targetPosition);
         }
 
-        if (Input.GetMouseButtonUp(0) && dragging)
+        if ((Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) && dragging)
         {
             dragging = false;
-            print("DiddyTransform - Dragging 끝");
         }
+    }
 
-        // 터치 입력 처리
+    private Vector3 GetInputWorldPos()
+    {
+        Vector3 inputPoint = Input.mousePosition;
         if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            Ray ray = mainCamera.ScreenPointToRay(touch.position);
+            inputPoint = Input.GetTouch(0).position;
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.transform == transform)
-                    {
-                        dragging = true;
-                        offset = hit.transform.position - GetTouchWorldPos(touch);
-                    }
-                }
-            }
-
-            if (touch.phase == TouchPhase.Moved && dragging)
-            {
-                Vector3 targetPosition = GetTouchWorldPos(touch) + offset;
-                transform.position = ClampPositionToScreen(targetPosition);
-            }
-
-            if (touch.phase == TouchPhase.Ended && dragging)
-            {
-                dragging = false;
-            }
-        }
-    }
-
-    private Vector3 GetMouseWorldPos()
-    {
-        Vector3 mousePoint = Input.mousePosition;
-        mousePoint.z = mainCamera.WorldToScreenPoint(transform.position).z;
-        return mainCamera.ScreenToWorldPoint(mousePoint);
-    }
-
-    private Vector3 GetTouchWorldPos(Touch touch)
-    {
-        Vector3 touchPoint = touch.position;
-        touchPoint.z = mainCamera.WorldToScreenPoint(transform.position).z;
-        return mainCamera.ScreenToWorldPoint(touchPoint);
+        inputPoint.z = mainCamera.WorldToScreenPoint(transform.position).z;
+        return mainCamera.ScreenToWorldPoint(inputPoint);
     }
 
     private Vector3 ClampPositionToScreen(Vector3 targetPosition)

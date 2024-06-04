@@ -158,7 +158,7 @@ public class PartSceneManager : MonoBehaviour
                         partCnt++;
 
                         // 부품 처음 줍는 거라면 팝업 띄우기
-                        if (partCnt == 1)
+                        if (partCnt == 1 && lastPart == null)
                         {
                             firstPartPopup.SetActive(true);
                             Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
