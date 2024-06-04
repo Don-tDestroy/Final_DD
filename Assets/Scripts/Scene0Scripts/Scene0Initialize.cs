@@ -20,27 +20,27 @@ public class Scene0Initialize : MonoBehaviour
         }
     }
 
-    public void StartGame() // °ÔÀÓ ½ÃÀÛ
+    public void StartGame(string nextScene) // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         PlayerPrefs.SetInt("IsPrologueWatched", 1);
-        SceneManager.LoadScene("Scene_1"); // ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿
+        SceneManager.LoadScene(nextScene); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
     }
 
-    public void SeePrologue() // ÇÁ·Ñ·Î±× º¸±â: ÃßÈÄ ´Ù½Ãº¸±â ±â´É Ãß°¡ ½Ã¿¡µµ È£Ãâ
+    public void SeePrologue() // ï¿½ï¿½ï¿½Ñ·Î±ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½Ãºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ã¿ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     {
         startPanel.SetActive(false);
         galleryPanel.SetActive(false);
         prologuePanel.SetActive(true);
     }
     
-    public void SeeStart() // ÇÁ·Ñ·Î±× º¸±â: ÃßÈÄ ´Ù½Ãº¸±â ±â´É Ãß°¡ ½Ã¿¡µµ È£Ãâ
+    public void SeeStart() // ï¿½ï¿½ï¿½Ñ·Î±ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½Ãºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ã¿ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     {
         prologuePanel.SetActive(false);
         galleryPanel.SetActive(false);
         startPanel.SetActive(true);
     }
 
-    public void SeeGallery() // °¶·¯¸® º¸±â
+    public void SeeGallery() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         startPanel.SetActive(false);
         prologuePanel.SetActive(false);
