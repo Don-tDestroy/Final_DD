@@ -14,13 +14,9 @@ public class CameraSwitch : MonoBehaviour
     // 전면/후면 카메라 전환 메서드
     public void SwitchCamera()
     {
-        // 모바일 플랫폼인 경우만 카메라 전환
-#if UNITY_IOS || UNITY_ANDROID
         StartCoroutine(SwitchCameraDirection());
-#else
-        Debug.Log("모바일이 아닙니다.");
-#endif
     }
+
     IEnumerator SwitchCameraDirection()
     {
         yield return null;
