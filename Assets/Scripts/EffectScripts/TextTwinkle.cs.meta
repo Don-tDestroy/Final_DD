@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/EffectScripts/ProgressTitle.cs.meta
+guid: 0b996b87af7e4794ea37852b95067b2a
+========
 guid: d9415017fa454d14b9ada614db2962f8
+>>>>>>>> develop:Assets/Scripts/EffectScripts/TextTwinkle.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
