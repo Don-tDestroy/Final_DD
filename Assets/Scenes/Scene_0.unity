@@ -1655,8 +1655,8 @@ MonoBehaviour:
   startPanel: {fileID: 1869232978}
   galleryPanel: {fileID: 1533240019}
   locationPanel: {fileID: 1736928882}
-  mainGateLat: 37.56644
-  mainGateLong: 126.94844
+  mainGateLat: 37.5664405
+  mainGateLong: 126.948448
 --- !u!4 &1251013511
 Transform:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class Scene0Initialize : MonoBehaviour
 
     public void StartGame() // 게임 시작
     {
-        bool isInRadius = GPSManager.Instance.CheckCurrPosInRadius(mainGateLat, mainGateLong);
+        bool isInRadius = GPSManager.Instance.CheckCurrPosInRadius(mainGateLat, mainGateLong, 100f);
         if (!isInRadius) // 정문 주위에 없으면
         {
             startPanel.SetActive(false);
