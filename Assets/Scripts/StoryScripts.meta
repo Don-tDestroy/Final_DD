@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/StoryScripts.meta
 guid: 7c383b5d883f1d4478965ea5b997941d
 folderAsset: yes
 DefaultImporter:
+========
+guid: 5601cfb0e724aed4da7d0457d1680dd2
+NativeFormatImporter:
+>>>>>>>> 60a04746fd098cf81482ede76fe6f289451a3693:Assets/Diddy/DiddyPhotoAnimationController.controller.meta
   externalObjects: {}
+  mainObjectFileID: 9100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
