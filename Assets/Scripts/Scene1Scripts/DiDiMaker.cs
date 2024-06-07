@@ -5,15 +5,16 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
 
+[System.Serializable]
+public struct DiDiTransformInfo
+{
+    public string key;
+    public Vector3 value;
+}
+
 public class DiDiMaker : MonoBehaviour
 {
-    [System.Serializable]
-    public struct DiDiTransformInfo
-    {
-        public string key;
-        public Vector3 value;
-    }
-
+ 
     private ARRaycastManager arRaycastManager;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
@@ -21,8 +22,7 @@ public class DiDiMaker : MonoBehaviour
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
-    private Vector2 createdPos = new Vector2(650f, 1300f); 
-    private readonly float didiRadius = 1.1f; // 디디 특정 반경 내에서만 주울 수 있도록 
+    private Vector2 createdPos = new Vector2(650f, 1700f); 
 
     [SerializeField]
     private List<DiDiTransformInfo> didiTransformInfo = new List<DiDiTransformInfo>();
@@ -51,6 +51,7 @@ public class DiDiMaker : MonoBehaviour
     private void Start()
     {
         StartCoroutine(CreateDiDiOnPlane());
+        StartCoroutine(TouchDiDi());
     }
 
     private IEnumerator CreateDiDiOnPlane()
@@ -61,13 +62,14 @@ public class DiDiMaker : MonoBehaviour
             if (didiObj == null && arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon))
             {
                 var hitPose = hits[0].pose;
-                Vector3 spawnPosition = hitPose.position + hitPose.forward * 3f - hitPose.up*0.1f; // 위치 조정
-                Quaternion spawnRotation = hits[0].pose.rotation * Quaternion.Euler(0f, 180f, 0f);
 
-                didiObj = Instantiate(didiPrefab, spawnPosition, spawnRotation);
-                didiObj.transform.localScale = Vector3.one * 0.2f;
+                Vector3 didiPosition = hitPose.position;
 
-                StartCoroutine(TouchDiDi());
+                Camera mainCamera = Camera.main;
+                Vector3 directionToCamera = mainCamera.transform.position - didiPosition;
+                Quaternion didiRotation = Quaternion.LookRotation(-directionToCamera) * didiPrefab.transform.rotation;
+
+                didiObj = Instantiate(didiPrefab, didiPosition, didiRotation);
             }
 
             yield return null;
@@ -80,7 +82,6 @@ public class DiDiMaker : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                txt.text = "터치";
                 Vector3 mousePos = Input.mousePosition;
                 Ray screenRay = Camera.main.ScreenPointToRay(mousePos);
 
@@ -91,7 +92,6 @@ public class DiDiMaker : MonoBehaviour
                     txt.text = hit.collider.gameObject.name;
                     if (hit.collider.gameObject == didiObj)
                     {
-                        txt.text = "디디 터치";
                         Destroy(didiObj);
                         CreateDiDiOnCanvas();
                     }
