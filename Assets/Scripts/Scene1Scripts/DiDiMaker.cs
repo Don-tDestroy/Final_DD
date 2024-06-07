@@ -19,6 +19,7 @@ public class DiDiMaker : MonoBehaviour
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     public GameObject didiPrefab;
+    public GameObject planeSnackbar;
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
@@ -30,6 +31,7 @@ public class DiDiMaker : MonoBehaviour
     private int partLayerMask;
 
     private GameObject didiObj;
+    private bool touched = false;
 
     //임시
     public TextMeshProUGUI txt;
@@ -58,7 +60,14 @@ public class DiDiMaker : MonoBehaviour
     {
         while (true)
         {
-            // 이미 디디가 생성된 경우 추가 생성하지 않음
+            if(touched == false)
+            {
+                while (CheckCreatedPlane() == false)
+                {
+                    yield return null;
+                }
+            }
+
             if (didiObj == null && arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon))
             {
                 var hitPose = hits[0].pose;
@@ -74,6 +83,22 @@ public class DiDiMaker : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private bool CheckCreatedPlane()
+    {
+        if (arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon) == false)
+        {
+            if (planeSnackbar.activeSelf == false)
+            {
+                planeSnackbar.SetActive(true);
+                planeSnackbar.GetComponent<FadeInOut>().FadeInAll();
+            }
+            return false;
+        }
+        planeSnackbar.SetActive(false);
+        planeSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+        return true;
     }
 
     private IEnumerator TouchDiDi()
@@ -92,6 +117,7 @@ public class DiDiMaker : MonoBehaviour
                     txt.text = hit.collider.gameObject.name;
                     if (hit.collider.gameObject == didiObj)
                     {
+                        touched = true;
                         Destroy(didiObj);
                         CreateDiDiOnCanvas();
                     }
