@@ -9,13 +9,16 @@ public class StoryManager : MonoBehaviour
     DiddyEmotionManager myEmotionManager;
     StoryScripts myStoryScript;
     public TextMeshProUGUI dialogue;
+    public TextMeshProUGUI name;
     public int StoryIndex;
     bool isSkip;
     bool isPrintingLines;
     int curDialogueIndex;
+    public bool isDiddyVisible;
 
     List<string> myLines;
     List<int> myEmotions;
+    List<int> myNames;
     void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
@@ -23,8 +26,18 @@ public class StoryManager : MonoBehaviour
         isSkip = false;
         isPrintingLines = false;
 
-        myLines = myStoryScript.Lines[curDialogueIndex];
-        myEmotions = myStoryScript.Emotions[curDialogueIndex];
+        if (!isDiddyVisible)
+        {
+            DiddyAnimated.SetActive(false);
+        }
+        else
+        {
+            DiddyAnimated.SetActive(true);
+        }
+
+        myLines = myStoryScript.Lines[StoryIndex];
+        myEmotions = myStoryScript.Emotions[StoryIndex];
+        myNames = myStoryScript.Names[StoryIndex];
 
         StartCoroutine(printDialogue(curDialogueIndex));
     }
@@ -32,9 +45,23 @@ public class StoryManager : MonoBehaviour
     IEnumerator printDialogue(int index)
     {
         dialogue.text = "";
+        if (myNames[index] == 0)
+        {
+            name.text = "화연";
+        }
+        else if (myNames[index] == 1)
+        {
+            name.text = "디디";
+        }
+
         float txtdelay = 0.1f;
         int count = 0;
         isPrintingLines = true;
+        if (isDiddyVisible)
+        {
+            myEmotionManager.DiddyChangeEmotion(myEmotions[index]);
+        }
+
         while (count < myLines[index].Length)
         {
             dialogue.text += myLines[index][count].ToString();
@@ -47,7 +74,6 @@ public class StoryManager : MonoBehaviour
         }
         isPrintingLines = false;
         isSkip = false;
-        myEmotionManager.DiddyChangeEmotion(myEmotions[index]);
     }
 
     public void onClickDialogueButton()
