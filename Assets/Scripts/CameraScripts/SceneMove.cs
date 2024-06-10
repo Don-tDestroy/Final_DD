@@ -3,20 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class SceneMove : MonoBehaviour
 {
-    public string prevSceneName; // 현재 씬 이름
-    public string destSceneName; // 다음 씬 이름
+    public static string prevSceneName; // 이전 씬 이름
+    public static string nextSceneName; // 다음 씬 이름
 
-    public void GoToScene()
+    public static void GoToCameraScene(string prev, string next)
     {
-        SceneManager.LoadScene(destSceneName); // 목적지 씬으로 이동
-    }
-
-    public void GoToCameraScene()
-    {
+        prevSceneName = prev;
+        nextSceneName = next;
         SceneManager.LoadScene("TestCameraScene"); // 카메라 씬으로 이동
     }
 
-    public void ReturnAfterCameraScene()
+    public static void GoToNextScene()
+    {
+        SceneManager.LoadScene(nextSceneName); // 다음 씬으로 이동
+    }
+   
+    public static void ReturnAfterCameraScene()
     {
         SceneManager.LoadScene(prevSceneName); // 이전 씬으로 이동
     }

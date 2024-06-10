@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -666,7 +666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &254518027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,6 +760,10 @@ PrefabInstance:
     - target: {fileID: 856359168982568939, guid: 829d1f988e95d8e4abdc9714d457ae95, type: 3}
       propertyPath: m_Name
       value: GPSManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 856359168982568939, guid: 829d1f988e95d8e4abdc9714d457ae95, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2955363815894759655, guid: 829d1f988e95d8e4abdc9714d457ae95, type: 3}
       propertyPath: warningPopup
@@ -1366,7 +1370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &714379696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,7 +1616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &890213791
 Transform:
   m_ObjectHideFlags: 0
@@ -1640,8 +1644,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2da0f66e9a6a7b4faf352cbe52bf4bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prevSceneName: Scene_0_Demo
-  destSceneName: TestGPSScene
 --- !u!1 &969875423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,7 +1661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &969875424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1737,7 +1739,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1066454036
 Light:
   m_ObjectHideFlags: 0
@@ -1964,16 +1966,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6083279010033445913, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
   m_PrefabInstance: {fileID: 1125568316}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1125568318 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7578305689723795186, guid: eb274b8aad73bfc4f93d827bea730e3a, type: 3}
-  m_PrefabInstance: {fileID: 1125568316}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1543968345 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7332286144473438194, guid: d1669f7bc3820db41acba6d2d29231f5, type: 3}
-  m_PrefabInstance: {fileID: 7310100288413492103}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1543968346 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 635580372418003901, guid: d1669f7bc3820db41acba6d2d29231f5, type: 3}
@@ -1999,7 +1991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1568476359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,19 +2078,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   screenPosTxt: {fileID: 882945670}
-  itemInfoTxt: {fileID: 98454732}
-  itemGetTxt: {fileID: 491240985}
-  distanceItem: {fileID: 154759222}
-  itemPrefab: {fileID: 296622391}
-  itemGuidePopup: {fileID: 1543968345}
-  GetItemPopup: {fileID: 2020266913}
-  itemSnackbar: {fileID: 1125568318}
+  partInfoTxt: {fileID: 0}
+  partCntTxt: {fileID: 0}
+  distancePart: {fileID: 0}
+  partPrefab: {fileID: 0}
+  cameraItemPrefab: {fileID: 0}
+  firstPartPopup: {fileID: 0}
+  partGuidePopup: {fileID: 0}
+  GetCameraItemPopup: {fileID: 0}
   planeSnackbar: {fileID: 1698552087}
+  partSnackbar: {fileID: 0}
   pathLatitude:
   - 37.56641769
   pathLongitude:
   - 126.94823455
   targetRadius: 15
+  cameraItemTransformInfo: []
   partTransformInfo:
   - key: position
     value: {x: -17, y: 144, z: 0}
@@ -2106,7 +2101,7 @@ MonoBehaviour:
     value: {x: 0, y: 200, z: 0}
   - key: scale
     value: {x: 2200, y: 2200, z: 2200}
-  afterPickCameraTrigger: TestGPSScene
+  lastPartTriggerScene: 
 --- !u!1001 &1698552085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2378,6 +2373,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8c39b8ee2811fb848936667315639616, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2542,7 +2541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!198 &2006772518
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -7527,11 +7526,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1195031169886159673, guid: 8668a52b520263647987fc030161025a, type: 3}
   m_PrefabInstance: {fileID: 2020266911}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2020266913 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3692754343024943013, guid: 8668a52b520263647987fc030161025a, type: 3}
-  m_PrefabInstance: {fileID: 2020266911}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2043421923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7543,6 +7537,10 @@ PrefabInstance:
     - target: {fileID: 3079384922396641228, guid: 7ba2e25fdd4b9874c8bffc4a32d11850, type: 3}
       propertyPath: m_Name
       value: SoundEffectManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3079384922396641228, guid: 7ba2e25fdd4b9874c8bffc4a32d11850, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6571411968313991015, guid: 7ba2e25fdd4b9874c8bffc4a32d11850, type: 3}
       propertyPath: m_LocalPosition.x

@@ -6,19 +6,22 @@ using UnityEngine.UI;
 public class PhotoGallery : MonoBehaviour
 {
     public GameObject photoPrefab; // 사진을 표시할 프리팹 (UI 이미지나 3D 오브젝트)
-    public Transform galleryContainer; // 사진을 배치할 부모 객체
+    public GameObject galleryContainer; // 사진을 배치할 부모 객체
+    private Transform galleryContainerTransform;
     private string galleryDirPath;
 
     void Start()
     {
         galleryDirPath = getGalleryDirPath();
+        galleryContainer.GetComponent<GridLayoutGroup>().cellSize = new Vector2(400, 400 * Screen.height / Screen.width);
+        galleryContainerTransform = galleryContainer.GetComponent<Transform>();
         LoadPhotos();
     }
 
     public static string getGalleryDirPath()
     {
         string savePath = Application.persistentDataPath;
-        string dirName = "Exploring Ewha With Diddy";
+        string dirName = "ExploringEwhaWithDiddy";
         string dirPath;
 
         if (savePath.IndexOf("Android") > 0) // 안드로이드 플랫폼인 경우 DCIM 하위에 폴더를 생성
@@ -71,20 +74,7 @@ public class PhotoGallery : MonoBehaviour
 
     private void AddPhotoToGallery(Texture2D texture)
     {
-        GameObject photoObject = Instantiate(photoPrefab, galleryContainer);
-
-        // photoObject의 RectTransform 가져와서 비율을 조정
-        /*RectTransform rectTransform = photoObject.GetComponent<RectTransform>();
-        if (rectTransform != null)
-        {
-            float originalWidth = rectTransform.sizeDelta.x;
-            float newHeight = originalWidth * Screen.height / Screen.height;
-            rectTransform.sizeDelta = new Vector2(originalWidth, newHeight);
-        }
-        else
-        {
-            Debug.LogError("photoPrefab에 RectTransform 컴포넌트가 없습니다.");
-        }*/
+        GameObject photoObject = Instantiate(photoPrefab, galleryContainerTransform);
 
         // UI 이미지에 텍스처 설정
         Image imageComponent = photoObject.GetComponent<Image>();

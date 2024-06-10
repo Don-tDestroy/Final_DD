@@ -128,7 +128,7 @@ public class GPSManager : MonoBehaviour
 
 
     // 지표면 거리 계산 공식(하버사인 공식)
-    private double GetDistance(double lat1, double lon1, double lat2, double lon2)
+    public double GetDistance(double lat1, double lon1, double lat2, double lon2)
     {
         double theta = lon1 - lon2;
 
