@@ -70,3 +70,8 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Font
+/[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/*
+Assets/TextMesh Pro/Resources/Fonts & Materials/Katuri SDF.asset
+Assets/TextMesh Pro/Resources/Fonts & Materials/Pretendard-Regular SDF.asset

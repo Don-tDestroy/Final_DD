@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/EffectScripts/ProgressTitle.cs.meta
+guid: 5bd40ec8c1efbca42bc94210dbdf48ff
+========
+guid: d9415017fa454d14b9ada614db2962f8
+>>>>>>>> develop:Assets/Scripts/EffectScripts/TextTwinkle.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

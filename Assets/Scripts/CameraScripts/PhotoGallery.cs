@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,19 +6,22 @@ using UnityEngine.UI;
 public class PhotoGallery : MonoBehaviour
 {
     public GameObject photoPrefab; // 사진을 표시할 프리팹 (UI 이미지나 3D 오브젝트)
-    public Transform galleryContainer; // 사진을 배치할 부모 객체
+    public GameObject galleryContainer; // 사진을 배치할 부모 객체
+    private Transform galleryContainerTransform;
     private string galleryDirPath;
 
     void Start()
     {
         galleryDirPath = getGalleryDirPath();
+        galleryContainer.GetComponent<GridLayoutGroup>().cellSize = new Vector2(400, 400 * Screen.height / Screen.width);
+        galleryContainerTransform = galleryContainer.GetComponent<Transform>();
         LoadPhotos();
     }
 
     public static string getGalleryDirPath()
     {
         string savePath = Application.persistentDataPath;
-        string dirName = "Exploring Ewha With Diddy";
+        string dirName = "ExploringEwhaWithDiddy";
         string dirPath;
 
         if (savePath.IndexOf("Android") > 0) // 안드로이드 플랫폼인 경우 DCIM 하위에 폴더를 생성
@@ -51,6 +54,7 @@ public class PhotoGallery : MonoBehaviour
         {
             StartCoroutine(LoadPhoto(filePath));
         }
+        Debug.Log("갤러리에서 사진을 로드 완료했습니다.");
     }
 
     private IEnumerator LoadPhoto(string filePath)
@@ -70,12 +74,14 @@ public class PhotoGallery : MonoBehaviour
 
     private void AddPhotoToGallery(Texture2D texture)
     {
-        GameObject photoObject = Instantiate(photoPrefab, galleryContainer);
+        GameObject photoObject = Instantiate(photoPrefab, galleryContainerTransform);
+
         // UI 이미지에 텍스처 설정
         Image imageComponent = photoObject.GetComponent<Image>();
         if (imageComponent != null)
         {
             imageComponent.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Debug.Log("이미지에 텍스처를 추가했습니다.");
         }
         else
         {

@@ -1,15 +1,24 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 public class TakePhotos : MonoBehaviour
 {
+    private ARCameraManager arCameraManager;
     private string galleryDirPath;
+    private int targetWidth;
+    private int targetHeight;
+    public AudioSource audioSource;
 
     void Start()
     {
+        arCameraManager = FindObjectOfType<ARCameraManager>(); // Canvas에서 컴포넌트 가져오기
+        arCameraManager.requestedFacingDirection = CameraFacingDirection.World;
         galleryDirPath = PhotoGallery.getGalleryDirPath();
+        targetWidth = Screen.width;
+        targetHeight = Screen.height;
     }
 
     // 사진 촬영 메서드
@@ -25,13 +34,12 @@ public class TakePhotos : MonoBehaviour
     IEnumerator TakeAPhoto()
     {
         yield return new WaitForEndOfFrame();
+        audioSource.Play();
 
         Camera camera = Camera.main;
 
         // 카메라에 Render Texture 설정
-        int width = Screen.width;
-        int height = Screen.height;
-        RenderTexture rt = new RenderTexture(width, height, 24);
+        RenderTexture rt = new RenderTexture(targetWidth, targetHeight, 24);
         camera.targetTexture = rt;
 
         // RenderTexture.active에 있는 Render Texture가 ReadPixels로 읽힐 Render Texture임
@@ -42,13 +50,11 @@ public class TakePhotos : MonoBehaviour
         camera.Render();
 
         // 새 텍스처를 생성하고 활성 Render Texture를 읽어들임
-        Texture2D image = new Texture2D(width, height);
-        image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        Texture2D image = new Texture2D(targetWidth, targetHeight, TextureFormat.RGB24, false);
+        image.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
         image.Apply();
-
+        
         camera.targetTexture = null;
-
-        // 원래의 활성 Render Texture를 대체함
         RenderTexture.active = currentRT;
 
         // 사진 파일 이름, 경로
