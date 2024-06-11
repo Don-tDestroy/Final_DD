@@ -8,8 +8,8 @@ public class StoryManager : MonoBehaviour
     public GameObject DiddyAnimated;
     DiddyEmotionManager myEmotionManager;
     StoryScripts myStoryScript;
-    public TextMeshProUGUI dialogue;
-    public TextMeshProUGUI name;
+    public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI nameText;
     public int StoryIndex;
     bool isSkip;
     bool isPrintingLines;
@@ -44,14 +44,14 @@ public class StoryManager : MonoBehaviour
 
     IEnumerator printDialogue(int index)
     {
-        dialogue.text = "";
+        dialogueText.text = "";
         if (myNames[index] == 0)
         {
-            name.text = "화연";
+            nameText.text = "화연";
         }
         else if (myNames[index] == 1)
         {
-            name.text = "디디";
+            nameText.text = "디디";
         }
 
         float txtdelay = 0.1f;
@@ -64,7 +64,7 @@ public class StoryManager : MonoBehaviour
 
         while (count < myLines[index].Length)
         {
-            dialogue.text += myLines[index][count].ToString();
+            dialogueText.text += myLines[index][count].ToString();
             count++;
             if (!isSkip)
             {
