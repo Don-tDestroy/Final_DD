@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fe103bf9ce0edd345885ae396812f855
+guid: 5db8f7d87be145a40958f61cd2931a19
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Hip Hop Dancing
+      name: Crying
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 190
+      lastFrame: 188
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
