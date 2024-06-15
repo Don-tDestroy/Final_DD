@@ -5,15 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class NextStageButton : MonoBehaviour
 {
-    private SceneQuizManager sceneQuizManager;
-
-    void Start()
-    {
-        sceneQuizManager = FindObjectOfType<SceneQuizManager>();
-    }
+    private int currStage=0;
 
     public void onClickNextStage() {
-        SceneManager.LoadScene(sceneQuizManager.currStage+1);
+        currStage++;
+        SceneManager.LoadScene(currStage);
     }
 
 }

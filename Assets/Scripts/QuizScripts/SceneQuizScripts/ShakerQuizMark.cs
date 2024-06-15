@@ -4,13 +4,6 @@ using UnityEngine;
 public class ShakerQuizMark : MonoBehaviour
 {
     private RectTransform rectTransform;
-    private Vector3 originalPosition;
-
-    void Start()
-    {
-        rectTransform = GetComponent<RectTransform>(); // Get the RectTransform component
-        originalPosition = rectTransform.localPosition; // Store the original position
-    }
 
     public void Shake(float duration, float magnitude)
     {
@@ -19,6 +12,7 @@ public class ShakerQuizMark : MonoBehaviour
 
     private IEnumerator ShakeAnimation(float duration, float magnitude)
     {
+        rectTransform = GetComponent<RectTransform>();
         float elapsed = 0f;
         Vector3 originalPos = rectTransform.localPosition;
 

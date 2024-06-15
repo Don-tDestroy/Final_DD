@@ -1,23 +1,20 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class QuizStateEffectButton : MonoBehaviour
 {
-    public Button button;
-    public Image checkImage; // Reference to the child Image component for the checkmark
-    public TextMeshProUGUI buttonText; // Reference to the child TextMeshProUGUI component for the button text
-    private Color originalButtonColor;
-    private Color originalTextColor;
+    [SerializeField] private Button button;
+    [SerializeField] private Image checkImage; // Reference to the child Image component for the checkmark
+    [SerializeField] private TextMeshProUGUI buttonText; 
+    private Color originalButtonColor= Color.white;
+    private Color originalTextColor = new Color(44f / 255f, 46f / 255f, 42f / 255f); 
 
-    private Color selectedButtonColor = new Color(0f / 255f, 82f / 255f, 66f / 255f); // 선택된 버튼의 색상
+    private Color selectedButtonColor = new Color(0f / 255f, 82f / 255f, 66f / 255f); 
+
 
     void Start()
     {
-        button = GetComponent<Button>();
-        originalButtonColor = button.image.color; // 초기 버튼 색상 저장
-        buttonText = GetComponentInChildren<TextMeshProUGUI>();
-        originalTextColor = buttonText.color; // 초기 텍스트 색상 저장
         checkImage.gameObject.SetActive(false); // 처음에는 Check 이미지 비활성화
     }
 
@@ -33,7 +30,7 @@ public class QuizStateEffectButton : MonoBehaviour
     public void SetUnselected()
     {
         button.image.color = originalButtonColor; // 원래 버튼 색상으로 복원
-        buttonText.color = originalTextColor; // 원래 텍스트 색상으로 복원
+        buttonText.color = originalTextColor;
         checkImage.gameObject.SetActive(false); // Check 이미지 비활성화
     }
 }
