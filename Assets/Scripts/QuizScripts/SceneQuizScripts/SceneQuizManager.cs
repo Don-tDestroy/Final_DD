@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -76,10 +75,12 @@ public class SceneQuizManager : MonoBehaviour
 
         if (currentQuestion.QuestionType == DescribeQuiz.QuestionTypes.MultipleChoice)
         {
+            // 다 풀고
             for (int i = 0; i < multipleChoiceButtons.Length; i++)
             {
                 multipleChoiceButtons[i].SetUnselected();
             }
+            // 선택한 버튼만 색 변경
             multipleChoiceButtons[userAnswerIndex].SetSelected();
         }
         else if (currentQuestion.QuestionType == DescribeQuiz.QuestionTypes.TrueFalse)

@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 public class DescribeQuiz : MonoBehaviour
 {
@@ -102,11 +100,7 @@ public class DescribeQuiz : MonoBehaviour
 
     public void SelectAnswer(int userAnswerIndex)
     {
-        int currStep = sceneQuizManager.currStep;
-        Question currentQuestion = questions[currStep];
-
         sceneQuizManager.UpdateSelection(userAnswerIndex);
-
         sceneQuizManager.currUserAnswerIndex = userAnswerIndex;
     }
 }
