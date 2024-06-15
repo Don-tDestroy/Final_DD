@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using TMPro;
 using UnityEngine.SceneManagement;
 
 [System.Serializable]
@@ -15,74 +15,85 @@ public struct PartTransformInfo
 
 public class PartSceneManager : MonoBehaviour
 {
+    // 팝업 및 UI 관련 매니저 스크립트
+    private PopupManager popupManager;
+
+    // 힌트 아이템 매니저 스크립트
+    private HintManager hintManager;
+
     // 부품 생성 관련 ray info
     private ARRaycastManager arRaycastManager;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     // 부품 줍기 관련 ray info
-    private RaycastHit hitInfo;
+    private RaycastHit hitInfoPart;
     private int partCnt = 0;
 
-    public TextMeshProUGUI screenPosTxt; // (테스트용) 스크린 클릭 position
-    public TextMeshProUGUI partInfoTxt; // (테스트용) 부품 생성 확인
-    public TextMeshProUGUI partCntTxt; // 주운 부품 개수 확인 [TODO] 디자인 적용해야함
-    public TextMeshProUGUI distancePart; // (테스트용) 클릭한 부품과의 거리
-
-    public GameObject partPrefab;
-    public GameObject firstPartPopup; // 처음 부품 주운 후 나오는 팝업
-    public GameObject partGuideCanavas; // 씬 시작할 때 나오는 부품 줍기 가이드 팝업
-    public GameObject planeSnackbar; // 바닥 인식 중에 뜨는 스낵바
-    public GameObject partSnackbar; // 부품 줍기 중에 뜨는 스낵바
-
+    private int totalPartCnt; // 부품 전체 개수. 씬마다 다름. GPS 값마다 부품 생성값에 따라 계산
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
-    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
+    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 700f), new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
     private readonly float partRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
     private bool picked = true; // 부품 주운 후
+
+    public GameObject partPrefab; // 부품 오브젝트
 
     [SerializeField]
     private List<double> pathLatitude = new List<double>(); // GPS 경로 (위도)
     [SerializeField]
     private List<double> pathLongitude = new List<double>(); // GPS 경로 (경도)
     [SerializeField]
+    private List<int> partCntPerPoint = new List<int>(); // 지점마다 생성되는 부품 개수
+    [SerializeField]
     private double targetRadius; // 목표 반경
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
     [SerializeField]
     private string lastPartTriggerScene; // 마지막 부품 주웠을 때 이동할 씬 이름
-
+    [SerializeField]
+    private string partLayerMaskName; // 부품 레이어 마스크 이름 (기본 부품이면 "Part")
+    [SerializeField]
+    private GameObject aimObj; // 부품 조준하는 에임 오브젝트
 
     private int currPathIdx = 0; // 현재까지 온 길 번호 (pathGpsInfo 의 index)
     private int partLayerMask; // 부품 레이어 마스크 (부품 주울 때, 부품 layer에만 ray 쏠 때 사용)
 
     private List<GameObject> lastPathParts = new List<GameObject>(); // 마지막 반경에서 생성된 부품 저장
 
+    private Vector3 originAimPos; // 부품 에임 기본 위치
+
 
     private void Awake()
     {
+        // popup manager 스크립트
+        popupManager = GameObject.Find("PopupManager").GetComponent<PopupManager>();
+        hintManager = gameObject.GetComponent<HintManager>();
+
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
         Debug.Log(screenWidth);
         Debug.Log(screenHeight);
 
         // 물체 생성 스크린 좌표 스크린 비율에 맞추기
-        screenPosTxt.text = "물체 생성 위치\n";
         for (int i = 0; i < createdPos.Count; i++)
         {
             float originX = createdPos[i].x;
             float originY = createdPos[i].y;
             createdPos[i] = new Vector2(originX * screenWidth / screenBiasWidth, originY * screenHeight / screenBiasHeigth);
-            screenPosTxt.text += createdPos[i].ToString() + "\n";
+            popupManager.SetDebuggingScreenPosTxt(i, createdPos[i]);
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
-        partLayerMask = LayerMask.GetMask("Part");
     }
 
     private void Start()
     {
+        partLayerMask = LayerMask.GetMask(partLayerMaskName);
+
+        originAimPos = RectTransformUtility.WorldToScreenPoint(null, aimObj.GetComponent<Image>().rectTransform.position);
+
         StartCoroutine(PartGuide());
     }
 
@@ -90,16 +101,10 @@ public class PartSceneManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        // 가이드 캔버스
-        SoundEffectManager.Instance.Play(1);
-        partGuideCanavas.SetActive(true);
-
-        // 기다리기
-        yield return new WaitForSeconds(3f);
-
-        // 가이드 캔버스 지우기
-        partGuideCanavas.SetActive(false);
-
+        float interval = 3f;
+        popupManager.OpenPartGuide(interval);
+        yield return new WaitForSeconds(interval);
+        
         // GPS path 및 줍기 활성화
         StartCoroutine(CheckGPSPath());
         StartCoroutine(CheckPickPart());
@@ -114,81 +119,86 @@ public class PartSceneManager : MonoBehaviour
             if (!isCreatingCoroutine && isInRadius && picked)
             {
                 picked = false;
-                partInfoTxt.text = (currPathIdx + 1).ToString() + "번째 반경 ";
+                popupManager.SetPartInfoTxt(currPathIdx);
                 CreateManyPart(currPathIdx == 0);
                 currPathIdx++;
-            }
 
-            yield return null;
-        }
-    } 
-
-    private IEnumerator CheckPickPart()
-    {
-        while (true)
-        {
-            // 부품 줍기
-            if (Input.GetMouseButtonDown(0))
-            {
-                screenPosTxt.text = "현재 클릭 위치\n" + Input.mousePosition.ToString();
-                screenPosTxt.text += "부품 줍기";
-                Vector3 mousePos = Input.mousePosition;
-                Ray screenRay = Camera.main.ScreenPointToRay(mousePos);
-
-                if (Physics.Raycast(screenRay.origin, screenRay.direction, out hitInfo, Mathf.Infinity, partLayerMask))
+                // 힌트 아이템 생성
+                // [TODO] 2로 나눠 떨어지는가는 임의로 생성한 값.. 수정해야함
+                if(currPathIdx % 2 == 0)
                 {
-                    // (테스트용) 거리 확인
-                    distancePart.text = "부품 거리 " + hitInfo.distance;
-
-                    // 부품이 특정 반경 내에 있을 경우에만 주울 수 있도록
-                    if (hitInfo.distance <= partRadius)
-                    {
-                        screenPosTxt.text += "없어짐 ! ";
-                        SoundEffectManager.Instance.Play(0);
-
-                        // 마지막 부품 클릭했으면 카메라 씬으로 이동
-                        GameObject lastPart = GetLastPart();
-                        if (lastPart != null && hitInfo.collider.gameObject == lastPart)
-                        {
-                            Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
-                            SceneManager.LoadScene(lastPartTriggerScene);
-                        }
-
-                        Destroy(hitInfo.collider.gameObject);
-                        partCnt++;
-
-                        // 부품 처음 줍는 거라면 팝업 띄우기
-                        if (partCnt == 1 && lastPart == null)
-                        {
-                            firstPartPopup.SetActive(true);
-                            Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
-                        }
-
-                        partCntTxt.text = "part count : " + partCnt;
-                        StartCoroutine(PickingPart(2f));
-                    }
-                    else
-                    {
-                        // 특정 반경 내에 없으면 스낵바 띄워서 안내
-                        StartCoroutine(OpenPartSnackbar());
-                    }
-                   
+                    hintManager.CreateHintItem();
                 }
             }
+
             yield return null;
         }
     }
 
-    
-    private IEnumerator OpenPartSnackbar()
+    private int CheckAimedPart(Vector3 rayPos)
     {
-        partSnackbar.SetActive(true);
-        partSnackbar.GetComponent<FadeInOut>().FadeInAll();
+        popupManager.SetScreenPosTxt(rayPos);
 
-        yield return new WaitForSeconds(2f);
+        Ray screenRay = Camera.main.ScreenPointToRay(rayPos);
 
-        partSnackbar.SetActive(false);
-        partSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+        if (Physics.Raycast(screenRay.origin, screenRay.direction, out hitInfoPart, Mathf.Infinity, partLayerMask))
+        {
+            // (테스트용) 거리 확인
+            popupManager.SetDistancePart(hitInfoPart.distance);
+
+            // 부품이 특정 반경 내에 있을 경우에만 주울 수 있도록
+            if (hitInfoPart.distance <= partRadius)
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private IEnumerator CheckPickPart()
+    {        
+        while (true)
+        {
+            int checkAimedPartIdx = CheckAimedPart(originAimPos);
+            // raycast 계속 쏘면서 부품 주울 수 있는지 확인
+            if (checkAimedPartIdx == 2)
+            {
+                popupManager.OpenPickPartSnackbar();
+                SoundEffectManager.Instance.Play(0);
+
+                // 마지막 부품 클릭했으면 카메라 씬으로 이동
+                GameObject lastPart = GetLastPart();
+                if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
+                {
+                    Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
+                    SceneManager.LoadScene(lastPartTriggerScene);
+                }
+
+                Destroy(hitInfoPart.collider.gameObject);
+                partCnt++;
+
+                // 부품 처음 줍는 거라면 팝업 띄우기
+                if (partCnt == 1 && lastPart == null)
+                {
+                    popupManager.OpenFirstPartPopup();
+                }
+
+                popupManager.SetPartCntTxt(partCnt, totalPartCnt);
+                popupManager.SetDebuggingPartTxt(partCnt);
+                StartCoroutine(PickingPart(3f));
+            }
+            else if (checkAimedPartIdx == 1)
+            {
+                // 특정 반경 내에 없으면 스낵바 띄워서 안내
+                popupManager.OpenPartScnackbar();
+            }
+
+            yield return null;
+        }
     }
 
     private IEnumerator PickingPart(float interval)
@@ -197,7 +207,6 @@ public class PartSceneManager : MonoBehaviour
 
         picked = true;
     }
-
 
     private void CreateManyPart(bool isFirst)
     {
@@ -213,6 +222,7 @@ public class PartSceneManager : MonoBehaviour
             var hitPose = hits[0].pose;
             GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
             part.transform.localEulerAngles = partTransformInfo[1].value;
+            part.transform.localScale = partTransformInfo[2].value;
 
 
             // 마지막 부품 반경에서 생성된 부품일 경우
@@ -231,15 +241,15 @@ public class PartSceneManager : MonoBehaviour
     {
         if (arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon) == false)
         {
-            if (planeSnackbar.activeSelf == false)
+            if (popupManager.planeSnackbar.activeSelf == false)
             {
-                planeSnackbar.SetActive(true);
-                planeSnackbar.GetComponent<FadeInOut>().FadeInAll();
+                popupManager.planeSnackbar.SetActive(true);
+                popupManager.planeSnackbar.GetComponent<FadeInOut>().FadeInAll();
             }
             return false;
         }
-        planeSnackbar.SetActive(false);
-        planeSnackbar.GetComponent<FadeInOut>().FadeOutAll();
+        popupManager.planeSnackbar.SetActive(false);
+        popupManager.planeSnackbar.GetComponent<FadeInOut>().FadeOutAll();
         return true;
     }
 
@@ -260,7 +270,7 @@ public class PartSceneManager : MonoBehaviour
                 }
 
                 CreateOnePart(createdPos[i]);
-                partInfoTxt.text += i.ToString() + "th part ";
+                popupManager.partInfoTxt.text += i.ToString() + "th part ";
                 yield return new WaitForSeconds(1);
             }
 
@@ -274,7 +284,7 @@ public class PartSceneManager : MonoBehaviour
             }
 
             CreateOnePart(createdPos[createdPos.Count - 1]);
-            partInfoTxt.text += "only 1th part";
+            popupManager.partInfoTxt.text += "only 1th part";
             yield return new WaitForSeconds(1);
         }
 
@@ -293,9 +303,4 @@ public class PartSceneManager : MonoBehaviour
         }
     }
 
-
-    public void PopupOkButton()
-    {
-        Time.timeScale = 1; // 시간 다시 흐르기
-    }
 }
