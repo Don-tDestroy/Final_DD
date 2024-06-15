@@ -16,8 +16,8 @@ public class IntroManager : MonoBehaviour
 
     // 목적지에 따라 추가되는 이화력 데이터
     Dictionary<string, int> ewhaPoint = new Dictionary<string, int> {
-    { "Scene_2", 0 },
-    { "Scene_3", 5 },
+    { "Scene_2", 2 },
+    { "Scene_3", 3 },
     { "Scene_4", 5 },
     { "Scene_5", 10 }
     };
