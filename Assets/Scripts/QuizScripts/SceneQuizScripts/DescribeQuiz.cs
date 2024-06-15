@@ -2,78 +2,78 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DescribeQuiz : MonoBehaviour
 {
+    // 퀴즈 데이터 처리
+    public static class QuestionTypes
+    {
+        public const string MultipleChoice = "MULTIPLE";
+        public const string TrueFalse = "OX";
+    }
+
     [System.Serializable]
     public class Question
     {
         public string QuestionText;
         public string[] Options;
         public int CorrectAnswerIndex;
+        public string QuestionType;
 
-        public Question(string questionText, string[] options, int correctAnswerIndex)
+        public Question(string questionText, string[] options, int correctAnswerIndex, string questionType)
         {
             QuestionText = questionText;
             Options = options;
             CorrectAnswerIndex = correctAnswerIndex;
+            QuestionType = questionType;
         }
     }
 
-    // 현재 어디까지 왔는 지에 따라 문제 달라짐
-    public int currStep = 0;
-
-    public TextMeshProUGUI describeTxt; // 문제
-    public TextMeshProUGUI[] optionTxts; // 선택지
-
-
+    private SceneQuizManager sceneQuizManager;
+    public TextMeshProUGUI questionTxt;
     public List<Question> questions = new List<Question>
     {
-        // 객관식
-        new Question("다음 중 ECC에 있는 것은?",
-            new string[] { "식당",
-                "서점",
-                "영화관",
-                "열람실",
-                "전부" }, 4),
-        new Question("1학년 1학기가 끝났을 때, 채플을 미수료하면 어떻게 될까?",
-                     new string[] { "다음 학기에 2개를 들으면 된다.",
-                         "채플 F학점을 받게 된다.",
-                         "다음 학기 채플에서 장기자랑을 해야 한다.",
-                         "다음 학기 채플에서 합창을 해야 한다.",
-                         "지도교수님과 면담시간을 가져야 한다." }, 0),
-        // OX
-        new Question("공대에는 식당이 있다", new string[] { "True", "False" }, 0)
+        new Question("다음 중 ECC에 있는 것은?", new string[] { "식당", "서점", "영화관", "열람실", "전부" }, 4, QuestionTypes.MultipleChoice),
+        new Question("1학년 1학기가 끝났을 때, 채플을 미수료하면 어떻게 될까?", new string[] { "다음 학기에 2개를 들으면 된다.", "채플 F학점을 받게 된다.", "다음 학기 채플에서 장기자랑을 해야 한다.", "다음 학기 채플에서 합창을 해야 한다.", "지도교수님과 면담시간을 가져야 한다." }, 0, QuestionTypes.MultipleChoice),
+        new Question("공대에는 식당이 있다", new string[] { "True", "False" }, 0, QuestionTypes.TrueFalse)
     };
-    private List<int> randomizedOptionIndices = new List<int>(); // 랜덤화된 선택지 인덱스 리스트
-    private int correctAnswerIndex; // 랜덤화된 선택지의 정답 인덱스
+
+    private List<int> randomizedOptionIndices = new List<int>(); // 객관식은 랜덤하게 섞기
+    private int correctAnswerIndex;
 
     void Start()
     {
+        sceneQuizManager = FindObjectOfType<SceneQuizManager>();
+        sceneQuizManager.currUserAnswerIndex = -1;
+
         DisplayQuestion();
     }
 
     public void DisplayQuestion()
     {
+        int currStep = sceneQuizManager.currStep;
         if (currStep < questions.Count)
         {
-            describeTxt.text = questions[currStep].QuestionText;
-            RandomizeOptions();
-            for (int i = 0; i < optionTxts.Length; i++)
+            Question currentQuestion = questions[currStep];
+            questionTxt.text = currentQuestion.QuestionText;
+
+
+            if (currentQuestion.QuestionType == QuestionTypes.MultipleChoice)
             {
-                optionTxts[i].text = questions[currStep].Options[randomizedOptionIndices[i]];
+                RandomizeOptions();
+                sceneQuizManager.ShowMultipleChoicePanel(currentQuestion.Options, randomizedOptionIndices);
+            }
+            else if (currentQuestion.QuestionType == QuestionTypes.TrueFalse)
+            {
+                sceneQuizManager.ShowOXPanel(currentQuestion.Options);
             }
         }
         else
         {
-            describeTxt.text = "퀴즈 끝";
+            questionTxt.text = "퀴즈가 끝났습니다!";
+            sceneQuizManager.HideAllPanels();
         }
-    }
-
-    public void NextStep()
-    {
-        currStep++;
-        DisplayQuestion();
     }
 
     public int GetCorrectAnswerIndex()
@@ -81,9 +81,10 @@ public class DescribeQuiz : MonoBehaviour
         return correctAnswerIndex;
     }
 
-    // 문제 랜덤하게 섞기
     private void RandomizeOptions()
     {
+        int currStep = sceneQuizManager.currStep;
+
         randomizedOptionIndices.Clear();
         for (int i = 0; i < questions[currStep].Options.Length; i++)
         {
@@ -97,5 +98,15 @@ public class DescribeQuiz : MonoBehaviour
             randomizedOptionIndices[randomIndex] = temp;
         }
         correctAnswerIndex = randomizedOptionIndices.IndexOf(questions[currStep].CorrectAnswerIndex);
+    }
+
+    public void SelectAnswer(int userAnswerIndex)
+    {
+        int currStep = sceneQuizManager.currStep;
+        Question currentQuestion = questions[currStep];
+
+        sceneQuizManager.UpdateSelection(userAnswerIndex);
+
+        sceneQuizManager.currUserAnswerIndex = userAnswerIndex;
     }
 }
