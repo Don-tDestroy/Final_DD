@@ -9,7 +9,7 @@ public class SceneQuizManager : MonoBehaviour
 
     private DescribeQuiz describeQuiz;
     [SerializeField]
-    private GameObject answerPopup, noAnswerPopup;
+    public QuizResultPopup quizResultPopup; // Reference to the QuizResultPopup script
     [SerializeField]
     private GameObject multipleChoicePanel, oxPanel;
     [SerializeField]
@@ -17,12 +17,19 @@ public class SceneQuizManager : MonoBehaviour
     [SerializeField]
     private QuizStateEffectButton[] oxButtons;
 
+
+    [SerializeField] private GameObject quizMarkObject; // Reference to the QuizMark GameObject
+    private ShakerQuizMark shakerQuizMark;
+
     public int currStep = 0;
     public int currUserAnswerIndex;
+
+    public int currStage = 0;//임시
 
     void Start()
     {
         describeQuiz = FindObjectOfType<DescribeQuiz>();
+        shakerQuizMark = quizMarkObject.GetComponent<ShakerQuizMark>(); // 틀렸을 때 좌우로 흔들리는 효과
 
         // 객관식 버튼 이벤트 할당
         for (int i = 0; i < multipleChoiceButtons.Length; i++)
@@ -37,13 +44,16 @@ public class SceneQuizManager : MonoBehaviour
             int index = i;
             oxButtons[i].GetComponent<Button>().onClick.AddListener(() => describeQuiz.SelectAnswer(index));
         }
+
+        quizResultPopup.HideResult();
+
     }
 
     public void ShowMultipleChoicePanel(string[] options, List<int> randomizedOptionIndices)
     {
         multipleChoicePanel.SetActive(true);
         oxPanel.SetActive(false);
-        for (int i = 0; i < options.Length; i++)
+        for (int i = 0; i < multipleChoiceButtons.Length; i++)
         {
             TextMeshProUGUI buttonText = multipleChoiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             buttonText.text = options[randomizedOptionIndices[i]];
@@ -62,6 +72,8 @@ public class SceneQuizManager : MonoBehaviour
             oxButtons[i].SetUnselected();
         }
     }
+
+
 
     public void HideAllPanels()
     {
@@ -101,15 +113,20 @@ public class SceneQuizManager : MonoBehaviour
     {
         if (currStep < describeQuiz.questions.Count)
         {
+            DescribeQuiz.Question currentQuestion = describeQuiz.questions[currStep];
             int correctAnswerIndex = describeQuiz.GetCorrectAnswerIndex();
+
+            NextStep();
+
+            string explanation = currentQuestion.Explanation; // 해설
             if (currUserAnswerIndex == correctAnswerIndex)
             {
-                answerPopup.SetActive(true);
-                NextStep();
+                quizResultPopup.ShowResult(true, "정답이에요!", explanation, "+10");
             }
             else
             {
-                noAnswerPopup.SetActive(true);
+                quizResultPopup.ShowResult(false, "틀렸어요.", explanation, "-10");
+                shakerQuizMark.Shake(0.3f, 15f); // Shake the QuizMark for 0.5 seconds with magnitude 10
             }
         }
         else
