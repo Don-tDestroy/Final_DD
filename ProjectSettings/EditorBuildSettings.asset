@@ -8,18 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Scene_0.unity
     guid: e1de2dd4dcd4eca46ae3398bce8b99c5
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/Scene_1.unity
+    guid: bcd77b2937d66f64da4ddfec7d917617
+  - enabled: 1
     path: Assets/Scenes/Scene_2.unity
     guid: e69b0c442a319604db7df073e47cdeb0
   - enabled: 0
     path: Assets/Scenes/TestCameraScene.unity
     guid: c45bc2cd7786e8045a692d08fa53c4c7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestGPSScene.unity
     guid: 3659e2f150bc2444cba0a0d7f6bea9ed
-  - enabled: 1
-    path: Assets/Scenes/TestIntroScene.unity
-    guid: f4271b307ea560941bea911512763775
   - enabled: 0
     path: Assets/Scenes/Demo_Scenes/Scene_6_Demo.unity
     guid: 23eaff08086d76d4d9ab55d320173406
