@@ -7,6 +7,7 @@ public class Scene0Initialize : MonoBehaviour
     public GameObject startPanel;
     public GameObject galleryPanel;
     public GameObject locationPanel;
+    public GameObject creditPanel;
 
     public double mainGateLat, mainGateLong;
 
@@ -28,7 +29,7 @@ public class Scene0Initialize : MonoBehaviour
         bool isInRadius = GPSManager.Instance.CheckCurrPosInRadius(mainGateLat, mainGateLong, 100f);
         if (!isInRadius) // 정문 주위에 없으면
         {
-            startPanel.SetActive(false);
+            // startPanel.SetActive(false);
             locationPanel.SetActive(true);
             return;
         }
@@ -36,30 +37,33 @@ public class Scene0Initialize : MonoBehaviour
         SceneManager.LoadScene(nextScene); // 다음 씬으로 이동
     }
 
-    public void SeePrologue() // 프롤로그 보기: 추후 다시보기 기능 추가 시에도 호출
+    public void SeePrologue() // 프롤로그 보기
     {
-        startPanel.SetActive(false);
+        // startPanel.SetActive(false);
         galleryPanel.SetActive(false);
+        creditPanel.SetActive(false);
         prologuePanel.SetActive(true);
     }
 
-    public void SeeStart() // 프롤로그 보기: 추후 다시보기 기능 추가 시에도 호출
+    public void SeeStart() // 시작 화면 보기
     {
         prologuePanel.SetActive(false);
         galleryPanel.SetActive(false);
+        creditPanel.SetActive(false);
         startPanel.SetActive(true);
     }
 
     public void SeeGallery() // 갤러리 보기
     {
-        startPanel.SetActive(false);
+        // startPanel.SetActive(false);
         prologuePanel.SetActive(false);
+        creditPanel.SetActive(false);
         galleryPanel.SetActive(true);
     }
 
     public void CloseLocationPanel()
     {
         locationPanel.SetActive(false);
-        startPanel.SetActive(true);
+        // startPanel.SetActive(true);
     }
 }

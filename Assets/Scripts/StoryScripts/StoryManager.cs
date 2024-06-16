@@ -19,12 +19,13 @@ public class StoryManager : MonoBehaviour
     bool isPrintingLines;
     int curDialogueIndex;
     public bool isDiddyVisible;
+    public bool isFinished;
 
     List<string> myLines;
     List<int> myEmotions;
     List<int> myNames;
-
     GameManager gameManager;
+    
     void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
@@ -33,6 +34,7 @@ public class StoryManager : MonoBehaviour
 
         isSkip = false;
         isPrintingLines = false;
+        isFinished = false;
 
         InitializeStoryIndex();
 
@@ -115,7 +117,7 @@ public class StoryManager : MonoBehaviour
             isSkip = true;
         }
 
-        if (curDialogueIndex < myLines.Count - 1) // 마지막 대사 직전까지
+        if (curDialogueIndex < myLines.Count-1) // 마지막 대사 직전까지
         {
 
             if (!isPrintingLines)
@@ -124,7 +126,7 @@ public class StoryManager : MonoBehaviour
                 StartCoroutine(printDialogue(curDialogueIndex));
             }
         }
-        else if(curDialogueIndex == myLines.Count - 1) // 마지막 대사일 때
+        else if(curDialogueIndex == myLines.Count-1) // 마지막 대사일 때
         {
             finishButton.SetActive(true);
         }
@@ -136,6 +138,13 @@ public class StoryManager : MonoBehaviour
         {
             SceneManager.LoadScene("Scene0");
         }
+        if (!isPrintingLines)
+        {
+            StartCoroutine(printDialogue(curDialogueIndex));
+            isFinished = true;
+        }
+
+        
         
     }
 
