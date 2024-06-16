@@ -9,9 +9,8 @@ public class GameManager : MonoBehaviour
     private int isTutorial = 0; // 게임 첫 시작 여부 (첫 시작이면 True)
     private int totalPartCnt = 0; // 총 주운 부품 개수
 
-    private string previousScene = null;
     private int ewhaPower = 0;
-
+    private int curStageNumber = 0;
 
     private void Awake()
     {
@@ -65,14 +64,14 @@ public class GameManager : MonoBehaviour
         totalPartCnt += cnt;
     }
 
-    public string GetPreviousScene()
+    public int GetStageNumber()
     {
-        return previousScene;
+        return curStageNumber;
     }
 
-    public void SavePreviousScene(string sname)
+    public void SetStageNumber(int n)
     {
-        previousScene = sname;
+        curStageNumber = n;
     }
 
     public int GetEwhaPower()
