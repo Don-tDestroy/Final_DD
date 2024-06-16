@@ -13,7 +13,6 @@ public struct DiDiTransformInfo
     public Vector3 value;
 }
 
-
 public class DiDiMaker : MonoBehaviour
 {
  
@@ -22,7 +21,7 @@ public class DiDiMaker : MonoBehaviour
 
     public GameObject didiPrefab;
     public GameObject planeSnackbar;
-    public GameObject storyObj;
+    public GameObject storyPrefab;
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
@@ -34,7 +33,10 @@ public class DiDiMaker : MonoBehaviour
     private int partLayerMask;
 
     private GameObject didiObj;
+    private GameObject storyObj;
     private bool touched = false;
+
+    ArOnOff arOnOff;
 
     //임시
     public TextMeshProUGUI txt;
@@ -52,56 +54,42 @@ public class DiDiMaker : MonoBehaviour
         arRaycastManager = GetComponent<ARRaycastManager>();
         partLayerMask = LayerMask.GetMask("Part");
 
+        arOnOff = GetComponent<ArOnOff>();
+
         StartCoroutine(StartStory(0, false));
     }
 
     private IEnumerator StartStory(int storyIndex, bool isDiddyVisible)
     {
-        txt.text = "Story 실행됐다!";
-        Debug.Log("Story 실행됐다!");
-        storyObj.SetActive(true);
+        arOnOff.OffAr();
+        storyObj = Instantiate(storyPrefab, GameObject.FindGameObjectWithTag("Canvas").transform);
+        storyObj.transform.localPosition = Vector3.zero;
+
         StoryManager storyManager = storyObj.GetComponent<StoryManager>();
         storyManager.isFinished = false;
         storyManager.StoryIndex = storyIndex;
         storyManager.isDiddyVisible = isDiddyVisible;
-
-        txt.text = "isFinished: " + storyManager.isFinished + "\nstoryindex: " + storyManager.StoryIndex + "\nisDiddyVisible: " + storyManager.isDiddyVisible;
-
-        if (storyIndex == 1)
-        {
-            StopCoroutine(TouchDiDi());
-        }
 
         while (!storyManager.isFinished)
         {
             yield return null;
         }
 
-        txt.text = "끝!";
-        Debug.Log("끝!");
-
-        storyObj.SetActive(false);
+        Destroy(storyObj);
 
         if (storyIndex == 0)
         {
-            StartCoroutine(CreateDiDiOnPlane());
-            StartCoroutine(TouchDiDi());
-            StopCoroutine(StartStory(0, false));
+            arOnOff.OnAr();
+            yield return StartCoroutine(CreateDiDiOnPlane());
         }
-        else if (storyIndex == 1)
+        else if (storyIndex == 1) 
         {
-            txt.text = "다음 씬을 불러와요!";
-            Debug.Log("다음 씬을 불러와요!");
             SceneManager.LoadSceneAsync("Scene_2");
-            StopCoroutine(StartStory(1, true));
         }
     }
 
     private IEnumerator CreateDiDiOnPlane()
     {
-        txt.text = "바닥을 인식해요!";
-        Debug.Log("바닥을 인식해요!");
-
         while (true)
         {
             if (touched == false)
@@ -122,7 +110,7 @@ public class DiDiMaker : MonoBehaviour
                     Quaternion didiRotation = Quaternion.LookRotation(-directionToCamera) * didiPrefab.transform.rotation;
 
                     didiObj = Instantiate(didiPrefab, didiPosition, didiRotation);
-                    StopCoroutine(CreateDiDiOnPlane());
+                    yield return StartCoroutine(TouchDiDi());
                 }
             }
             yield return null;
@@ -147,8 +135,6 @@ public class DiDiMaker : MonoBehaviour
 
     private IEnumerator TouchDiDi()
     {
-        txt.text = "터치디디 코루틴";
-        Debug.Log("터치 코루틴");
         while (true)
         {
             if (Input.GetMouseButtonDown(0))
@@ -163,11 +149,9 @@ public class DiDiMaker : MonoBehaviour
                     txt.text = hit.collider.gameObject.name;
                     if (hit.collider.gameObject == didiObj)
                     {
-                        txt.text = "터치디디";
-                        Debug.Log("터치디디");
                         touched = true;
                         Destroy(didiObj);
-                        StartCoroutine(StartStory(1, true));
+                        yield return StartCoroutine(StartStory(1, true)); 
                     }
                 }
             }
