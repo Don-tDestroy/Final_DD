@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1891,23 +1891,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partPrefab: {fileID: 504644758}
   pathLatitude:
-  - 37.564246760124774
-  - 37.566520690918
-  - 37.566520690918
-  - 37.566520690918
-  - 37.566520690918
-  - 37.566520690918
-  - 37.566520690918
-  - 37.566520690918
+  - 37.55934
+  - 37.55947
+  - 37.55959
+  - 37.55971
+  - 37.55983
+  - 37.55995
+  - 37.56008
+  - 37.56019
   pathLongitude:
-  - 126.95042707018189
-  - 126.948677062988
-  - 126.948677062988
-  - 126.948677062988
-  - 126.948677062988
-  - 126.948677062988
-  - 126.948677062988
-  - 126.948677062988
+  - 126.94565
+  - 126.94562
+  - 126.94559
+  - 126.94557
+  - 126.94561
+  - 126.94559
+  - 126.94561
+  - 126.94566
   partCntPerPoint: 0300000002000000020000000200000002000000020000000200000001000000
   targetRadius: 15
   partTransformInfo:
@@ -1921,7 +1921,7 @@ MonoBehaviour:
   partLayerMaskName: Part
   aimObj: {fileID: 2129893767}
   cameraItemPrefab: {fileID: 296622391}
-  getCameraItemPopup: {fileID: 0}
+  getCameraItemPopup: {fileID: 2020266913}
 --- !u!114 &1568476366
 MonoBehaviour:
   m_ObjectHideFlags: 0
