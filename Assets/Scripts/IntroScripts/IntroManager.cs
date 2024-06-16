@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class IntroManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class IntroManager : MonoBehaviour
     public GameObject dialogueBox;
     public Button skipButton;
     public GameObject resultPopup;
+    public TextMeshProUGUI ewhaText;
 
     string[] data; // 특정 씬에 대한 intro data 저장
     bool isSkip = false;
@@ -29,7 +31,7 @@ public class IntroManager : MonoBehaviour
 
     void Start()
     {
-        GameManager.Instance.SetStageNumber(2); // 삭제 ! 
+        GameManager.Instance.SetStageNumber(5); // 삭제 ! 
         currStage = GameManager.Instance.GetStageNumber();
 
         data = introDataObj.GetComponent<IntroDataScript>().GetData(currStage);
@@ -82,7 +84,18 @@ public class IntroManager : MonoBehaviour
                 StartCoroutine(PrintDialogue());
                 GameManager.Instance.AddEwhaPower(ewhaPoint[currStage]);
                 resultPopup.SetActive(true);
+                ewhaText.text = "+" + ewhaPoint[currStage];
             }
         }
+    }
+
+    public void OnClickOkButton()
+    {
+        // 수정수정~~ TestCameraScene->CameraScene
+        if (currStage == 2) { SceneManager.LoadScene("TestCameraScene"); } // 예외처리) 튜토리얼 스테이지의 경우 바로 카메라 씬
+        else { SceneManager.LoadScene("Scene_Quiz"); }
+
+        resultPopup.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

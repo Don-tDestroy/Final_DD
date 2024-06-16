@@ -588,7 +588,7 @@ PrefabInstance:
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 468607914}
+      objectReference: {fileID: 1658086002}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -607,7 +607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ResultPopupSetter, Assembly-CSharp
+      value: IntroManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -631,10 +631,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5693879382999014849, guid: 8668a52b520263647987fc030161025a, type: 3}
       insertIndex: 1
       addedObject: {fileID: 538925959}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3692754343024943013, guid: 8668a52b520263647987fc030161025a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 468607914}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8668a52b520263647987fc030161025a, type: 3}
 --- !u!224 &468607909 stripped
 RectTransform:
@@ -651,20 +648,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3692754343024943013, guid: 8668a52b520263647987fc030161025a, type: 3}
   m_PrefabInstance: {fileID: 468607908}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &468607914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 468607911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b19090d5b5974064697f6cd3ba62c199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  introObj: {fileID: 1658085996}
-  ewhaText: {fileID: 140023786}
 --- !u!1 &480376091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,6 +1733,7 @@ MonoBehaviour:
   dialogueBox: {fileID: 689835556}
   skipButton: {fileID: 480376093}
   resultPopup: {fileID: 468607911}
+  ewhaText: {fileID: 140023786}
 --- !u!1 &1788073531
 GameObject:
   m_ObjectHideFlags: 0
