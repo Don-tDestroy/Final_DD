@@ -30,7 +30,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene_6_Quiz.unity
     guid: 9c26ab58ddfc59343be9a3470778f446
   - enabled: 0
-    path: Assets/Scenes/TestIntroScene.unity
+    path: Assets/Scenes/IntroScene.unity
     guid: f4271b307ea560941bea911512763775
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9dd0b8e5bd91c1a42aa70853fe0774e6, type: 2}

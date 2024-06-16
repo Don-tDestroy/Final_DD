@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 public class IntroManager : MonoBehaviour
 {
-    string temp = "Scene_5"; // 임시 변수. Intro Scene 분리 시: 이전 씬 이름, 분리 안할 시: 현재 씬 이름
+    int currStage;
 
     public GameObject introDataObj;
     public TextMeshProUGUI introText;
@@ -20,16 +20,19 @@ public class IntroManager : MonoBehaviour
     int curDialogueIndex = 0;
 
     // 목적지에 따라 추가되는 이화력 데이터
-    Dictionary<string, int> ewhaPoint = new Dictionary<string, int> {
-    { "Scene_2", 2 },
-    { "Scene_3", 3 },
-    { "Scene_4", 5 },
-    { "Scene_5", 10 }
+    Dictionary<int, int> ewhaPoint = new Dictionary<int, int> {
+    { 2, 2 },
+    { 3, 3 },
+    { 4, 5 },
+    { 5, 10 }
     };
 
     void Start()
     {
-        data = introDataObj.GetComponent<IntroDataScript>().GetData(temp);
+        GameManager.Instance.SetStageNumber(2); // 삭제 ! 
+        currStage = GameManager.Instance.GetStageNumber();
+
+        data = introDataObj.GetComponent<IntroDataScript>().GetData(currStage);
         StartCoroutine(printDialogue());
     }
 
@@ -77,8 +80,12 @@ public class IntroManager : MonoBehaviour
             if (!isPrintingLines)
             {
                 StartCoroutine(printDialogue());
-                Debug.Log("+" + ewhaPoint[temp] + " 이화력 상승!"); // TODO: 이화력 전역 변수 생기면 값 올리기
-                                                               // TODO: 퀴즈 씬으로 이동
+
+                GameManager.Instance.AddEwhaPower(ewhaPoint[currStage]);
+
+                // 수정수정~~ TestCameraScene->CameraScene
+                if (currStage == 2) { SceneManager.LoadScene("TestCameraScene"); } // 예외처리) 튜토리얼 스테이지의 경우 바로 카메라 씬
+                else { SceneManager.LoadScene("Scene_Quiz"); }
                 return;
             }
         }
