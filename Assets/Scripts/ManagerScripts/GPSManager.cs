@@ -73,7 +73,7 @@ public class GPSManager : MonoBehaviour
 
                 currLatitude = Input.location.lastData.latitude; // 현재 위도 저장
                 currLongitude = Input.location.lastData.longitude; // 현재 경도 저장
-                currGpsPosTxt.text = "현재 GPS 위치 \n" + "현재 위도: " + currLatitude + "\n현재 경로: " + currLongitude;
+                currGpsPosTxt.text = "현재 GPS 위치 \n" + "현재 위도: " + currLatitude + "\n현재 경도: " + currLongitude;
             }
 
             print("Unable to determine device location");

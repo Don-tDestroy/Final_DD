@@ -265,7 +265,7 @@ MonoBehaviour:
     \uC88C\uC11D\uC744 \uC608\uC57D\uD574 \uC0AC\uC6A9\uD558\uBA74 \uB3FC\uC694."
   hintTransformInfo:
   - key: position
-    value: {x: 0, y: 0.6, z: 0}
+    value: {x: 0, y: 0.7, z: 0}
   - key: rotation
     value: {x: 0, y: 0, z: 0}
   - key: scale
@@ -284,24 +284,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partPrefab: {fileID: 8241437029242094258, guid: 6094d0dffcb96f54fb3c8cd989b99f0b, type: 3}
   pathLatitude:
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
+  - 37.560236
+  - 37.560698
+  - 37.562209
+  - 37.563042
+  - 37.563072
   pathLongitude:
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  partCntPerPoint: 0200000002000000020000000200000002000000020000000200000001000000
+  - 126.945648
+  - 126.945506
+  - 126.946888
+  - 126.947287
+  - 126.946794
+  partCntPerPoint: 280000008c000000410000001e00000002000000
   targetRadius: 15
   partTransformInfo:
   - key: position
