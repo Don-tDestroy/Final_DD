@@ -16,6 +16,7 @@ public class HintManager : MonoBehaviour
     // 힌트 줍기 관련 ray info
     private RaycastHit hitInfoHint;
     private int hintCnt = 0;
+    private int createdHintCnt = 0;
 
     // 전체 힌트 개수
     [HideInInspector]
@@ -112,6 +113,8 @@ public class HintManager : MonoBehaviour
             hint.transform.localEulerAngles = hintTransformInfo[1].value;
             hint.transform.localScale = hintTransformInfo[2].value;
 
+            createdHintCnt++;
+
             return true;
         }
 
@@ -131,7 +134,7 @@ public class HintManager : MonoBehaviour
 
     public void CreateHintItem()
     {
-        if (hintCnt == 5)
+        if (createdHintCnt == 5)
         {
             return;
         }
