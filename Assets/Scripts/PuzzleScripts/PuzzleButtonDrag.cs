@@ -20,10 +20,13 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Vector2 moveBegin;
     private Vector2 moveOffset;
 
+    [SerializeField] private float maxSize = 1.4f; // 최대 크기
+    [SerializeField] private float growSpeed = 4.0f; // 증가 속도
+    [SerializeField] private float shrinkSpeed = 8.0f; // 감소 속도
+    [SerializeField] private float destroyDelay = 1.1f; // 파괴까지의 지연 시간
+
     [SerializeField]
     private int stageIdx;
-
-    public Animator fixPullyAnim;
 
     private void Awake()
     {
@@ -60,15 +63,10 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private IEnumerator PlayFixAnim()
     {
 
-        fixPullyAnim.SetBool("isFix", true);
-        transform.localPosition = sourceTr.localPosition;
-        transform.localScale = sourceTr.localScale;
+        StartCoroutine(AnimateScaleAndDestroy());
 
         yield return new WaitForSeconds(1f);
 
-        transform.localPosition = originPosition;
-        transform.localScale = originScale;
-        fixPullyAnim.SetBool("isFix", false);
     }
 
     // 드래그 시작 위치 지정
@@ -79,19 +77,9 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
             return; // 드래그가 비활성화된 경우 이벤트를 무시
         }
 
-        //if (destPosition == answerBtn)
-        //{
-        //    PuzzleManager.Instance.AnswerCntDown();
-        //}
-        //if (destPosition != sourceTr)
-        //{
-        //    PuzzleManager.Instance.CurrentCntDown();
-        //}
         destPosition = sourceTr;
 
         transform.localScale = new Vector3(transform.localScale.x * 1.1f, transform.localScale.y * 1.1f, transform.localScale.z);
-        //transform.SetParent(originParent);
-        //transform.SetAsLastSibling();
 
         moveBegin = eventData.position;
         startingPoint = transform.localPosition;
@@ -138,23 +126,42 @@ public class PuzzleButtonDrag: MonoBehaviour, IBeginDragHandler, IDragHandler, I
             // 부품이 드롭되면 해당 스테이지 슬롯 비활성화
             DisableDrag();
 
-            // 좀 있다가 자기 자리로
-
-            Debug.Log("비활성화");
-
-
-
         }
-
-        ////transform.SetParent(destPosition);
-
-        //if (destPosition == answerBtn)
-        //{
-
-
-        //}
 
 
         canvasGroup.blocksRaycasts = true;
+    }
+
+    private IEnumerator AnimateScaleAndDestroy()
+    {
+        float currentScale = transform.localScale.x; // 현재 크기 초기화
+        bool growing = true; // 증가 중인지 여부
+
+        while (true)
+        {
+            // 증가 및 감소 로직
+            if (growing)
+            {
+                currentScale += Time.deltaTime * growSpeed;
+                if (currentScale >= maxSize)
+                {
+                    growing = false;
+                }
+            }
+            else
+            {
+                currentScale -= Time.deltaTime * shrinkSpeed;
+                if (currentScale <= 0)
+                {
+                    Destroy(gameObject); // 오브젝트 파괴
+                    yield break; // 코루틴 종료
+                }
+            }
+
+            // 크기 적용
+            transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+
+            yield return null; // 다음 프레임까지 대기
+        }
     }
 }

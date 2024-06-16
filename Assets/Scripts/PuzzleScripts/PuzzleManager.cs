@@ -17,7 +17,6 @@ public class PuzzleManager : MonoBehaviour
     private Transform originParent;
 
 
-    public int[] stagePully = { 8, 1, 11 };
     public PuzzleButtonDragGroup[] stagePullyGroup;
 
     public Animator fixSpaceShipAnim;
@@ -34,7 +33,7 @@ public class PuzzleManager : MonoBehaviour
         UpdateCompletionText();
 
         for (int i = 0; i < stagePullyGroup.Length; i++) {
-            stagePullyGroup[i].setPullyCntText(stagePully[i]);
+            stagePullyGroup[i].SetPullyInitText();
         }
     }
 
@@ -70,12 +69,7 @@ public class PuzzleManager : MonoBehaviour
         currentCnt++;
         UpdateCompletionText();
         StartCoroutine(PlayFixAnim());
-        // 100% 완성된 모습은 보여주고 끝내기?
-        // 아님 팝업에서 완성된 우주선 보여주기?
-        if (currentCnt == targetCnt)
-        {
-            FinalAnswerCheck();
-        }
+
     }
 
     private IEnumerator PlayFixAnim()
@@ -85,6 +79,11 @@ public class PuzzleManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         fixSpaceShipAnim.SetBool("isFix", false);
+
+        if (currentCnt == targetCnt)
+        {
+            FinalAnswerCheck();
+        }
     }
 
     public void CurrentCntDown()
@@ -102,34 +101,15 @@ public class PuzzleManager : MonoBehaviour
             answerPopup.SetActive(true);
         }
     }
-
-    //public void OnClickOk()
-    //{
-    //    for (int i = 0; i < sourceTrList.Count; i++)
-    //    {
-    //        sourceTrList[i].SetParent(originParent);
-    //        sourceTrList[i].SetAsLastSibling();
-    //        sourceTrList[i].localPosition = sourceTrPosList[i];
-    //        sourceTrList[i].gameObject.GetComponent<ButtonDrag>().ObjInit();
-    //    }
-    //    currentCnt = 0;
-    //    answerCnt = 0;
-    //}
-
-    private void Update()
-    {
-        Debug.Log("answer " + answerCnt);
-        Debug.Log("current " + currentCnt);
-    }
-
     private void UpdateCompletionText()
     {
         int completionPercentage = (currentCnt * 100) / targetCnt;
-        //completionText.text = $"Completion: {completionPercentage}% ({currentCnt}/{targetCnt} parts)";
         completionText.text = $"{completionPercentage}%";
     }
 
     public void UpdateStagePullyCnt(int stageIdx) {
         stagePullyGroup[stageIdx].SetPullySuccessText();
     }
+
+
 }

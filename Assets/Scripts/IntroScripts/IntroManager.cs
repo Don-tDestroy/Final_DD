@@ -12,12 +12,13 @@ public class IntroManager : MonoBehaviour
 
     string[] data; // 특정 씬에 대한 intro data 저장
     bool isSkip = false;
+    bool isPrintingLines = false;
     int curDialogueIndex = 0;
 
     // 목적지에 따라 추가되는 이화력 데이터
     Dictionary<string, int> ewhaPoint = new Dictionary<string, int> {
-    { "Scene_2", 0 },
-    { "Scene_3", 5 },
+    { "Scene_2", 2 },
+    { "Scene_3", 3 },
     { "Scene_4", 5 },
     { "Scene_5", 10 }
     };
@@ -33,30 +34,44 @@ public class IntroManager : MonoBehaviour
         introText.text = "";
         float txtdelay = 0.1f;
         int count = 0;
+        isPrintingLines = true;
         while (count < data[curDialogueIndex].Length)
         {
             introText.text += data[curDialogueIndex][count].ToString();
             count++;
-            if (isSkip)
+            if (!isSkip)
             {
-                txtdelay = 0f;
+                yield return new WaitForSeconds(txtdelay);
             }
-            yield return new WaitForSeconds(txtdelay);
         }
+        isPrintingLines = false;
+        isSkip = false;
     }
 
     public void onClickDialogueButton()
     {
-        isSkip = true;
-        curDialogueIndex++;
-
-        if(data.Length == curDialogueIndex)
+        if (isPrintingLines)
         {
-
-            Debug.Log("+" + ewhaPoint[temp] + " 이화력 상승!"); // TODO: 이화력 전역 변수 생기면 값 올리기
-            // TODO: 퀴즈 씬으로 이동
-            return;
+            isSkip = true;
         }
-        StartCoroutine(printDialogue());
+
+        if (curDialogueIndex < data.Length - 1) // 마지막 대사 직전까지
+        {
+            if (!isPrintingLines)
+            {
+                curDialogueIndex++;
+                StartCoroutine(printDialogue());
+            }
+        }
+        else if (curDialogueIndex == data.Length - 1) // 마지막 대사일 때
+        {
+            if (!isPrintingLines)
+            {
+                StartCoroutine(printDialogue());
+                Debug.Log("+" + ewhaPoint[temp] + " 이화력 상승!"); // TODO: 이화력 전역 변수 생기면 값 올리기
+                                                               // TODO: 퀴즈 씬으로 이동
+                return;
+            }
+        }
     }
 }
