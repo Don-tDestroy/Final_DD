@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct DiDiTransformInfo
@@ -20,6 +21,7 @@ public class DiDiMaker : MonoBehaviour
 
     public GameObject didiPrefab;
     public GameObject planeSnackbar;
+    public GameObject storyPrefab;
 
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
@@ -31,7 +33,10 @@ public class DiDiMaker : MonoBehaviour
     private int partLayerMask;
 
     private GameObject didiObj;
+    private GameObject storyObj;
     private bool touched = false;
+
+    ArOnOff arOnOff;
 
     //임시
     public TextMeshProUGUI txt;
@@ -48,39 +53,66 @@ public class DiDiMaker : MonoBehaviour
 
         arRaycastManager = GetComponent<ARRaycastManager>();
         partLayerMask = LayerMask.GetMask("Part");
+
+        arOnOff = GetComponent<ArOnOff>();
+
+        StartCoroutine(StartStory(0, false));
     }
 
-    private void Start()
+    private IEnumerator StartStory(int storyIndex, bool isDiddyVisible)
     {
-        StartCoroutine(CreateDiDiOnPlane());
-        StartCoroutine(TouchDiDi());
+        arOnOff.OffAr();
+        storyObj = Instantiate(storyPrefab, GameObject.FindGameObjectWithTag("Canvas").transform);
+        storyObj.transform.localPosition = Vector3.zero;
+
+        StoryManager storyManager = storyObj.GetComponent<StoryManager>();
+        storyManager.isFinished = false;
+        storyManager.StoryIndex = storyIndex;
+        storyManager.isDiddyVisible = isDiddyVisible;
+
+        while (!storyManager.isFinished)
+        {
+            yield return null;
+        }
+
+        Destroy(storyObj);
+
+        if (storyIndex == 0)
+        {
+            arOnOff.OnAr();
+            yield return StartCoroutine(CreateDiDiOnPlane());
+        }
+        else if (storyIndex == 1) 
+        {
+            SceneManager.LoadSceneAsync("Scene_2");
+        }
     }
 
     private IEnumerator CreateDiDiOnPlane()
     {
         while (true)
         {
-            if(touched == false)
+            if (touched == false)
             {
                 while (CheckCreatedPlane() == false)
                 {
                     yield return null;
                 }
+
+                if (didiObj == null && arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon))
+                {
+                    var hitPose = hits[0].pose;
+
+                    Vector3 didiPosition = hitPose.position;
+
+                    Camera mainCamera = Camera.main;
+                    Vector3 directionToCamera = mainCamera.transform.position - didiPosition;
+                    Quaternion didiRotation = Quaternion.LookRotation(-directionToCamera) * didiPrefab.transform.rotation;
+
+                    didiObj = Instantiate(didiPrefab, didiPosition, didiRotation);
+                    yield return StartCoroutine(TouchDiDi());
+                }
             }
-
-            if (didiObj == null && arRaycastManager.Raycast(createdPos, hits, TrackableType.PlaneWithinPolygon))
-            {
-                var hitPose = hits[0].pose;
-
-                Vector3 didiPosition = hitPose.position;
-
-                Camera mainCamera = Camera.main;
-                Vector3 directionToCamera = mainCamera.transform.position - didiPosition;
-                Quaternion didiRotation = Quaternion.LookRotation(-directionToCamera) * didiPrefab.transform.rotation;
-
-                didiObj = Instantiate(didiPrefab, didiPosition, didiRotation);
-            }
-
             yield return null;
         }
     }
@@ -119,20 +151,12 @@ public class DiDiMaker : MonoBehaviour
                     {
                         touched = true;
                         Destroy(didiObj);
-                        CreateDiDiOnCanvas();
+                        yield return StartCoroutine(StartStory(1, true)); 
                     }
                 }
             }
             yield return null;
         }
-    }
-
-    private void CreateDiDiOnCanvas()
-    {
-        didiObj = Instantiate(didiPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-        didiObj.transform.localPosition = didiTransformInfo[0].value;
-        didiObj.transform.localScale = didiTransformInfo[2].value;
-        didiObj.transform.localEulerAngles = didiTransformInfo[1].value;
     }
 
 }
