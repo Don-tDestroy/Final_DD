@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class IntroManager : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class IntroManager : MonoBehaviour
     public TextMeshProUGUI introText;
     public GameObject dialogueBox;
     public Button skipButton;
+    public GameObject resultPopup;
 
     string[] data; // 특정 씬에 대한 intro data 저장
     bool isSkip = false;
@@ -33,10 +33,10 @@ public class IntroManager : MonoBehaviour
         currStage = GameManager.Instance.GetStageNumber();
 
         data = introDataObj.GetComponent<IntroDataScript>().GetData(currStage);
-        StartCoroutine(printDialogue());
+        StartCoroutine(PrintDialogue());
     }
 
-    IEnumerator printDialogue()
+    IEnumerator PrintDialogue()
     {
         introText.text = "";
         float txtdelay = 0.1f;
@@ -60,7 +60,7 @@ public class IntroManager : MonoBehaviour
         skipButton.onClick.Invoke();
     }
 
-    public void onClickDialogueButton()
+    public void OnClickDialogueButton()
     {
         if (isPrintingLines)
         {
@@ -72,21 +72,16 @@ public class IntroManager : MonoBehaviour
             if (!isPrintingLines)
             {
                 curDialogueIndex++;
-                StartCoroutine(printDialogue());
+                StartCoroutine(PrintDialogue());
             }
         }
         else if (curDialogueIndex == data.Length - 1) // 마지막 대사일 때
         {
             if (!isPrintingLines)
             {
-                StartCoroutine(printDialogue());
-
+                StartCoroutine(PrintDialogue());
                 GameManager.Instance.AddEwhaPower(ewhaPoint[currStage]);
-
-                // 수정수정~~ TestCameraScene->CameraScene
-                if (currStage == 2) { SceneManager.LoadScene("TestCameraScene"); } // 예외처리) 튜토리얼 스테이지의 경우 바로 카메라 씬
-                else { SceneManager.LoadScene("Scene_Quiz"); }
-                return;
+                resultPopup.SetActive(true);
             }
         }
     }
