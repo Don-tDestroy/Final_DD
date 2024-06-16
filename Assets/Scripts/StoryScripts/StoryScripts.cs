@@ -80,8 +80,8 @@ public class StoryScripts : MonoBehaviour
         new List<int>() {0,0,0,0},
         new List<int>() {7,7,7,4,4,0,0,5,5,4,7,7,0,0,2},
         new List<int>() {0,0,0,0,0},
-        new List<int>() {2,0,0,0,0,0,0,8,0,0,0,0},
-        new List<int>() {2,0,1,1,0,0,0,0,0,8,0,0,0,0,0,0}
+        new List<int>() {2,0,0,0,0,0,0,8,9,9,9,9},
+        new List<int>() {2,0,1,1,0,0,0,0,0,8,9,9,9,9,9,9}
     };
 
     public List<List<int>> Names = new List<List<int>>()

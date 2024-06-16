@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StoryManager : MonoBehaviour
 {
@@ -10,7 +11,10 @@ public class StoryManager : MonoBehaviour
     StoryScripts myStoryScript;
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI nameText;
+    public GameObject finishButton;
+
     public int StoryIndex;
+    bool isEnding = false;
     bool isSkip;
     bool isPrintingLines;
     int curDialogueIndex;
@@ -19,12 +23,46 @@ public class StoryManager : MonoBehaviour
     List<string> myLines;
     List<int> myEmotions;
     List<int> myNames;
+
+    GameManager gameManager;
     void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         isSkip = false;
         isPrintingLines = false;
+
+        InitializeStoryIndex();
+
+
+        myLines = myStoryScript.Lines[StoryIndex];
+        myEmotions = myStoryScript.Emotions[StoryIndex];
+        myNames = myStoryScript.Names[StoryIndex];
+
+        StartCoroutine(printDialogue(curDialogueIndex));
+    }
+
+    private void InitializeStoryIndex()
+    {
+        int curEwhaPower = gameManager.GetEwhaPower();
+
+        if(curEwhaPower <= 20)
+        {
+            StoryIndex = 2;
+        }
+        else if(curEwhaPower <= 40)
+        {
+            StoryIndex = 3;
+        }
+        else
+        {
+            StoryIndex = 4;
+        }
+
+        if (StoryIndex == 0 || StoryIndex == 1) { isEnding = false; }
+        else { isEnding = true; }
 
         if (!isDiddyVisible)
         {
@@ -34,12 +72,6 @@ public class StoryManager : MonoBehaviour
         {
             DiddyAnimated.SetActive(true);
         }
-
-        myLines = myStoryScript.Lines[StoryIndex];
-        myEmotions = myStoryScript.Emotions[StoryIndex];
-        myNames = myStoryScript.Names[StoryIndex];
-
-        StartCoroutine(printDialogue(curDialogueIndex));
     }
 
     IEnumerator printDialogue(int index)
@@ -94,8 +126,17 @@ public class StoryManager : MonoBehaviour
         }
         else if(curDialogueIndex == myLines.Count - 1) // 마지막 대사일 때
         {
-
+            finishButton.SetActive(true);
         }
+    }
+
+    public void onClickFinishButton()
+    {
+        if (isEnding)
+        {
+            SceneManager.LoadScene("Scene0");
+        }
+        
     }
 
 
