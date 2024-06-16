@@ -1504,11 +1504,17 @@ PrefabInstance:
       propertyPath: m_text
       value: "\uB514\uB514\uC758 \uCE74\uBA54\uB77C\uAC00 \uC5B4\uB518\uAC00\uC5D0
         \uB5A8\uC5B4\uC838\uC788\uB2E4.\n\uD654\uC0B4\uD45C\uB97C \uB530\uB77C\uAC00\uC11C
-        \uCC3E\uC544\uBCF4\uC790!"
+        \uCC3E\uC544\uBCF4\uC790!\n(\uD654\uC0B4\uD45C(\uBD80\uD488)\uC740 \uCD08\uB85D\uC0C9
+        \uC601\uC5ED\uC5D0 \uB9DE\uCD94\uC5B4 \uC90D\uACE0,\n\uCC45\uACFC \uCE74\uBA54\uB77C
+        \uC544\uC774\uD15C\uC740 \uD074\uB9AD\uD574\uC11C \uC90D\uAE30)"
       objectReference: {fileID: 0}
     - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_fontSize
-      value: 56
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_fontColor.b
@@ -1528,7 +1534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_fontSizeBase
-      value: 56
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -1720,6 +1726,10 @@ PrefabInstance:
     - target: {fileID: 6431847296008457754, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
       propertyPath: m_Name
       value: PopupCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431847296008457754, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8125124565294109896, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
       propertyPath: m_IsActive
@@ -7724,23 +7734,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.12772286
+      value: -0.13052607
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.014482015
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9876315
+      value: 0.99144495
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.08978432
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -7748,7 +7758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9124767990771232411, guid: f8c264e4e715c544cbcb695a15d7ba0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
