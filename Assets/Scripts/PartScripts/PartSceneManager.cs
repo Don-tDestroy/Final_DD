@@ -32,7 +32,7 @@ public class PartSceneManager : MonoBehaviour
     private int totalPartCnt = 0; // 부품 전체 개수. 씬마다 다름. GPS 값마다 부품 생성값에 따라 계산
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
-    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 1700f), new Vector2(650f, 2100) }; // (1440, 2560) 기준 좌표
+    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 1600f), new Vector2(650f, 1900f) }; // (1440, 2560) 기준 좌표
     private readonly float partRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
@@ -141,13 +141,14 @@ public class PartSceneManager : MonoBehaviour
             {
                 picked = false;
                 partInSamePoint = true;
+                CreateManyPart(currPathIdx == 0);
+
                 if (isInRadius && createdPartCnt == 0)
                 {
                     currPathIdx++;
                 }
 
-                popupManager.SetPartInfoTxt(currPathIdx);
-                CreateManyPart(currPathIdx == 1);
+                popupManager.SetPartInfoTxt(currPathIdx, createdPartCnt);
             }
 
             yield return null;
@@ -192,7 +193,7 @@ public class PartSceneManager : MonoBehaviour
                 Destroy(hitInfoPart.collider.gameObject);
                 partCnt++;
 
-                float interval = 3f;
+                float interval = 1.5f;
 
                 // 마지막 부품 클릭했으면 카메라 씬으로 이동
                 GameObject lastPart = GetLastPart();
@@ -207,7 +208,6 @@ public class PartSceneManager : MonoBehaviour
                 // 부품 처음 줍는 거라면 팝업 띄우기
                 if (partCnt == 1 && lastPart == null)
                 {
-                    interval = 5f; // 처음 부품은 화면과 가까이 있으므로 더 오래 기다리기
                     popupManager.OpenFirstPartPopup();
                 }
 
@@ -240,6 +240,11 @@ public class PartSceneManager : MonoBehaviour
 
     private bool CreateOnePart(Vector2 pos)
     {
+        if (partInSamePoint == false)
+        {
+            return false;
+        }
+
         // 인식한 바닥 (TrackableType.PlaneWithinPolygon) 과 닿았다면 부품 생성
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {

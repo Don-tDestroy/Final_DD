@@ -35,11 +35,7 @@ public class HintManager : MonoBehaviour
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     // 힌트 생성 범위
-    private readonly List<List<Vector2>> createdPosInterval = new List<List<Vector2>>() { new List<Vector2>() { new Vector2(200f, 500f), new Vector2(500f, 1200f) },
-                                                                                        new List<Vector2>() { new Vector2(700f, 500f), new Vector2(1300f, 1200f) },
-                                                                                        new List<Vector2>() { new Vector2(200f, 1300f), new Vector2(500f, 1800f) },
-                                                                                        new List<Vector2>() { new Vector2(700f, 1300f), new Vector2(1300f, 1800f) },
-                                                                                        }; // (1440, 2560) 기준 좌표
+    private readonly List<Vector2> createdPosInterval = new List<Vector2>() { new Vector2(200f, 500f), new Vector2(1300f, 1800f) };
     [SerializeField]
     private List<PartTransformInfo> hintTransformInfo = new List<PartTransformInfo>(); // hint transform 정보
 
@@ -54,12 +50,9 @@ public class HintManager : MonoBehaviour
         // 물체 생성 스크린 좌표 스크린 비율에 맞추기
         for (int i = 0; i < createdPosInterval.Count; i++)
         {
-            for(int j = 0; j < createdPosInterval[i].Count; j++)
-            {
-                float originX = createdPosInterval[i][j].x;
-                float originY = createdPosInterval[i][j].y;
-                createdPosInterval[i][j] = new Vector2(originX * screenWidth / screenBiasWidth, originY * screenHeight / screenBiasHeigth);
-            }
+            float originX = createdPosInterval[i].x;
+            float originY = createdPosInterval[i].y;
+            createdPosInterval[i] = new Vector2(originX * screenWidth / screenBiasWidth, originY * screenHeight / screenBiasHeigth);
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
@@ -147,10 +140,8 @@ public class HintManager : MonoBehaviour
         while (true)
         {
             // 좌표 랜덤으로 설정
-            int randIdx = Random.Range(0, createdPosInterval.Count);
-            List<Vector2> createIntervalList = createdPosInterval[randIdx];
-            float x = Random.Range(createIntervalList[0].x, createIntervalList[1].x);
-            float y = Random.Range(createIntervalList[0].y, createIntervalList[1].y);
+            float x = Random.Range(createdPosInterval[0].x, createdPosInterval[1].x);
+            float y = Random.Range(createdPosInterval[0].y, createdPosInterval[1].y);
             createPos = new Vector2(x, y);
 
             if (CheckCreatedPlane(createPos) == false)
