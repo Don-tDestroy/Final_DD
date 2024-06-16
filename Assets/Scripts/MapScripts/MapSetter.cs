@@ -15,7 +15,6 @@ public class MapSetter : MonoBehaviour
 
         switch (currScene.name)
         {
-            case "Scene_1":
             case "Scene_2":
                 SetTextAndPinPosition(0);
                 break;
