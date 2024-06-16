@@ -65,7 +65,7 @@ public class Scene2PartSceneManager : MonoBehaviour
     
     // Scene2 오리지널
     public GameObject cameraItemPrefab; // 카메라 오브젝트
-    public GameObject GetCameraItemPopup; // 카메라 아이템 줍고 나오는 팝업
+    public GameObject getCameraItemPopup; // 카메라 아이템 줍고 나오는 팝업
 
     private void Awake()
     {
@@ -88,6 +88,7 @@ public class Scene2PartSceneManager : MonoBehaviour
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
+        getCameraItemPopup.SetActive(false);
     }
 
     private void Start()
@@ -196,7 +197,7 @@ public class Scene2PartSceneManager : MonoBehaviour
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
                     Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품인 카메라를 주웠습니다");
-                    GetCameraItemPopup.SetActive(true);
+                    getCameraItemPopup.SetActive(true);
                     picked = true;
                     yield return null;
                     /*
