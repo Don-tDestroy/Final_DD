@@ -9,7 +9,7 @@ public class MapSetter : MonoBehaviour
     public GameObject locationObj;
     public GameObject arrowObj;
 
-    void Start()
+    void Awake()
     {
         Scene currScene = SceneManager.GetActiveScene();
 
