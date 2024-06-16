@@ -38,8 +38,6 @@ public class StoryManager : MonoBehaviour
 
         InitializeStoryIndex();
 
-        Debug.Log(StoryIndex);
-
         myLines = myStoryScript.Lines[StoryIndex];
         myEmotions = myStoryScript.Emotions[StoryIndex];
         myNames = myStoryScript.Names[StoryIndex];

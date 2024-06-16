@@ -40,6 +40,8 @@ public class DiDiMaker : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.SetStageNumber(1);
+
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
 
