@@ -189,4 +189,11 @@ public class PopupManager : MonoBehaviour
         HideShowDebuggingPanel(isOn);
     }
 
+    private void Update()
+    {
+        // 이화력 매번 띄우기
+        int ewhaPw = GameManager.Instance.GetEwhaPower();
+        ewhaLevelTxt.text = ewhaPw.ToString();
+    }
+
 }
