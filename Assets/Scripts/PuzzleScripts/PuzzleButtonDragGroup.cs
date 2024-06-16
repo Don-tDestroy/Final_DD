@@ -11,7 +11,10 @@ public class PuzzleButtonDragGroup : MonoBehaviour
     {
         pullyCntText.text = string.Format("x {0:D2}", cnt);
     }
-
+    public void SetPullyInitText()
+    {
+        pullyCntText.text = "";
+    }
     public void SetPullySuccessText()
     {
         pullyCntText.text = "완료!";
