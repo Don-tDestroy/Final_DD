@@ -144,7 +144,7 @@ public class Scene2PartSceneManager : MonoBehaviour
                     currPathIdx++;
                 }
 
-                popupManager.SetPartInfoTxt(currPathIdx);
+                popupManager.SetPartInfoTxt(currPathIdx, createdPartCnt);
                 CreateManyPart(currPathIdx == 1);
             }
 
