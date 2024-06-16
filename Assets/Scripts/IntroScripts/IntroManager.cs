@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+
 
 public class IntroManager : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class IntroManager : MonoBehaviour
 
     public GameObject introDataObj;
     public TextMeshProUGUI introText;
+    public GameObject dialogueBox;
+    public Button skipButton;
 
     string[] data; // 특정 씬에 대한 intro data 저장
     bool isSkip = false;
@@ -46,6 +50,11 @@ public class IntroManager : MonoBehaviour
         }
         isPrintingLines = false;
         isSkip = false;
+    }
+
+    public void OnClickDialogueBox()
+    {
+        skipButton.onClick.Invoke();
     }
 
     public void onClickDialogueButton()
