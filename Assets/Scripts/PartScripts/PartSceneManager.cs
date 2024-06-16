@@ -95,6 +95,8 @@ public class PartSceneManager : MonoBehaviour
 
     private void Start()
     {
+        SaveCurrentStage(); // 현재 스테이지 저장
+
         partLayerMask = LayerMask.GetMask(partLayerMaskName);
 
         originAimPos = RectTransformUtility.WorldToScreenPoint(null, aimObj.GetComponent<Image>().rectTransform.position);
@@ -108,9 +110,31 @@ public class PartSceneManager : MonoBehaviour
         hintInterval = totalPartCnt / hintManager.totalHintCnt;
         hintIntervalTarget = hintInterval / 2;
 
+        Debug.Log("힌트 간격 & 나머지 수 " + hintInterval + ", " + hintIntervalTarget);
+
         popupManager.SetPartCntTxt(0, totalPartCnt);
 
         StartCoroutine(PartGuide());
+    }
+
+    private void SaveCurrentStage()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        switch (currentSceneName)
+        {
+            case "Scene_3":
+                GameManager.Instance.SetStageNumber(3);
+                break;
+            case "Scene_4_Before":
+                GameManager.Instance.SetStageNumber(4);
+                break;
+            case "Scene_5_Before":
+                GameManager.Instance.SetStageNumber(5);
+                break;
+        }
+
+        Debug.Log("현재 스테이지 " + GameManager.Instance.GetStageNumber());
     }
 
     private IEnumerator PartGuide()

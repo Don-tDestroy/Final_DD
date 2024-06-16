@@ -1060,11 +1060,6 @@ MonoBehaviour:
   hintPrefab: {fileID: 1471116221058144, guid: f383356d4eb91f44daddce1e70077112, type: 3}
   hintLayerMaskName: Hint
   hintMessage:
-  - "\uAD50\uB0B4 \uAC74\uBB3C\uB4E4\uC5D0\uB294 \uB300\uBD80\uBD84 \uC774\uD654\uC0C1\uC810(\uC774\uB9C8\uD2B824)
-    \uB610\uB294 CU \uD3B8\uC758\uC810\uC774 \uC788\uB2E4."
-  - "\uC774\uD654\uC0C1\uC810(\uC774\uB9C8\uD2B824)\uC740 \uD559\uAD00, \uD559\uC0DD\uBB38\uD654\uAD00,
-    \uC0DD\uD65C\uAD00, \uC885\uD569\uACFC\uD559\uAD00, \uACF5\uB300, \uC911\uC559\uB3C4\uC11C\uAD00,
-    \uC74C\uC545\uAD00 \uB4F1\uC5D0 \uC788\uB2E4."
   - "CU \uD3B8\uC758\uC810\uC740 \uD3EC\uC2A4\uCF54\uAD00, SK\uD154\uB808\uCF64\uAD00,
     ECC, \uD55C\uC6B0\uB9AC\uC9D1\uC5D0 \uC788\uB2E4."
   - "\uD559\uC2DD\uC744 \uBA39\uC744 \uC218 \uC788\uB294 \uC2DD\uB2F9\uC740 \uC9C4\uC120\uBBF8\uAD00,
@@ -1118,7 +1113,7 @@ MonoBehaviour:
     value: {x: 0, y: 0, z: 0}
   - key: scale
     value: {x: 0.3, y: 0.3, z: 0.3}
-  lastPartTriggerScene: TestIntroScene
+  lastPartTriggerScene: IntroScene
   partLayerMaskName: Part
   aimObj: {fileID: 176580802}
 --- !u!114 &668188654

@@ -1291,6 +1291,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1770091768}
+    - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
+      propertyPath: m_text
+      value: "\uBD80\uD488\uC744 \uC774\uC5B4\uC11C \uC8FC\uC6CC\uBCF4\uC790!"
+      objectReference: {fileID: 0}
     - target: {fileID: 9157380178516620844, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_Name
       value: GuideCanvas
@@ -1834,9 +1838,6 @@ MonoBehaviour:
   hintPrefab: {fileID: 1471116221058144, guid: f383356d4eb91f44daddce1e70077112, type: 3}
   hintLayerMaskName: Hint
   hintMessage:
-  - "\uC774\uD654\uC5EC\uB300 \uD559\uC0DD\uB4E4\uC740 \uCD1D 8\uD559\uAE30\uB3D9\uC548
-    \uCC44\uD50C\uC744 \uB4E4\uC5B4\uC57C \uD55C\uB2E4. \uCC44\uD50C\uC740 0\uD559\uC810\uC774\uB2E4."
-  - "\uCC44\uD50C\uC744 \uB4E3\uB294 \uC7A5\uC18C\uB294 \uB300\uAC15\uB2F9\uC774\uB2E4."
   - "\uCC44\uD50C\uC740 \uCD1D 2\uBC88 \uBE60\uC9C8 \uC218 \uC788\uACE0 \uC878\uC5C5\uC608\uC815\uC790\uB294
     3\uBC88 \uBE60\uC9C8 \uC218 \uC788\uB2E4."
   - "\uCC44\uD50C\uC740 \uC77C\uC77C\uBCF4\uCDA9\uACFC \uD2B9\uBCC4\uBCF4\uCDA9\uC73C\uB85C
@@ -1891,7 +1892,7 @@ MonoBehaviour:
     value: {x: 0, y: 0, z: 0}
   - key: scale
     value: {x: 0.3, y: 0.3, z: 0.3}
-  lastPartTriggerScene: TestIntroScene
+  lastPartTriggerScene: IntroScene
   partLayerMaskName: Part
   aimObj: {fileID: 424153486}
 --- !u!114 &1922373948
