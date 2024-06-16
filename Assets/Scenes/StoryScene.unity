@@ -7952,7 +7952,7 @@ MonoBehaviour:
   dialogueText: {fileID: 678759644}
   nameText: {fileID: 1083071844}
   finishButton: {fileID: 1214807450}
-  StoryIndex: 1
+  StoryIndex: 4
   isDiddyVisible: 1
 --- !u!114 &1996686673
 MonoBehaviour:
