@@ -6,7 +6,7 @@ using UnityEngine.XR.ARSubsystems;
 using TMPro;
 
 
-public class PartScene6Manager : MonoBehaviour
+public class PartScene6Manager_backup : MonoBehaviour
 {
     // 부품 생성 관련 ray info
     private ARRaycastManager arRaycastManager;

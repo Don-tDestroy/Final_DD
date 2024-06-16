@@ -6,13 +6,11 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.SceneManagement;
 
-public class Scene2PartSceneManager : MonoBehaviour
+
+public class Scene6_PartSceneManager : MonoBehaviour
 {
     // 팝업 및 UI 관련 매니저 스크립트
     private PopupManager popupManager;
-
-    // 힌트 아이템 매니저 스크립트
-    private HintManager hintManager;
 
     // 부품 생성 관련 ray info
     private ARRaycastManager arRaycastManager;
@@ -25,7 +23,7 @@ public class Scene2PartSceneManager : MonoBehaviour
     private int totalPartCnt = 0; // 부품 전체 개수. 씬마다 다름. GPS 값마다 부품 생성값에 따라 계산
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
-    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 700f), new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
+    private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 1600f), new Vector2(650f, 1900f) }; // (1440, 2560) 기준 좌표
     private readonly float partRadius = 1.5f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
@@ -44,8 +42,6 @@ public class Scene2PartSceneManager : MonoBehaviour
     [SerializeField]
     private List<PartTransformInfo> partTransformInfo = new List<PartTransformInfo>(); // part transform 정보
     [SerializeField]
-    private string lastPartTriggerScene; // 마지막 부품 주웠을 때 이동할 씬 이름
-    [SerializeField]
     private string partLayerMaskName; // 부품 레이어 마스크 이름 (기본 부품이면 "Part")
     [SerializeField]
     private GameObject aimObj; // 부품 조준하는 에임 오브젝트
@@ -57,21 +53,22 @@ public class Scene2PartSceneManager : MonoBehaviour
 
     private Vector3 originAimPos; // 부품 에임 기본 위치
 
-    private int hintInterval, hintIntervalTarget; // 힌트 생성되는 간격
-
     private bool partInSamePoint = false; // 부품이 같은 포인트 내에서 생성되는 중인지 true / false. true -> GPS 반경 보지 않고 부품 생성
     private int createdPartCnt = 0; // 생성된 부품 개수
 
-    
-    // Scene2 오리지널
-    public GameObject cameraItemPrefab; // 카메라 오브젝트
-    public GameObject getCameraItemPopup; // 카메라 아이템 줍고 나오는 팝업
+    private int spaceShipLayerMask; // 우주선
+
+    // 실내 네비게이터
+    [SerializeField]
+    private GameObject indoorNav;
+    public GameObject findTargetPopup;
+    public GameObject navigatorStartPopup;
+
 
     private void Awake()
     {
         // popup manager 스크립트
         popupManager = GameObject.Find("PopupManager").GetComponent<PopupManager>();
-        hintManager = gameObject.GetComponent<HintManager>();
 
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
@@ -88,12 +85,14 @@ public class Scene2PartSceneManager : MonoBehaviour
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
-        getCameraItemPopup.SetActive(false);
     }
 
     private void Start()
     {
+        SaveCurrentStage(); // 현재 스테이지 저장
+
         partLayerMask = LayerMask.GetMask(partLayerMaskName);
+        spaceShipLayerMask = LayerMask.GetMask("SpaceShip");
 
         originAimPos = RectTransformUtility.WorldToScreenPoint(null, aimObj.GetComponent<Image>().rectTransform.position);
 
@@ -103,12 +102,16 @@ public class Scene2PartSceneManager : MonoBehaviour
         {
             totalPartCnt += partCntPerPoint[i];
         }
-        hintInterval = totalPartCnt / hintManager.totalHintCnt;
-        hintIntervalTarget = hintInterval / 2;
-
         popupManager.SetPartCntTxt(0, totalPartCnt);
+        popupManager.SetHintCntTxt(0, 0);
 
         StartCoroutine(PartGuide());
+    }
+
+    private void SaveCurrentStage()
+    {
+        GameManager.Instance.SetStageNumber(6);
+        Debug.Log("현재 스테이지 " + GameManager.Instance.GetStageNumber());
     }
 
     private IEnumerator PartGuide()
@@ -118,7 +121,7 @@ public class Scene2PartSceneManager : MonoBehaviour
         float interval = 3f;
         popupManager.OpenPartGuide(interval);
         yield return new WaitForSeconds(interval);
-
+        
         // GPS path 및 줍기 활성화
         StartCoroutine(CheckGPSPath());
         StartCoroutine(CheckPickPart());
@@ -139,13 +142,14 @@ public class Scene2PartSceneManager : MonoBehaviour
             {
                 picked = false;
                 partInSamePoint = true;
+                CreateManyPart(currPathIdx == 0);
+
                 if (isInRadius && createdPartCnt == 0)
                 {
                     currPathIdx++;
                 }
 
                 popupManager.SetPartInfoTxt(currPathIdx, createdPartCnt);
-                CreateManyPart(currPathIdx == 1);
             }
 
             yield return null;
@@ -177,7 +181,7 @@ public class Scene2PartSceneManager : MonoBehaviour
     }
 
     private IEnumerator CheckPickPart()
-    {
+    {        
         while (true)
         {
             int checkAimedPartIdx = CheckAimedPart(originAimPos);
@@ -190,27 +194,24 @@ public class Scene2PartSceneManager : MonoBehaviour
                 Destroy(hitInfoPart.collider.gameObject);
                 partCnt++;
 
-                float interval = 3f;
+                float interval = 1.5f;
 
-                // Scene2 오리지널: 마지막 부품 클릭했으면 팝업
+                // 마지막 부품 클릭했으면 카메라 씬으로 이동
                 GameObject lastPart = GetLastPart();
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
-                    Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품인 카메라를 주웠습니다");
-                    getCameraItemPopup.SetActive(true);
-                    picked = true;
-                    yield return null;
-                    /*
+                    Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
                     popupManager.partInfoTxt.text = "마지막 부품 주움 !!";
-                    yield return new WaitForSeconds(1f);
-                    SceneManager.LoadScene(lastPartTriggerScene);
-                    */
+                    navigatorStartPopup.SetActive(true);
+
+                    // 빔 네이게이션 시작
+                    indoorNav.GetComponent<SetNavigationTarget>().onSetNavigationTarget();
+
                 }
 
                 // 부품 처음 줍는 거라면 팝업 띄우기
                 if (partCnt == 1 && lastPart == null)
                 {
-                    interval = 5f; // 처음 부품은 화면과 가까이 있으므로 더 오래 기다리기
                     popupManager.OpenFirstPartPopup();
                 }
 
@@ -243,23 +244,15 @@ public class Scene2PartSceneManager : MonoBehaviour
 
     private bool CreateOnePart(Vector2 pos)
     {
+        if (partInSamePoint == false)
+        {
+            return false;
+        }
+
         // 인식한 바닥 (TrackableType.PlaneWithinPolygon) 과 닿았다면 부품 생성
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
-            var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
-
-            // Scene2 오리지널: 마지막 부품 반경에서, 카메라 게임오브젝트를 1개만 생성 (카메라 Prefab으로)
-            if (currPathIdx == pathLatitude.Count - 1)
-            {
-                if (lastPathParts.Count == 0)
-                {
-                    GameObject cameraItem = Instantiate(cameraItemPrefab, hitPose.position, partRotation);
-                    lastPathParts.Add(cameraItem);
-                }
-                return true;
-            }
-
             GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
             part.transform.localEulerAngles = partTransformInfo[1].value;
             part.transform.localScale = partTransformInfo[2].value;
@@ -267,43 +260,22 @@ public class Scene2PartSceneManager : MonoBehaviour
             // 생성된 부품 개수 증가
             createdPartCnt++;
 
-            // 힌트 아이템 생성
-            float currentPartCnt = createdPartCnt;
-            if (currPathIdx - 2 >= 0)
-            {
-                currentPartCnt += partCntPerPoint[currPathIdx - 2];
-            }
-            if (currentPartCnt % hintInterval == hintIntervalTarget)
-            {
-                hintManager.CreateHintItem();
-            }
-
             // 현재 반경의 부품 개수 모두 생성했다면
-            if (partCntPerPoint[currPathIdx - 1] == createdPartCnt)
+            if (partCntPerPoint[currPathIdx-1] == createdPartCnt)
             {
                 createdPartCnt = 0;
                 partInSamePoint = false;
             }
+
+            // 마지막 부품 반경에서 생성된 부품일 경우
+            if (currPathIdx == pathLatitude.Count)
+            {
+                lastPathParts.Add(part);
+            }
+            return true;
         }
 
         return false;
-    }
-
-    // Scene2 오리지널: 화살표가 목적지를 가리키도록 Y축 회전을 계산
-    private float CalculateYRotationToTarget(Vector3 hitPosition)
-    {
-        if (currPathIdx >= pathLatitude.Count) return 0;
-
-        Vector3 targetPos = new Vector3(
-            (float)pathLongitude[currPathIdx],
-            hitPosition.y,
-            (float)pathLatitude[currPathIdx]
-        );
-
-        Vector3 directionToTarget = targetPos - hitPosition;
-        float angle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
-
-        return Mathf.Clamp(angle, -180f, 0f);
     }
 
     // 바닥 생성됐는지 확인하는 함수
@@ -371,6 +343,11 @@ public class Scene2PartSceneManager : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public void OnClickNextScene()
+    {
+        SceneManager.LoadScene("Scene_6_Puzzle");
     }
 
 }

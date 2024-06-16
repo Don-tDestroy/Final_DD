@@ -32,7 +32,7 @@ public class PlacedItemManager : MonoBehaviour
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
-    private readonly float partRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
+    private readonly float partRadius = 1.5f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
     private bool picked = true; // 부품 주운 후
