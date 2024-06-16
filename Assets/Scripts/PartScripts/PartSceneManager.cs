@@ -29,7 +29,7 @@ public class PartSceneManager : MonoBehaviour
     private RaycastHit hitInfoPart;
     private int partCnt = 0;
 
-    private int totalPartCnt; // 부품 전체 개수. 씬마다 다름. GPS 값마다 부품 생성값에 따라 계산
+    private int totalPartCnt = 0; // 부품 전체 개수. 씬마다 다름. GPS 값마다 부품 생성값에 따라 계산
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 700f), new Vector2(650f, 1300f), new Vector2(650f, 2000) }; // (1440, 2560) 기준 좌표
@@ -64,6 +64,11 @@ public class PartSceneManager : MonoBehaviour
 
     private Vector3 originAimPos; // 부품 에임 기본 위치
 
+    private int hintInterval, hintIntervalTarget; // 힌트 생성되는 간격
+
+    private bool partInSamePoint = false; // 부품이 같은 포인트 내에서 생성되는 중인지 true / false. true -> GPS 반경 보지 않고 부품 생성
+    private int createdPartCnt = 0; // 생성된 부품 개수
+
 
     private void Awake()
     {
@@ -94,6 +99,17 @@ public class PartSceneManager : MonoBehaviour
 
         originAimPos = RectTransformUtility.WorldToScreenPoint(null, aimObj.GetComponent<Image>().rectTransform.position);
 
+        // 전체 부품 개수 계산
+        totalPartCnt = 0;
+        for (int i = 0; i < partCntPerPoint.Count; i++)
+        {
+            totalPartCnt += partCntPerPoint[i];
+        }
+        hintInterval = totalPartCnt / hintManager.totalHintCnt;
+        hintIntervalTarget = hintInterval / 2;
+
+        popupManager.SetPartCntTxt(0, totalPartCnt);
+
         StartCoroutine(PartGuide());
     }
 
@@ -114,21 +130,24 @@ public class PartSceneManager : MonoBehaviour
     {
         while (true)
         {
+            if (currPathIdx == pathLatitude.Count)
+            {
+                yield break;
+            }
+
             // GPS 가 path 반경 안에 들어왔는지 확인
             bool isInRadius = GPSManager.Instance.CheckCurrPosInRadius(pathLatitude[currPathIdx], pathLongitude[currPathIdx], targetRadius);
-            if (!isCreatingCoroutine && isInRadius && picked)
+            if (!isCreatingCoroutine && (isInRadius || partInSamePoint) && picked)
             {
                 picked = false;
-                popupManager.SetPartInfoTxt(currPathIdx);
-                CreateManyPart(currPathIdx == 0);
-                currPathIdx++;
-
-                // 힌트 아이템 생성
-                // [TODO] 2로 나눠 떨어지는가는 임의로 생성한 값.. 수정해야함
-                if(currPathIdx % 2 == 0)
+                partInSamePoint = true;
+                if (isInRadius && createdPartCnt == 0)
                 {
-                    hintManager.CreateHintItem();
+                    currPathIdx++;
                 }
+
+                popupManager.SetPartInfoTxt(currPathIdx);
+                CreateManyPart(currPathIdx == 1);
             }
 
             yield return null;
@@ -170,26 +189,31 @@ public class PartSceneManager : MonoBehaviour
                 popupManager.OpenPickPartSnackbar();
                 SoundEffectManager.Instance.Play(0);
 
+                Destroy(hitInfoPart.collider.gameObject);
+                partCnt++;
+
+                float interval = 3f;
+
                 // 마지막 부품 클릭했으면 카메라 씬으로 이동
                 GameObject lastPart = GetLastPart();
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
                     Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
+                    popupManager.partInfoTxt.text = "마지막 부품 주움 !!";
+                    yield return new WaitForSeconds(1f);
                     SceneManager.LoadScene(lastPartTriggerScene);
                 }
-
-                Destroy(hitInfoPart.collider.gameObject);
-                partCnt++;
 
                 // 부품 처음 줍는 거라면 팝업 띄우기
                 if (partCnt == 1 && lastPart == null)
                 {
+                    interval = 5f; // 처음 부품은 화면과 가까이 있으므로 더 오래 기다리기
                     popupManager.OpenFirstPartPopup();
                 }
 
                 popupManager.SetPartCntTxt(partCnt, totalPartCnt);
                 popupManager.SetDebuggingPartTxt(partCnt);
-                StartCoroutine(PickingPart(3f));
+                StartCoroutine(PickingPart(interval));
             }
             else if (checkAimedPartIdx == 1)
             {
@@ -224,9 +248,29 @@ public class PartSceneManager : MonoBehaviour
             part.transform.localEulerAngles = partTransformInfo[1].value;
             part.transform.localScale = partTransformInfo[2].value;
 
+            // 생성된 부품 개수 증가
+            createdPartCnt++;
+
+            // 힌트 아이템 생성
+            float currentPartCnt = createdPartCnt;
+            if (currPathIdx - 2 >= 0)
+            {
+                currentPartCnt += partCntPerPoint[currPathIdx - 2];
+            }
+            if (currentPartCnt % hintInterval == hintIntervalTarget)
+            {
+                hintManager.CreateHintItem();
+            }
+
+            // 현재 반경의 부품 개수 모두 생성했다면
+            if (partCntPerPoint[currPathIdx-1] == createdPartCnt)
+            {
+                createdPartCnt = 0;
+                partInSamePoint = false;
+            }
 
             // 마지막 부품 반경에서 생성된 부품일 경우
-            if (currPathIdx == pathLatitude.Count - 1)
+            if (currPathIdx == pathLatitude.Count)
             {
                 lastPathParts.Add(part);
             }

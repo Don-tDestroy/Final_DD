@@ -18,7 +18,8 @@ public class HintManager : MonoBehaviour
     private int hintCnt = 0;
 
     // 전체 힌트 개수
-    private int totalHintCnt = 5;
+    [HideInInspector]
+    public int totalHintCnt = 5;
 
     // 힌트 오브젝트
     public GameObject hintPrefab;
@@ -33,10 +34,10 @@ public class HintManager : MonoBehaviour
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     // 힌트 생성 범위
-    private readonly List<List<Vector2>> createdPosInterval = new List<List<Vector2>>() { new List<Vector2>() { new Vector2(200f, 1300f), new Vector2(500f, 1800f) },
+    private readonly List<List<Vector2>> createdPosInterval = new List<List<Vector2>>() { new List<Vector2>() { new Vector2(200f, 500f), new Vector2(500f, 1200f) },
+                                                                                        new List<Vector2>() { new Vector2(700f, 500f), new Vector2(1300f, 1200f) },
+                                                                                        new List<Vector2>() { new Vector2(200f, 1300f), new Vector2(500f, 1800f) },
                                                                                         new List<Vector2>() { new Vector2(700f, 1300f), new Vector2(1300f, 1800f) },
-                                                                                        new List<Vector2>() { new Vector2(200f, 1900f), new Vector2(500f, 2300f) },
-                                                                                        new List<Vector2>() { new Vector2(700f, 1900f), new Vector2(1300f, 2300f) },
                                                                                         }; // (1440, 2560) 기준 좌표
     [SerializeField]
     private List<PartTransformInfo> hintTransformInfo = new List<PartTransformInfo>(); // hint transform 정보
@@ -68,6 +69,8 @@ public class HintManager : MonoBehaviour
     {
         hintLayerMask = LayerMask.GetMask(hintLayerMaskName);
 
+        popupManager.SetHintCntTxt(0, totalHintCnt);
+
         // 힌트 아이템 생성 및 줍기 활성화
         StartCoroutine(CheckPickPart());
     }
@@ -90,8 +93,6 @@ public class HintManager : MonoBehaviour
 
                     popupManager.OpenHint(hintMessage[hintCnt]);
                     hintCnt++;
-
-                    popupManager.OpenFirstPartPopup();
 
                     popupManager.SetHintCntTxt(hintCnt, totalHintCnt);
                 }
@@ -130,6 +131,10 @@ public class HintManager : MonoBehaviour
 
     public void CreateHintItem()
     {
+        if (hintCnt == 5)
+        {
+            return;
+        }
         StartCoroutine(CreateHintItemCoroutine());
     }
 

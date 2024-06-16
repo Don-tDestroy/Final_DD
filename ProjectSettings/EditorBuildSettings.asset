@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestGPSScene.unity
     guid: 3659e2f150bc2444cba0a0d7f6bea9ed
+  - enabled: 1
+    path: Assets/Scenes/TestIntroScene.unity
+    guid: f4271b307ea560941bea911512763775
   - enabled: 0
     path: Assets/Scenes/Demo_Scenes/Scene_6_Demo.unity
     guid: 23eaff08086d76d4d9ab55d320173406

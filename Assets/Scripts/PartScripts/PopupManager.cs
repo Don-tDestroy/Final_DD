@@ -46,7 +46,7 @@ public class PopupManager : MonoBehaviour
 
     public void SetPartInfoTxt(int currPathIdx)
     {
-        partInfoTxt.text = (currPathIdx + 1).ToString() + "번째 반경 ";
+        partInfoTxt.text = $"{currPathIdx} 번째 반경";
     }
 
     public void SetDebuggingPartTxt(int partCnt)
@@ -56,7 +56,11 @@ public class PopupManager : MonoBehaviour
 
     public void SetPartCntTxt(int partCnt, int totalPartCnt)
     {
-        partTxt.text = $"{partCnt}/{totalPartCnt}";
+        int per = (int)(((float)partCnt / (float)totalPartCnt) * 100);
+
+        Debug.Log("part percen" + per);
+
+        partTxt.text = $"{per}%";
     }
 
     public void SetHintCntTxt(int hintCnt, int totalHintCnt)
@@ -105,6 +109,10 @@ public class PopupManager : MonoBehaviour
 
     public void OpenPartScnackbar()
     {
+        if (partSnackbar.activeSelf == true)
+        {
+            return;
+        }
         StartCoroutine(OpenPartScnackbarCoroutine());
     }
 
@@ -125,6 +133,10 @@ public class PopupManager : MonoBehaviour
 
     public void OpenPickPartSnackbar()
     {
+        if (pickPartSnackbar.activeSelf == true)
+        {
+            return;
+        }
         StartCoroutine(OpenPickPartSnackbarCoroutine());
     }
 
@@ -152,9 +164,9 @@ public class PopupManager : MonoBehaviour
 
     public void OpenHint(string txt)
     {
-        Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
-        hintTxt.text = txt;
+        hintGuideTxt.text = txt;
         hintPopup.SetActive(true);
+        Time.timeScale = 0; // 시간 멈추기 (그 다음 부품 생성되는 시간 맞추기 위해)
     }
 
     public void PopupOkButton()
