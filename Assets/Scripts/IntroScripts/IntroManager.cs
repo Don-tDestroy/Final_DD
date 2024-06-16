@@ -65,9 +65,13 @@ public class IntroManager : MonoBehaviour
         }
         else if (curDialogueIndex == data.Length - 1) // 마지막 대사일 때
         {
-            Debug.Log("+" + ewhaPoint[temp] + " 이화력 상승!"); // TODO: 이화력 전역 변수 생기면 값 올리기
-            // TODO: 퀴즈 씬으로 이동
-            return;
+            if (!isPrintingLines)
+            {
+                StartCoroutine(printDialogue());
+                Debug.Log("+" + ewhaPoint[temp] + " 이화력 상승!"); // TODO: 이화력 전역 변수 생기면 값 올리기
+                                                               // TODO: 퀴즈 씬으로 이동
+                return;
+            }
         }
     }
 }
