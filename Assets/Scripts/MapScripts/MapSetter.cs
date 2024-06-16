@@ -9,25 +9,31 @@ public class MapSetter : MonoBehaviour
     public GameObject locationObj;
     public GameObject arrowObj;
 
-    void Awake()
-    {
-        Scene currScene = SceneManager.GetActiveScene();
+    private RectTransform arrowRectTransform;
+    private Vector2 initialPos;
+    private Vector2 targetPos;
 
-        switch (currScene.name)
+    void Start()
+    {
+        int currStage = GameManager.Instance.GetStageNumber();
+
+        arrowRectTransform = arrowObj.GetComponent<RectTransform>();
+
+        switch (currStage)
         {
-            case "Scene_2":
+            case 2:
                 SetTextAndPinPosition(0);
                 break;
-            case "Scene_3":
+            case 3:
                 SetTextAndPinPosition(1);
                 break;
-            case "Scene_4":
+            case 4:
                 SetTextAndPinPosition(2);
                 break;
-            case "Scene_5":
+            case 5:
                 SetTextAndPinPosition(3);
                 break;
-            case "Scene_6":
+            case 6:
                 SetTextAndPinPosition(4);
                 break;
         }
@@ -35,23 +41,42 @@ public class MapSetter : MonoBehaviour
 
     void SetTextAndPinPosition(int childNum)
     {
-        Transform currTransform = locationObj.transform.GetChild(childNum);
-        TextMeshProUGUI targetText = currTransform.GetComponent<TextMeshProUGUI>();
+        RectTransform currRectTransform = locationObj.transform.GetChild(childNum).GetComponent<RectTransform>();
+        TextMeshProUGUI targetText = currRectTransform.GetComponent<TextMeshProUGUI>();
         targetText.color = new Color32(0, 104, 0, 255);
         targetText.fontStyle = FontStyles.Bold;
 
         if (childNum != 4) 
         {
-            Transform nextTransform = locationObj.transform.GetChild(childNum + 1);
+            RectTransform nextRectTransform = locationObj.transform.GetChild(childNum + 1).GetComponent<RectTransform>();
+            float midPointY = (nextRectTransform.anchoredPosition.y + currRectTransform.anchoredPosition.y) / 2;
 
-            float midPointY = (nextTransform.position.y + currTransform.position.y) / 2;
-            Vector3 arrowPosition = arrowObj.transform.position;
-            arrowPosition.y = midPointY;
-            arrowObj.transform.position = arrowPosition;
+            Vector3 tempPosition = arrowRectTransform.anchoredPosition;
+            tempPosition.y = midPointY;
+            arrowRectTransform.anchoredPosition = tempPosition;
+
+            initialPos = arrowRectTransform.anchoredPosition; // 현재 위치 
+            targetPos = initialPos + Vector2.up * 1f; // 목표 위치
+
+            StartCoroutine(UpAnimation());
         }
         else // 현 위치가 공과대학
         {
             arrowObj.SetActive(false); // 마지막 목적지에서는 화살표가 필요 없음
+        }
+    }
+
+    private IEnumerator UpAnimation()
+    {
+        while (true)
+        {
+            // 위로 이동
+            arrowRectTransform.anchoredPosition = targetPos;
+            yield return new WaitForSeconds(0.8f);
+
+            // 원위치로 돌아가기
+            arrowRectTransform.anchoredPosition = initialPos;
+            yield return new WaitForSeconds(0.8f);
         }
     }
 }
