@@ -26,7 +26,7 @@ public class StoryManager : MonoBehaviour
     List<int> myNames;
     GameManager gameManager;
     
-    void Awake()
+    void Start()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
@@ -38,7 +38,6 @@ public class StoryManager : MonoBehaviour
 
         InitializeStoryIndex();
 
-
         myLines = myStoryScript.Lines[StoryIndex];
         myEmotions = myStoryScript.Emotions[StoryIndex];
         myNames = myStoryScript.Names[StoryIndex];
@@ -48,23 +47,26 @@ public class StoryManager : MonoBehaviour
 
     private void InitializeStoryIndex()
     {
-        int curEwhaPower = gameManager.GetEwhaPower();
-
-        if(curEwhaPower <= 20)
-        {
-            StoryIndex = 2;
-        }
-        else if(curEwhaPower <= 40)
-        {
-            StoryIndex = 3;
-        }
-        else
-        {
-            StoryIndex = 4;
-        }
-
         if (StoryIndex == 0 || StoryIndex == 1) { isEnding = false; }
         else { isEnding = true; }
+
+        if (isEnding)
+        {
+            int curEwhaPower = gameManager.GetEwhaPower();
+
+            if (curEwhaPower <= 20)
+            {
+                StoryIndex = 2;
+            }
+            else if (curEwhaPower <= 40)
+            {
+                StoryIndex = 3;
+            }
+            else
+            {
+                StoryIndex = 4;
+            }
+        }
 
         if (!isDiddyVisible)
         {
@@ -142,11 +144,6 @@ public class StoryManager : MonoBehaviour
         {
             StartCoroutine(printDialogue(curDialogueIndex));
             isFinished = true;
-        }
-
-        
-        
+        }        
     }
-
-
 }
