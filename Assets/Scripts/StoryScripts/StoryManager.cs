@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StoryManager : MonoBehaviour
 {
     public GameObject DiddyAnimated;
     DiddyEmotionManager myEmotionManager;
     StoryScripts myStoryScript;
-    public TextMeshProUGUI dialogue;
-    public TextMeshProUGUI name;
+    public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI nameText;
+    public GameObject finishButton;
+
     public int StoryIndex;
     bool isSkip;
     bool isPrintingLines;
@@ -20,13 +23,45 @@ public class StoryManager : MonoBehaviour
     List<string> myLines;
     List<int> myEmotions;
     List<int> myNames;
-    void Start()
+    
+    void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
+
         isSkip = false;
         isPrintingLines = false;
         isFinished = false;
+
+        InitializeStoryIndex();
+
+
+        myLines = myStoryScript.Lines[StoryIndex];
+        myEmotions = myStoryScript.Emotions[StoryIndex];
+        myNames = myStoryScript.Names[StoryIndex];
+
+        StartCoroutine(printDialogue(curDialogueIndex));
+    }
+
+    private void InitializeStoryIndex()
+    {
+        int curEwhaPower = GameManager.Instance.GetEwhaPower();
+        if (GameManager.Instance.GetIsEnding())
+        {
+            if (curEwhaPower <= 0)
+            {
+                StoryIndex = 2;
+            }
+            else if (curEwhaPower <= 20)
+            {
+                StoryIndex = 3;
+            }
+            else
+            {
+                StoryIndex = 4;
+            }
+        }
+        
 
         if (!isDiddyVisible)
         {
@@ -36,24 +71,18 @@ public class StoryManager : MonoBehaviour
         {
             DiddyAnimated.SetActive(true);
         }
-
-        myLines = myStoryScript.Lines[StoryIndex];
-        myEmotions = myStoryScript.Emotions[StoryIndex];
-        myNames = myStoryScript.Names[StoryIndex];
-
-        StartCoroutine(printDialogue(curDialogueIndex));
     }
 
     IEnumerator printDialogue(int index)
     {
-        dialogue.text = "";
+        dialogueText.text = "";
         if (myNames[index] == 0)
         {
-            name.text = "화연";
+            nameText.text = "화연";
         }
         else if (myNames[index] == 1)
         {
-            name.text = "디디";
+            nameText.text = "디디";
         }
 
         float txtdelay = 0.1f;
@@ -66,7 +95,7 @@ public class StoryManager : MonoBehaviour
 
         while (count < myLines[index].Length)
         {
-            dialogue.text += myLines[index][count].ToString();
+            dialogueText.text += myLines[index][count].ToString();
             count++;
             if (!isSkip)
             {
@@ -96,11 +125,20 @@ public class StoryManager : MonoBehaviour
         }
         else if(curDialogueIndex == myLines.Count-1) // 마지막 대사일 때
         {
-            if (!isPrintingLines)
-            {
-                StartCoroutine(printDialogue(curDialogueIndex));
-                isFinished = true;
-            }
+            finishButton.SetActive(true);
+        }
+    }
+
+    public void onClickFinishButton()
+    {
+        if (GameManager.Instance.GetIsEnding())
+        {
+            SceneManager.LoadScene("Scene0");
+        }
+        if (!isPrintingLines)
+        {
+            StartCoroutine(printDialogue(curDialogueIndex));
+            isFinished = true;
         }
     }
 

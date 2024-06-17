@@ -11,10 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene_1.unity
     guid: bcd77b2937d66f64da4ddfec7d917617
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Scene_2.unity
     guid: e69b0c442a319604db7df073e47cdeb0
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TestCameraScene.unity
     guid: c45bc2cd7786e8045a692d08fa53c4c7
   - enabled: 0
@@ -29,6 +29,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Scene_6_Quiz.unity
     guid: 9c26ab58ddfc59343be9a3470778f446
+  - enabled: 0
+    path: Assets/Scenes/IntroScene.unity
+    guid: f4271b307ea560941bea911512763775
+  - enabled: 1
+    path: Assets/Scenes/Scene_Quiz.unity
+    guid: 80257d26ca8bcb04cbaf01c3f1f12b6b
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9dd0b8e5bd91c1a42aa70853fe0774e6, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 2ed14a325cd14e94fa5692280697d62c, type: 2}
