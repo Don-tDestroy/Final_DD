@@ -45,6 +45,9 @@ public class StoryManager : MonoBehaviour
 
     private void InitializeStoryIndex()
     {
+        if (StoryIndex == 0 || StoryIndex == 1) { GameManager.Instance.SetIsEnding(false);  }
+        else { GameManager.Instance.SetIsEnding(true); }
+
         int curEwhaPower = GameManager.Instance.GetEwhaPower();
         if (GameManager.Instance.GetIsEnding())
         {
