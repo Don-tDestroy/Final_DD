@@ -198,6 +198,7 @@ public class Scene2PartSceneManager : MonoBehaviour
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
                     Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품인 카메라를 주웠습니다");
+                    SoundEffectManager.Instance.Play(1);
                     getCameraItemPopup.SetActive(true);
                     //picked = true;
                     yield break;
@@ -373,4 +374,8 @@ public class Scene2PartSceneManager : MonoBehaviour
         }
     }
 
+    public void OnNextScene()
+    {
+        SceneManager.LoadScene("IntroScene");
+    }
 }
