@@ -27,6 +27,11 @@ public class ArOnOff : MonoBehaviour
         {
             plane.gameObject.SetActive(false);
         }
+        foreach (var plane in _arPointCloudManager.trackables)
+        {
+            plane.gameObject.SetActive(false);
+        }
+
 
         _arPlaneManager.enabled = false;
         _arPointCloudManager.enabled = false;

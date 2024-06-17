@@ -194,7 +194,7 @@ public class Scene6_PartSceneManager : MonoBehaviour
                 Destroy(hitInfoPart.collider.gameObject);
                 partCnt++;
 
-                float interval = 1.5f;
+                float interval = 1.2f;
 
                 // 마지막 부품 클릭했으면 카메라 씬으로 이동
                 GameObject lastPart = GetLastPart();
