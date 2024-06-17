@@ -24,7 +24,7 @@ public class StoryManager : MonoBehaviour
     List<int> myEmotions;
     List<int> myNames;
     
-    void Awake()
+    void Start()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
