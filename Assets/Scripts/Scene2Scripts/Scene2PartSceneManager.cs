@@ -191,7 +191,7 @@ public class Scene2PartSceneManager : MonoBehaviour
                 Destroy(hitInfoPart.collider.gameObject);
                 partCnt++;
 
-                float interval = 1.5f;
+                float interval = 1.2f;
 
                 // Scene2 오리지널: 마지막 부품 클릭했으면 팝업
                 GameObject lastPart = GetLastPart();
