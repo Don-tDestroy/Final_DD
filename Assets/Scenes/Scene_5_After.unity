@@ -1579,6 +1579,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 156170739}
+    - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
+      propertyPath: m_text
+      value: "\uBD80\uD488\uC744 \uC774\uC5B4\uC11C \uC8FC\uC6CC\uBCF4\uC790!"
+      objectReference: {fileID: 0}
     - target: {fileID: 9157380178516620844, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_Name
       value: GuideCanvas
