@@ -14,7 +14,6 @@ public class StoryManager : MonoBehaviour
     public GameObject finishButton;
 
     public int StoryIndex;
-    bool isEnding = false;
     bool isSkip;
     bool isPrintingLines;
     int curDialogueIndex;
@@ -24,13 +23,11 @@ public class StoryManager : MonoBehaviour
     List<string> myLines;
     List<int> myEmotions;
     List<int> myNames;
-    GameManager gameManager;
     
     void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         isSkip = false;
         isPrintingLines = false;
@@ -48,23 +45,23 @@ public class StoryManager : MonoBehaviour
 
     private void InitializeStoryIndex()
     {
-        int curEwhaPower = gameManager.GetEwhaPower();
-
-        if(curEwhaPower <= 20)
+        int curEwhaPower = GameManager.Instance.GetEwhaPower();
+        if (GameManager.Instance.GetIsEnding())
         {
-            StoryIndex = 2;
+            if (curEwhaPower <= 0)
+            {
+                StoryIndex = 2;
+            }
+            else if (curEwhaPower <= 20)
+            {
+                StoryIndex = 3;
+            }
+            else
+            {
+                StoryIndex = 4;
+            }
         }
-        else if(curEwhaPower <= 40)
-        {
-            StoryIndex = 3;
-        }
-        else
-        {
-            StoryIndex = 4;
-        }
-
-        if (StoryIndex == 0 || StoryIndex == 1) { isEnding = false; }
-        else { isEnding = true; }
+        
 
         if (!isDiddyVisible)
         {
@@ -134,7 +131,7 @@ public class StoryManager : MonoBehaviour
 
     public void onClickFinishButton()
     {
-        if (isEnding)
+        if (GameManager.Instance.GetIsEnding())
         {
             SceneManager.LoadScene("Scene0");
         }
@@ -143,9 +140,6 @@ public class StoryManager : MonoBehaviour
             StartCoroutine(printDialogue(curDialogueIndex));
             isFinished = true;
         }
-
-        
-        
     }
 
 
