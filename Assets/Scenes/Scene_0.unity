@@ -3830,8 +3830,8 @@ MonoBehaviour:
   galleryPanel: {fileID: 1533240019}
   locationPanel: {fileID: 2010316273}
   creditPanel: {fileID: 41592704}
-  mainGateLat: 37.560991
-  mainGateLong: 126.946099
+  mainGateLat: 37.5592136
+  mainGateLong: 126.945724
 --- !u!4 &1251013511
 Transform:
   m_ObjectHideFlags: 0
