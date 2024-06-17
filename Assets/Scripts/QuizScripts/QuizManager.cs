@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class QuizManager : MonoBehaviour
 {
@@ -77,16 +79,20 @@ public class QuizManager : MonoBehaviour
     {
         if (answerCnt == targetCnt)
         {
+            SoundEffectManager.Instance.Play(1);
             answerPopup.SetActive(true);
         }
         else
         {
+            SoundEffectManager.Instance.Play(3);
             noAnswerPopup.SetActive(true);
+            noAnswerPopup.GetComponent<ShakerQuizMark>().Shake(0.3f, 15f);
         }
     }
 
     public void OnClickOk()
     {
+        SoundEffectManager.Instance.Play(0);
         for (int i = 0; i < sourceTrList.Count; i++)
         {
             sourceTrList[i].SetParent(originParent);
@@ -102,5 +108,13 @@ public class QuizManager : MonoBehaviour
     {
         Debug.Log("answer " + answerCnt);
         Debug.Log("current " + currentCnt);
+    }
+
+    public void OnNextScene()
+    {
+        // 엔딩 부르기 !!
+        SoundEffectManager.Instance.Play(0);
+        GameManager.Instance.SetIsEnding(true);
+        SceneManager.LoadScene("StoryScene");
     }
 }

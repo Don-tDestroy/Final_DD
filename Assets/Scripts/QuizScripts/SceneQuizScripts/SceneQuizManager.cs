@@ -153,15 +153,19 @@ public class SceneQuizManager : MonoBehaviour
             string explanation = currentQuestion.Explanation; // 해설
             if (currUserAnswerIndex == correctAnswerIndex)
             {
+                SoundEffectManager.Instance.Play(1);
                 quizResultPopup.ShowResult(true, "정답이에요!", explanation, "+10");
                 isAnswer = true;
+                GameManager.Instance.AddEwhaPower(10);
             }
             else
             {
+                SoundEffectManager.Instance.Play(3);
                 quizResultPopup.ShowResult(false, "틀렸어요.", explanation, "-10");
                 shakerQuizMark = quizMarkObject.GetComponent<ShakerQuizMark>(); // 틀렸을 때 좌우로 흔들리는 효과
                 shakerQuizMark.Shake(0.3f, 15f);
                 isAnswer = false;
+                GameManager.Instance.AddEwhaPower(-10);
             }
         }
         else
@@ -172,10 +176,11 @@ public class SceneQuizManager : MonoBehaviour
 
     public void OnClickNextButton()
     {
+        SoundEffectManager.Instance.Play(0);
         // 정답이라면 카메라 씬으로 넘어가기
         if (isAnswer)
         {
-            SceneManager.LoadScene("TestCameraScene");
+            SceneManager.LoadScene("CameraScene");
         }
         else
         {
@@ -209,5 +214,12 @@ public class SceneQuizManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void OnLoadEnding()
+    {
+        SoundEffectManager.Instance.Play(0);
+        GameManager.Instance.SetIsEnding(true);
+        SceneManager.LoadScene("StoryScene");
     }
 }

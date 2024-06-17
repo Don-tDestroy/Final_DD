@@ -133,7 +133,7 @@ public class StoryManager : MonoBehaviour
     {
         if (GameManager.Instance.GetIsEnding())
         {
-            SceneManager.LoadScene("Scene0");
+            SceneManager.LoadScene("Scene_0");
         }
         if (!isPrintingLines)
         {
