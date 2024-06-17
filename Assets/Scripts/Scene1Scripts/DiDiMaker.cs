@@ -38,11 +38,10 @@ public class DiDiMaker : MonoBehaviour
 
     ArOnOff arOnOff;
 
-    //임시
-    public TextMeshProUGUI txt;
-
     private void Awake()
     {
+        GameManager.Instance.SetStageNumber(1);
+
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
 
@@ -146,7 +145,6 @@ public class DiDiMaker : MonoBehaviour
 
                 if (Physics.Raycast(screenRay.origin, screenRay.direction, out hit, Mathf.Infinity, partLayerMask))
                 {
-                    txt.text = hit.collider.gameObject.name;
                     if (hit.collider.gameObject == didiObj)
                     {
                         touched = true;

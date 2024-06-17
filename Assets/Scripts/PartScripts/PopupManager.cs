@@ -44,9 +44,9 @@ public class PopupManager : MonoBehaviour
         screenPosTxt.text = "현재 클릭 위치\n" + rayPos;
     }
 
-    public void SetPartInfoTxt(int currPathIdx)
+    public void SetPartInfoTxt(int currPathIdx, int createdPartCnt)
     {
-        partInfoTxt.text = $"{currPathIdx} 번째 반경";
+        partInfoTxt.text = $"{currPathIdx} 번째 반경 \n {createdPartCnt} 번째 부품";
     }
 
     public void SetDebuggingPartTxt(int partCnt)
@@ -187,6 +187,13 @@ public class PopupManager : MonoBehaviour
     public void OnClickDebuggingPanel(bool isOn)
     {
         HideShowDebuggingPanel(isOn);
+    }
+
+    private void Update()
+    {
+        // 이화력 매번 띄우기
+        int ewhaPw = GameManager.Instance.GetEwhaPower();
+        ewhaLevelTxt.text = ewhaPw.ToString();
     }
 
 }
