@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18154608, g: 0.22718912, b: 0.30740547, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2440,6 +2440,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2445578797849063698, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
   m_PrefabInstance: {fileID: 1824049260}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1190449407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 700797237033294504, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+  m_PrefabInstance: {fileID: 1824049260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327bff76f04d8834483702cb15f5e7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1190929158
 GameObject:
   m_ObjectHideFlags: 0
@@ -3409,6 +3420,14 @@ PrefabInstance:
     - target: {fileID: 3375471478100745732, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 1190449407}
+    - target: {fileID: 3375471478100745732, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: goToNextStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3375471478100745732, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CameraStageMove, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3576994513425132299, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_Name
@@ -3417,6 +3436,10 @@ PrefabInstance:
     - target: {fileID: 3576994513425132299, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3576994513425132299, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3659317865366374839, guid: 8ab83f57aaab7a64698cb8d5bcd609a2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
