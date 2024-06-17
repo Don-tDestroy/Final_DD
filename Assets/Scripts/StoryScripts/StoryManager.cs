@@ -14,7 +14,6 @@ public class StoryManager : MonoBehaviour
     public GameObject finishButton;
 
     public int StoryIndex;
-    bool isEnding = false;
     bool isSkip;
     bool isPrintingLines;
     int curDialogueIndex;
@@ -24,19 +23,18 @@ public class StoryManager : MonoBehaviour
     List<string> myLines;
     List<int> myEmotions;
     List<int> myNames;
-    GameManager gameManager;
     
-    void Start()
+    void Awake()
     {
         myEmotionManager = DiddyAnimated.GetComponent<DiddyEmotionManager>(); 
         myStoryScript = GetComponent<StoryScripts>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         isSkip = false;
         isPrintingLines = false;
         isFinished = false;
 
         InitializeStoryIndex();
+
 
         myLines = myStoryScript.Lines[StoryIndex];
         myEmotions = myStoryScript.Emotions[StoryIndex];
@@ -47,18 +45,14 @@ public class StoryManager : MonoBehaviour
 
     private void InitializeStoryIndex()
     {
-        if (StoryIndex == 0 || StoryIndex == 1) { isEnding = false; }
-        else { isEnding = true; }
-
-        if (isEnding)
+        int curEwhaPower = GameManager.Instance.GetEwhaPower();
+        if (GameManager.Instance.GetIsEnding())
         {
-            int curEwhaPower = gameManager.GetEwhaPower();
-
-            if (curEwhaPower <= 20)
+            if (curEwhaPower <= 0)
             {
                 StoryIndex = 2;
             }
-            else if (curEwhaPower <= 40)
+            else if (curEwhaPower <= 20)
             {
                 StoryIndex = 3;
             }
@@ -67,6 +61,7 @@ public class StoryManager : MonoBehaviour
                 StoryIndex = 4;
             }
         }
+        
 
         if (!isDiddyVisible)
         {
@@ -136,7 +131,7 @@ public class StoryManager : MonoBehaviour
 
     public void onClickFinishButton()
     {
-        if (isEnding)
+        if (GameManager.Instance.GetIsEnding())
         {
             SceneManager.LoadScene("Scene0");
         }
@@ -144,6 +139,8 @@ public class StoryManager : MonoBehaviour
         {
             StartCoroutine(printDialogue(curDialogueIndex));
             isFinished = true;
-        }        
+        }
     }
+
+
 }

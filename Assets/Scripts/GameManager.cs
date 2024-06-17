@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     private int ewhaPower = 0;
     private int curStageNumber = 0;
+    private bool isEnding = false;
 
     private void Awake()
     {
@@ -82,5 +84,15 @@ public class GameManager : MonoBehaviour
     public void AddEwhaPower(int epower)
     {
         ewhaPower += epower;
+    }
+
+    public bool GetIsEnding()
+    {
+        return isEnding;
+    }
+
+    public void SetIsEnding(bool ending)
+    {
+        isEnding = ending;
     }
 }
