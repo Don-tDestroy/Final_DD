@@ -8,6 +8,6 @@ public class Scene2StageManager : MonoBehaviour
     void Start()
     {
         int currStage = GameManager.Instance.GetStageNumber() + 1;
-        GameManager.Instance.SetStageNumber(currStage);
+        GameManager.Instance.SetStageNumber(2);
     }
 }
