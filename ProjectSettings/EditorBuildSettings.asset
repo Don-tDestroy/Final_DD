@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CameraScene.unity
     guid: c45bc2cd7786e8045a692d08fa53c4c7
   - enabled: 1
+    path: Assets/Scenes/Scene_Quiz.unity
+    guid: 80257d26ca8bcb04cbaf01c3f1f12b6b
+  - enabled: 1
     path: Assets/Scenes/Scene_1.unity
     guid: bcd77b2937d66f64da4ddfec7d917617
   - enabled: 1
@@ -45,14 +48,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene_6_GPS.unity
     guid: 5b1adb4b3be644d4f88055f0e9de0502
   - enabled: 1
+    path: Assets/Scenes/Scene_6_Navigator.unity
+    guid: abe60edd55b281a429ae0e1dfd4ddfc3
+  - enabled: 1
     path: Assets/Scenes/Scene_6_Puzzle.unity
     guid: d1de227b3ffab954ab9d53fe156ee297
   - enabled: 1
     path: Assets/Scenes/Scene_6_Quiz.unity
     guid: 9c26ab58ddfc59343be9a3470778f446
-  - enabled: 1
-    path: Assets/Scenes/Scene_Quiz.unity
-    guid: 80257d26ca8bcb04cbaf01c3f1f12b6b
   - enabled: 0
     path: Assets/Scenes/Demo_Scenes/Scene_6_Demo.unity
     guid: 23eaff08086d76d4d9ab55d320173406
