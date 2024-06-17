@@ -1027,6 +1027,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2020582593076357960, guid: 8668a52b520263647987fc030161025a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180424838406155497, guid: 8668a52b520263647987fc030161025a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3222495367672463518, guid: 8668a52b520263647987fc030161025a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3641691381595492797, guid: 8668a52b520263647987fc030161025a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3692754343024943013, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_Name
       value: WarningPopup
