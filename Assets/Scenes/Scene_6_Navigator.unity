@@ -106,7 +106,7 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 3
     agentTypeID: 0
-    agentRadius: 1.2
+    agentRadius: 0.8
     agentHeight: 2
     agentSlope: 45
     agentClimb: 0.4
@@ -114,7 +114,7 @@ NavMeshSettings:
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.4
+    cellSize: 0.26666668
     manualTileSize: 0
     tileSize: 256
     buildHeightMesh: 0
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 56cf87e25bbf4424883a78535904b460, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 44ca79c6cfcab894497c5172b88e8424, type: 2}
 --- !u!1 &68173354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1591,7 +1591,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 8, z: 8}
+  m_Size: {x: 10, y: 10, z: 15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &521938398
 Transform:
@@ -3109,7 +3109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1050524629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3689,10 +3689,10 @@ PrefabInstance:
       addedObject: {fileID: 2020266912}
     - targetCorrespondingSourceObject: {fileID: 2719311343640132590, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1318805141}
+      addedObject: {fileID: 1509778153}
     - targetCorrespondingSourceObject: {fileID: 2719311343640132590, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1509778153}
+      addedObject: {fileID: 1318805141}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 191bcfab37ab9a14cb23b594dc6e53a9, type: 3}
 --- !u!224 &1303251733 stripped
@@ -4364,13 +4364,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partPrefab: {fileID: 7547768883136039179, guid: 2725daaa3b9d2324f85e3b484da285e8, type: 3}
-  pathLatitude:
-  - 37.566337
-  - 37.5663719
-  pathLongitude:
-  - 126.948616
-  - 126.9485855
-  partCntPerPoint: 0900000001000000
+  pathLatitude: []
+  pathLongitude: []
+  partCntPerPoint: 
   targetRadius: 15
   partTransformInfo:
   - key: position
@@ -10022,7 +10018,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0.1}
+  - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -10032,7 +10028,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.09978828
+        value: 0.14719734
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -15085,7 +15081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -15094,18 +15090,18 @@ PrefabInstance:
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1568476366}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PopupOkButton
+      value: OnClickSetNav
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: PartScene6Manager, Assembly-CSharp
+      value: Scene6_PartSceneManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7693467348369708860, guid: 8668a52b520263647987fc030161025a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName

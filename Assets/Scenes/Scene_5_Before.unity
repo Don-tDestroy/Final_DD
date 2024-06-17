@@ -1091,7 +1091,7 @@ MonoBehaviour:
   pathLongitude:
   - 126.947138
   - 126.947694
-  partCntPerPoint: 1900000001000000
+  partCntPerPoint: 1300000001000000
   targetRadius: 15
   partTransformInfo:
   - key: position

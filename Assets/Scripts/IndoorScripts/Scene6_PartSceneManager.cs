@@ -102,10 +102,24 @@ public class Scene6_PartSceneManager : MonoBehaviour
         {
             totalPartCnt += partCntPerPoint[i];
         }
-        popupManager.SetPartCntTxt(0, totalPartCnt);
-        popupManager.SetHintCntTxt(0, 0);
+        if(pathLatitude.Count == 0)
+        {
+            navigatorStartPopup.SetActive(true);
 
-        StartCoroutine(PartGuide());
+            popupManager.SetPartCntTxt(1, 1);
+            popupManager.SetHintCntTxt(0, 0);
+
+            StartCoroutine(CheckSpaceShip());
+        }
+        else
+        {
+            indoorNav.SetActive(false);
+
+            popupManager.SetPartCntTxt(0, totalPartCnt);
+            popupManager.SetHintCntTxt(0, 0);
+
+            StartCoroutine(PartGuide());
+        }
     }
 
     private void SaveCurrentStage()
@@ -180,6 +194,30 @@ public class Scene6_PartSceneManager : MonoBehaviour
         return 0;
     }
 
+    private IEnumerator CheckSpaceShip()
+    {
+        while (true)
+        {
+            // 부품 줍기
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3 mousePos = Input.mousePosition;
+                Ray screenRay = Camera.main.ScreenPointToRay(mousePos);
+
+                if (Physics.Raycast(screenRay.origin, screenRay.direction, out hitInfoPart, Mathf.Infinity, spaceShipLayerMask))
+                {
+                    if(hitInfoPart.distance <= partRadius)
+                    {
+                        GameObject.Find("FindTriggerPopup").SetActive(false);
+                        findTargetPopup.SetActive(true);
+                    }
+                }
+            }
+
+            yield return null;
+        }
+    }
+
     private IEnumerator CheckPickPart()
     {        
         while (true)
@@ -201,12 +239,7 @@ public class Scene6_PartSceneManager : MonoBehaviour
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
                     Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품을 클릭했습니다.");
-                    popupManager.partInfoTxt.text = "마지막 부품 주움 !!";
-                    navigatorStartPopup.SetActive(true);
-
-                    // 빔 네이게이션 시작
-                    indoorNav.GetComponent<SetNavigationTarget>().onSetNavigationTarget();
-
+                    SceneManager.LoadScene("Scene_6_Navigator");
                 }
 
                 // 부품 처음 줍는 거라면 팝업 띄우기
@@ -256,7 +289,6 @@ public class Scene6_PartSceneManager : MonoBehaviour
             var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
             
             GameObject part = Instantiate(partPrefab, hitPose.position, partRotation);
-            part.transform.localEulerAngles = partTransformInfo[1].value;
             part.transform.localScale = partTransformInfo[2].value;
 
             // 생성된 부품 개수 증가
@@ -294,7 +326,7 @@ public class Scene6_PartSceneManager : MonoBehaviour
         Vector3 directionToTarget = targetPos - hitPosition;
         float angle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
 
-        return Mathf.Clamp(angle, -180f, 0f);
+        return Mathf.Clamp(angle, 0f, -90f);
     }
 
     // 바닥 생성됐는지 확인하는 함수
@@ -368,6 +400,11 @@ public class Scene6_PartSceneManager : MonoBehaviour
     public void OnClickNextScene()
     {
         SceneManager.LoadScene("Scene_6_Puzzle");
+    }
+
+    public void OnClickSetNav() {
+        // 빔 네이게이션 시작
+        indoorNav.GetComponent<SetNavigationTarget>().onSetNavigationTarget();
     }
 
 }
