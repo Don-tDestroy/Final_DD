@@ -4616,6 +4616,7 @@ GameObject:
   - component: {fileID: 2461215406082964055}
   - component: {fileID: 3465583107966300359}
   - component: {fileID: 3757188066176875506}
+  - component: {fileID: 8462961122887451042}
   m_Layer: 5
   m_Name: GPS_pos
   m_TagString: Untagged
@@ -4739,6 +4740,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8462961122887451042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222394063468710543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3189733e2062e45ad6bec35c89cb4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &399808406627610222
 PrefabInstance:
   m_ObjectHideFlags: 0

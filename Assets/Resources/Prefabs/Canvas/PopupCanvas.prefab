@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2471253297222068554}
   - component: {fileID: 1219079852060491794}
   - component: {fileID: 7056078033846991256}
+  - component: {fileID: 2012330943174812446}
   m_Layer: 5
   m_Name: PopupCanvas
   m_TagString: Canvas
@@ -107,6 +108,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2012330943174812446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6431847296008457754}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d4ccde67ecb0249bec11f8261c70ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warningPopup: {fileID: 4937197067108107772}
 --- !u!1 &9208058259066242658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1045,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8668a52b520263647987fc030161025a, type: 3}
+--- !u!1 &4937197067108107772 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3692754343024943013, guid: 8668a52b520263647987fc030161025a, type: 3}
+  m_PrefabInstance: {fileID: 8627557751508965977}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7435060990553200992 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1195031169886159673, guid: 8668a52b520263647987fc030161025a, type: 3}
