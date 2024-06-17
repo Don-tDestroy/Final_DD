@@ -30,8 +30,10 @@ public class NextStageButton : MonoBehaviour
     public void onClickNextStage() {
         if (time < remitTime)
         {
+            SoundEffectManager.Instance.Play(3);
             warningPopup.SetActive(true);
-            Time.timeScale = 0; // 시간 멈추기
+            warningPopup.transform.GetChild(0).GetComponent<ShakerQuizMark>().Shake(0.3f, 15f);
+            Invoke(nameof(StopTime), 0.4f);
             return;
         }
 
@@ -46,12 +48,20 @@ public class NextStageButton : MonoBehaviour
             case 5:
                 nextStage = "Scene_5_After";
                 break;
+            default:
+                break;
         }
         SceneManager.LoadScene(nextStage);
     }
 
+    private void StopTime()
+    {
+        Time.timeScale = 0; // 시간 멈추기
+    }
+
     public void OnClicOkButton()
     {
+        SoundEffectManager.Instance.Play(0);
         Time.timeScale = 1; //시간 흐르기
     }
 

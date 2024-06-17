@@ -86,7 +86,7 @@ public class QuizManager : MonoBehaviour
         {
             SoundEffectManager.Instance.Play(3);
             noAnswerPopup.SetActive(true);
-            noAnswerPopup.GetComponent<ShakerQuizMark>().Shake(0.3f, 15f);
+            noAnswerPopup.transform.GetChild(0).GetComponent<ShakerQuizMark>().Shake(0.3f, 15f);
         }
     }
 
