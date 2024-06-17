@@ -300,6 +300,7 @@ public class Scene6_PartSceneManager : MonoBehaviour
         if (isCreatingCoroutine) yield break;
 
         isCreatingCoroutine = true;
+        yield return new WaitForSeconds(0.1f);
 
         if (isFirst)
         {

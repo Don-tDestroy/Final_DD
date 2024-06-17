@@ -1087,24 +1087,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partPrefab: {fileID: 7763592518289849904, guid: 6cca52be2b87504418aa1d1bfa997bd2, type: 3}
   pathLatitude:
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
-  - 37.4974098
+  - 37.564185
+  - 37.56428
+  - 37.564535
+  - 37.564646
+  - 37.566337
   pathLongitude:
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  - 126.8310317
-  partCntPerPoint: 0200000002000000020000000200000002000000020000000200000001000000
+  - 126.947694
+  - 126.947665
+  - 126.948056
+  - 126.948031
+  - 126.948616
+  partCntPerPoint: 0500000014000000060000006400000001000000
   targetRadius: 15
   partTransformInfo:
   - key: position
@@ -1585,6 +1579,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 156170739}
+    - target: {fileID: 7289402231704613714, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
+      propertyPath: m_text
+      value: "\uBD80\uD488\uC744 \uC774\uC5B4\uC11C \uC8FC\uC6CC\uBCF4\uC790!"
+      objectReference: {fileID: 0}
     - target: {fileID: 9157380178516620844, guid: a0853712d2c62a74d85e684ff36ed0be, type: 3}
       propertyPath: m_Name
       value: GuideCanvas

@@ -5,18 +5,31 @@ using UnityEngine.XR.ARFoundation;
 
 public class ArOnOff : MonoBehaviour
 {
-    public GameObject arPlane;
-    public GameObject arPoint;
+    public ARPlaneManager _arPlaneManager;
+    public ARPointCloudManager _arPointCloudManager;
+
+    private void Start()
+    {
+        _arPlaneManager = GetComponent<ARPlaneManager>();
+        _arPointCloudManager = GetComponent<ARPointCloudManager>();
+    }
+
 
     public void OnAr()
     {
-        arPlane.SetActive(true);
-        arPoint.SetActive(true);
-}
+        _arPlaneManager.enabled = true;
+        _arPointCloudManager.enabled = true;
+    }
 
     public void OffAr()
     {
-        arPlane.SetActive(false);
-        arPoint.SetActive(false);
+        foreach (var plane in _arPlaneManager.trackables)
+        {
+            plane.gameObject.SetActive(false);
+        }
+
+        _arPlaneManager.enabled = false;
+        _arPointCloudManager.enabled = false;
+
     }
 }

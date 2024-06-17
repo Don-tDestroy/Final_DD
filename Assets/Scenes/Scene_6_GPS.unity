@@ -4353,12 +4353,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partPrefab: {fileID: 7547768883136039179, guid: 2725daaa3b9d2324f85e3b484da285e8, type: 3}
   pathLatitude:
-  - 37.556984
-  - 37.557181
+  - 37.566337
+  - 37.566364
   pathLongitude:
-  - 126.937176
-  - 126.937804
-  partCntPerPoint: 0a00000001000000
+  - 126.948616
+  - 126.948527
+  partCntPerPoint: 0500000001000000
   targetRadius: 15
   partTransformInfo:
   - key: position

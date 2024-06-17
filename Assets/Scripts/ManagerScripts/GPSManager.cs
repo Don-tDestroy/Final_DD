@@ -7,13 +7,11 @@ using TMPro;
 public class GPSManager : MonoBehaviour
 {
     private static GPSManager _instance; // 싱글톤 객체
-    
-    public TextMeshProUGUI currGpsPosTxt; // (테스트용) 현재 GPS 위치
-
-    public GameObject warningPopup; // GPS 연결 실패 시 띄우는 팝업
 
     private double currLatitude; // 현재 위도
     private double currLongitude; // 현재 경도
+
+    private bool isSuccess; // 연결 성공 여부
 
     private void Awake()
     {
@@ -53,14 +51,14 @@ public class GPSManager : MonoBehaviour
         if (maxWait < 1)
         {
             print("Timed out");
-            OpenWarningPopup();
+            isSuccess = false;
             yield break;
         }
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
             print("Unable to determine device location");
-            OpenWarningPopup();
+            isSuccess = false;
             yield break;
         }
         else
@@ -73,22 +71,15 @@ public class GPSManager : MonoBehaviour
 
                 currLatitude = Input.location.lastData.latitude; // 현재 위도 저장
                 currLongitude = Input.location.lastData.longitude; // 현재 경도 저장
-                currGpsPosTxt.text = "현재 GPS 위치 \n" + "현재 위도: " + currLatitude + "\n현재 경도: " + currLongitude;
+                isSuccess = true;
             }
 
             print("Unable to determine device location");
-            OpenWarningPopup();
+            isSuccess = false;
         }
 
         Input.location.Stop();
     }
-
-    private void OpenWarningPopup()
-    {
-        SoundEffectManager.Instance.Play(1);
-        warningPopup.SetActive(true);
-    }
-
 
     // 싱글톤 객체 초기화
     public static GPSManager Instance
@@ -117,6 +108,12 @@ public class GPSManager : MonoBehaviour
         return currLongitude;
     }
 
+
+    // 연결 성공 여부
+    public bool GetIsSuccess()
+    {
+        return isSuccess;
+    }
 
     // 현재 GPS가 목표 반경(radius) 이내에 들어오는지 확인하는 함수 (True / False 리턴)
     public bool CheckCurrPosInRadius(double targetLat, double targetLon, double targetRadius = 15f)

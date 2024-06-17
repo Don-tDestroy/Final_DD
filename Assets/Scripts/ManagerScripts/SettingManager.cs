@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SettingManager : MonoBehaviour
 {
@@ -16,5 +17,10 @@ public class SettingManager : MonoBehaviour
     public void ButtonPlay()
     {
         SoundEffectManager.Instance.Play(0);
+    }
+
+    public void OnClickRestart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

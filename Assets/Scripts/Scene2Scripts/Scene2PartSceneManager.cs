@@ -139,13 +139,14 @@ public class Scene2PartSceneManager : MonoBehaviour
             {
                 picked = false;
                 partInSamePoint = true;
+                CreateManyPart(currPathIdx == 0);
+
                 if (isInRadius && createdPartCnt == 0)
                 {
                     currPathIdx++;
                 }
 
                 popupManager.SetPartInfoTxt(currPathIdx, createdPartCnt);
-                CreateManyPart(currPathIdx == 1);
             }
 
             yield return null;
@@ -190,16 +191,17 @@ public class Scene2PartSceneManager : MonoBehaviour
                 Destroy(hitInfoPart.collider.gameObject);
                 partCnt++;
 
-                float interval = 3f;
+                float interval = 1.5f;
 
                 // Scene2 오리지널: 마지막 부품 클릭했으면 팝업
                 GameObject lastPart = GetLastPart();
                 if (lastPart != null && hitInfoPart.collider.gameObject == lastPart)
                 {
                     Debug.Log("마지막 반경에서 가장 마지막으로 생성된 부품인 카메라를 주웠습니다");
+                    SoundEffectManager.Instance.Play(1);
                     getCameraItemPopup.SetActive(true);
-                    picked = true;
-                    yield return null;
+                    //picked = true;
+                    yield break;
                     /*
                     popupManager.partInfoTxt.text = "마지막 부품 주움 !!";
                     yield return new WaitForSeconds(1f);
@@ -210,7 +212,6 @@ public class Scene2PartSceneManager : MonoBehaviour
                 // 부품 처음 줍는 거라면 팝업 띄우기
                 if (partCnt == 1 && lastPart == null)
                 {
-                    interval = 5f; // 처음 부품은 화면과 가까이 있으므로 더 오래 기다리기
                     popupManager.OpenFirstPartPopup();
                 }
 
@@ -250,7 +251,7 @@ public class Scene2PartSceneManager : MonoBehaviour
             var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
 
             // Scene2 오리지널: 마지막 부품 반경에서, 카메라 게임오브젝트를 1개만 생성 (카메라 Prefab으로)
-            if (currPathIdx == pathLatitude.Count - 1)
+            if (currPathIdx == pathLatitude.Count)
             {
                 if (lastPathParts.Count == 0)
                 {
@@ -260,8 +261,7 @@ public class Scene2PartSceneManager : MonoBehaviour
                 return true;
             }
 
-            GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
-            part.transform.localEulerAngles = partTransformInfo[1].value;
+            GameObject part = Instantiate(partPrefab, hitPose.position, partRotation);
             part.transform.localScale = partTransformInfo[2].value;
 
             // 생성된 부품 개수 증가
@@ -328,6 +328,7 @@ public class Scene2PartSceneManager : MonoBehaviour
         if (isCreatingCoroutine) yield break;
 
         isCreatingCoroutine = true;
+        yield return new WaitForSeconds(0.1f);
 
         if (isFirst)
         {
@@ -373,4 +374,8 @@ public class Scene2PartSceneManager : MonoBehaviour
         }
     }
 
+    public void OnNextScene()
+    {
+        SceneManager.LoadScene("IntroScene");
+    }
 }

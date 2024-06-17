@@ -6136,7 +6136,6 @@ GameObject:
   - component: {fileID: 2039018579}
   - component: {fileID: 2039018581}
   - component: {fileID: 2039018580}
-  - component: {fileID: 2039018584}
   - component: {fileID: 2039018582}
   - component: {fileID: 2039018586}
   - component: {fileID: 2039018585}
@@ -6192,7 +6191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanePrefab: {fileID: 849930977}
+  m_PlanePrefab: {fileID: 6391486188251498534, guid: 9ff0c3e187f0b714884240686d277c85, type: 3}
   m_DetectionMode: 1
 --- !u!114 &2039018581
 MonoBehaviour:
@@ -6220,20 +6219,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RaycastPrefab: {fileID: 2798543663445584278, guid: cba209c5483bba04b84e28ac1c136810, type: 3}
---- !u!114 &2039018584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039018577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a487069f37bda147930ee99b8af6001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transparent: {fileID: 2100000, guid: fb12e769336f69145857b282b1b1a164, type: 2}
-  visual: {fileID: 2100000, guid: c1019f80e1b90984da08e43e1c7a98c4, type: 2}
 --- !u!114 &2039018585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6268,8 +6253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c18e1b549a9820489b42f4ad7620c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arPlane: {fileID: 849930977}
-  arPoint: {fileID: 249851804}
+  _arPlaneManager: {fileID: 2039018580}
+  _arPointCloudManager: {fileID: 2039018581}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
