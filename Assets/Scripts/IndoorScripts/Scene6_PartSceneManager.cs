@@ -253,7 +253,9 @@ public class Scene6_PartSceneManager : MonoBehaviour
         if (arRaycastManager.Raycast(pos, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
-            GameObject part = Instantiate(partPrefab, hitPose.position, hitPose.rotation);
+            var partRotation = Quaternion.Euler(0, CalculateYRotationToTarget(hitPose.position), 0);
+            
+            GameObject part = Instantiate(partPrefab, hitPose.position, partRotation);
             part.transform.localEulerAngles = partTransformInfo[1].value;
             part.transform.localScale = partTransformInfo[2].value;
 
@@ -276,6 +278,23 @@ public class Scene6_PartSceneManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    // from Scene2 오리지널: 화살표가 목적지를 가리키도록 Y축 회전을 계산
+    private float CalculateYRotationToTarget(Vector3 hitPosition)
+    {
+        if (currPathIdx >= pathLatitude.Count) return 0;
+
+        Vector3 targetPos = new Vector3(
+            (float)pathLongitude[currPathIdx],
+            hitPosition.y,
+            (float)pathLatitude[currPathIdx]
+        );
+
+        Vector3 directionToTarget = targetPos - hitPosition;
+        float angle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+
+        return Mathf.Clamp(angle, -180f, 0f);
     }
 
     // 바닥 생성됐는지 확인하는 함수
