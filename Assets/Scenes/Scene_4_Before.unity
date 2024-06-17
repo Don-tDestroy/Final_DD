@@ -1837,13 +1837,6 @@ MonoBehaviour:
   - "\uC774\uD654\uC5EC\uB300 \uD559\uC0DD\uB4E4\uC740 \uCD1D 8\uD559\uAE30\uB3D9\uC548
     \uCC44\uD50C\uC744 \uB4E4\uC5B4\uC57C \uD55C\uB2E4. \uCC44\uD50C\uC740 0\uD559\uC810\uC774\uB2E4."
   - "\uCC44\uD50C\uC744 \uB4E3\uB294 \uC7A5\uC18C\uB294 \uB300\uAC15\uB2F9\uC774\uB2E4."
-  - "\uCC44\uD50C\uC740 \uCD1D 2\uBC88 \uBE60\uC9C8 \uC218 \uC788\uACE0 \uC878\uC5C5\uC608\uC815\uC790\uB294
-    3\uBC88 \uBE60\uC9C8 \uC218 \uC788\uB2E4."
-  - "\uCC44\uD50C\uC740 \uC77C\uC77C\uBCF4\uCDA9\uACFC \uD2B9\uBCC4\uBCF4\uCDA9\uC73C\uB85C
-    \uACB0\uC11D\uC77C\uC218\uB97C \uBA54\uAFC0 \uC218 \uC788\uB2E4."
-  - "\uC774\uBC88 \uD559\uAE30 \uCC44\uD50C\uC744 \uC218\uB8CC\uD558\uC9C0 \uBABB\uD558\uC600\uB2E4\uBA74
-    \uB2E4\uC74C \uD559\uAE30\uC5D0 \uC5EC\uB7EC \uAC1C\uB97C \uB4E4\uC744 \uC218
-    \uC788\uB2E4."
   hintTransformInfo:
   - key: position
     value: {x: 0, y: 0.7, z: 0}
@@ -1891,7 +1884,7 @@ MonoBehaviour:
     value: {x: 0, y: 0, z: 0}
   - key: scale
     value: {x: 0.3, y: 0.3, z: 0.3}
-  lastPartTriggerScene: TestIntroScene
+  lastPartTriggerScene: Scene_Elevator
   partLayerMaskName: Part
   aimObj: {fileID: 424153486}
 --- !u!114 &1922373948
@@ -1920,7 +1913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 6391486188251498534, guid: 9ff0c3e187f0b714884240686d277c85, type: 3}
-  m_DetectionMode: 1
+  m_DetectionMode: -1
 --- !u!114 &1922373950
 MonoBehaviour:
   m_ObjectHideFlags: 0

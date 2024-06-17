@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
+
 
 public class SceneQuizManager : MonoBehaviour
 {
@@ -47,8 +49,16 @@ public class SceneQuizManager : MonoBehaviour
 
     Question currentQuestion; // 현재 스테이지에 따라 문제 바뀜
 
+    private bool isAnswer = false; // 정답 여부
+    public TextMeshProUGUI quizTitleTxt;
+    public GameObject ewhaZeroPopup;
+
     void Start()
     {
+        currStep = GameManager.Instance.GetStageNumber() - 3; // 게임 매니저에서 현재 스테이지 정보 가져옴 (0: stage 3, 1: stage 4, 2: stage 5)
+        if (currStep < 0) currStep = 0; // 테스트용 예외처리
+        quizTitleTxt.text = $"Quiz #{currStep + 1}";
+
         currentQuestion = QuestionClass.questions[currStep];
         currUserAnswerIndex = -1;
         quizResultPopup.HideResult();
@@ -133,33 +143,83 @@ public class SceneQuizManager : MonoBehaviour
             oxButtons[userAnswerIndex].SetSelected();
         }
     }
-    public void NextStep()
-    {
-        currStep++;
-    }
 
     public void SubmitAnswer()
     {
         if (currStep < QuestionClass.questions.Count)
         {
             int correctAnswerIndex = describeQuiz.GetCorrectAnswerIndex();
-            NextStep(); // 다음 문제로 넘겨주기
 
             string explanation = currentQuestion.Explanation; // 해설
             if (currUserAnswerIndex == correctAnswerIndex)
             {
+                SoundEffectManager.Instance.Play(1);
                 quizResultPopup.ShowResult(true, "정답이에요!", explanation, "+10");
+                isAnswer = true;
+                GameManager.Instance.AddEwhaPower(10);
             }
             else
             {
+                SoundEffectManager.Instance.Play(3);
                 quizResultPopup.ShowResult(false, "틀렸어요.", explanation, "-10");
                 shakerQuizMark = quizMarkObject.GetComponent<ShakerQuizMark>(); // 틀렸을 때 좌우로 흔들리는 효과
-                shakerQuizMark.Shake(0.3f, 15f); 
+                shakerQuizMark.Shake(0.3f, 15f);
+                isAnswer = false;
+                GameManager.Instance.AddEwhaPower(-10);
             }
         }
         else
         {
             Debug.Log("null submit");
         }
+    }
+
+    public void OnClickNextButton()
+    {
+        SoundEffectManager.Instance.Play(0);
+        // 정답이라면 카메라 씬으로 넘어가기
+        if (isAnswer)
+        {
+            SceneManager.LoadScene("CameraScene");
+        }
+        else
+        {
+            Debug.Log(currStep);
+            // 정답 아니라면 다음 씬으로 넘어가기
+            switch (currStep)
+            {
+                case 0: // stage 3 -> 4
+                    SceneManager.LoadScene("Scene_4_Before");
+                    break;
+                case 1: // stage 4 -> 5
+                    SceneManager.LoadScene("Scene_5_Before");
+                    break;
+                case 2:
+                    // stage 5
+                    // 이화력 확인해서 엔딩 or stage 6
+                    Debug.Log("scene 5 quiz");
+                    if (GameManager.Instance.GetEwhaPower() == 0)
+                    {
+                        Debug.Log("이화력 0 엔딩 !!");
+                        // 엔딩씬 로드 전 팝업 안내
+                        ewhaZeroPopup.SetActive(true);
+                    }
+                    else
+                    {
+                        Debug.Log("scene 6 load");
+                        SceneManager.LoadScene("Scene_6_GPS");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void OnLoadEnding()
+    {
+        SoundEffectManager.Instance.Play(0);
+        GameManager.Instance.SetIsEnding(true);
+        SceneManager.LoadScene("StoryScene");
     }
 }

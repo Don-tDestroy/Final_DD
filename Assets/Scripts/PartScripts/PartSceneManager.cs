@@ -33,7 +33,7 @@ public class PartSceneManager : MonoBehaviour
     private readonly float screenBiasWidth = 1440f;
     private readonly float screenBiasHeigth = 2560f;
     private readonly List<Vector2> createdPos = new List<Vector2>() { new Vector2(650f, 1300f), new Vector2(650f, 1600f), new Vector2(650f, 1900f) }; // (1440, 2560) 기준 좌표
-    private readonly float partRadius = 1.1f; // 부품 특정 반경 내에서만 주울 수 있도록 
+    private readonly float partRadius = 1.5f; // 부품 특정 반경 내에서만 주울 수 있도록 
 
     private bool isCreatingCoroutine = false; // 부품 생성 코루틴 동작 여부
     private bool picked = true; // 부품 주운 후
@@ -95,6 +95,8 @@ public class PartSceneManager : MonoBehaviour
 
     private void Start()
     {
+        SaveCurrentStage(); // 현재 스테이지 저장
+
         partLayerMask = LayerMask.GetMask(partLayerMaskName);
 
         originAimPos = RectTransformUtility.WorldToScreenPoint(null, aimObj.GetComponent<Image>().rectTransform.position);
@@ -108,9 +110,31 @@ public class PartSceneManager : MonoBehaviour
         hintInterval = totalPartCnt / hintManager.totalHintCnt;
         hintIntervalTarget = hintInterval / 2;
 
+        Debug.Log("힌트 간격 & 나머지 수 " + hintInterval + ", " + hintIntervalTarget);
+
         popupManager.SetPartCntTxt(0, totalPartCnt);
 
         StartCoroutine(PartGuide());
+    }
+
+    private void SaveCurrentStage()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        switch (currentSceneName)
+        {
+            case "Scene_3":
+                GameManager.Instance.SetStageNumber(3);
+                break;
+            case "Scene_4_Before":
+                GameManager.Instance.SetStageNumber(4);
+                break;
+            case "Scene_5_Before":
+                GameManager.Instance.SetStageNumber(5);
+                break;
+        }
+
+        Debug.Log("현재 스테이지 " + GameManager.Instance.GetStageNumber());
     }
 
     private IEnumerator PartGuide()

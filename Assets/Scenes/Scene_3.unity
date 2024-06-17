@@ -304,7 +304,7 @@ MonoBehaviour:
     value: {x: 0, y: 0, z: 0}
   - key: scale
     value: {x: 0.3, y: 0.3, z: 0.3}
-  lastPartTriggerScene: TestIntroScene
+  lastPartTriggerScene: IntroScene
   partLayerMaskName: Part
   aimObj: {fileID: 495942754}
 --- !u!114 &273603121
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 6391486188251498534, guid: 9ff0c3e187f0b714884240686d277c85, type: 3}
-  m_DetectionMode: 1
+  m_DetectionMode: -1
 --- !u!114 &273603123
 MonoBehaviour:
   m_ObjectHideFlags: 0

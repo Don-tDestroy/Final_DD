@@ -65,6 +65,11 @@ public class PopupManager : MonoBehaviour
 
     public void SetHintCntTxt(int hintCnt, int totalHintCnt)
     {
+        if (totalHintCnt == 0)
+        {
+            hintTxt.text = "없음";
+            return;
+        }
         hintTxt.text = $"{hintCnt}/{totalHintCnt}";
     }
 

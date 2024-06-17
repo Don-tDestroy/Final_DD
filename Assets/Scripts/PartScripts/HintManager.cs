@@ -56,14 +56,16 @@ public class HintManager : MonoBehaviour
         }
 
         arRaycastManager = GetComponent<ARRaycastManager>();
+
+        totalHintCnt = hintMessage.Count; // Scene4, 5에서는 힌트 개수 달라지므로 동적으로 저장
+
+        popupManager.SetHintCntTxt(0, totalHintCnt);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         hintLayerMask = LayerMask.GetMask(hintLayerMaskName);
-
-        popupManager.SetHintCntTxt(0, totalHintCnt);
 
         // 힌트 아이템 생성 및 줍기 활성화
         StartCoroutine(CheckPickPart());
@@ -127,7 +129,7 @@ public class HintManager : MonoBehaviour
 
     public void CreateHintItem()
     {
-        if (createdHintCnt == 5)
+        if (createdHintCnt == totalHintCnt)
         {
             return;
         }
