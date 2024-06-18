@@ -1,8 +1,10 @@
 # 우주선수리특"공대": 디디와의 이화 탐험
-<img src="https://github.com/Don-tDestroy/exploring-ewha-with-diddy/assets/32611398/e9d234f3-ef0a-40ea-a697-ac8116f07bed" height="500"/>
-<img src="https://github.com/Don-tDestroy/exploring-ewha-with-diddy/assets/32611398/1884a36f-c153-4bf8-85d4-4e3a340d2f87" height="500"/>
-<img src="https://github.com/L2024Q1-EWHA/Final_DD/assets/32611398/16374d82-959e-4e1a-84b7-47a6ae010f03" height="500"/>
-<img src="https://github.com/L2024Q1-EWHA/Final_DD/assets/32611398/98280826-7958-46f4-a4d6-4fc18f621f0d" height="500"/>
+<img src="https://github.com/Don-tDestroy/exploring-ewha-with-diddy/assets/32611398/e9d234f3-ef0a-40ea-a697-ac8116f07bed" height="400"/>
+<img src="https://github.com/Don-tDestroy/exploring-ewha-with-diddy/assets/32611398/1884a36f-c153-4bf8-85d4-4e3a340d2f87" height="400"/>
+<img src="https://github.com/L2024Q1-EWHA/Final_DD/assets/32611398/16374d82-959e-4e1a-84b7-47a6ae010f03" height="400"/>
+<img src="https://github.com/L2024Q1-EWHA/Final_DD/assets/32611398/efb8c839-e343-4d0a-bd8e-3528f2a320ae" height="400"/>
+
+
 
 
 ## 프로젝트 개요
