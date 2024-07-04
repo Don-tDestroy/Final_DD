@@ -14,6 +14,8 @@
 * 스토리: 학교 정문에서 미지의 생명체 ‘디디’와 조우하다! 이 친구, 도움이 필요해 보여!
 * 프로젝트 목표: 정문에서 공대까지 빠르게 이동할 수 있는 경로와 학교에 대한 정보를 제공한다.
 
+## 시연 영상
+https://www.youtube.com/watch?v=G1HAqlKlYWw
 
 ## 팀원
 **[Team DD](https://github.com/Don-tDestroy)**<br><br>
